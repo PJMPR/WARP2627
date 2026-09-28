@@ -53,18 +53,33 @@
       </div>
       <pre class="code-block"><code>dotnet --version
 git --version</code></pre>
-      <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> Pierwsze polecenie powinno wypisać wersję zaczynającą się od <code>10.</code>, drugie numer wersji Git.</p>
+      <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+        <li>Pierwsze polecenie wypisuje wersję zaczynającą się od <code>10.</code></li>
+        <li>Drugie polecenie wypisuje numer wersji Git</li>
+      </ul>
     </section>
 
     <section class="section-block" aria-labelledby="steps-title">
       <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">ĆWICZENIE PROWADZONE</p><h2 id="steps-title">Od Hello World do repo</h2></div></div>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">TERMINAL / .NET CLI</p><h3>Utwórz projekt</h3></div></div>
-        <p>W PowerShell przejdź do katalogu, w którym trzymasz projekty. Utwórz aplikację i uruchom ją:</p>
+        <p>Przejdź do katalogu, w którym trzymasz projekty. Utwórz aplikację i uruchom ją:</p>
         <pre class="code-block"><code>dotnet new console --name HelloWorkshop
 cd HelloWorkshop
 dotnet run</code></pre>
-        <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> W terminalu pojawi się <code>Hello, World!</code>. Otwórz <code>Program.cs</code>, zmień tekst na <code>Hello, Warsztacie Programisty!</code>, zapisz plik i ponownie wykonaj <code>dotnet run</code>.</p>
+<p>Po utworzeniu projektu przez polecenie poniżej, folder zawiera kilka ważnych plików:</p>
+        <ul class="instruction-list">
+          <li><code>HelloWorkshop.csproj</code> – plik konfiguracji projektu (metadane, zależności, ustawienia SDK)</li>
+          <li><code>Program.cs</code> – główny plik kodu źródłowego z metodą <code>Main</code></li>
+          <li><code>bin/</code> – folder z skompilowanymi binami (powstaje po <code>dotnet run</code> lub <code>dotnet build</code>)</li>
+          <li><code>obj/</code> – folder z plikam tymczasowymi procesu budowania (cache kompilacji)</li>
+        </ul>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>Zweryfikuj, czy wszystkie pliki się znajdują w katalogu projektu</li>
+          <li>W terminalu pojawi się <code>Hello, World!</code></li>
+          <li>Otwórz <code>Program.cs</code> i zmień tekst na <code>Hello, Warsztacie Programisty!</code></li>
+          <li>Zapisz plik i ponownie wykonaj <code>dotnet run</code></li>
+        </ul>
       </article>
 
       <article class="lesson-step">
@@ -89,41 +104,114 @@ dotnet run</code></pre>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">GIT / PIERWSZY PUSH</p><h3>Zapisz i opublikuj projekt</h3></div></div>
         <p>W terminalu, w katalogu <code>HelloWorkshop</code>, skonfiguruj autora commitów, zainicjuj repozytorium i sprawdź jego stan. Zastąp przykładowe dane własnymi.</p>
-        <pre class="code-block"><code>git config --global user.name "Imię Nazwisko"
+        <pre class="code-block"><code># Ustawia globalne dane autora (--global: dla wszystkich repozytoriów na tym komputerze)
+git config --global user.name "Imię Nazwisko"
 git config --global user.email "adres@example.com"
+
+# Inicjalizuje lokalne repozytorium (-b main: tworzy domyślną gałąź o nazwie main)
 git init -b main
+
+# Wyświetla status: niezleżone pliki, zmienione pliki, przygotowane do commita
 git status</code></pre>
         <p>Dodaj pliki do poczekalni, przejrzyj zmiany i utwórz commit:</p>
-        <pre class="code-block"><code>git add .
+        <pre class="code-block"><code># Dodaje wszystkie pliki z bieżącego katalogu do poczekalni (staging area)
+git add .
+
+# Wyświetla różnice między wersją w poczekalni a ostatnią wersją w repozytorium
+# (--staged: pokazuje tylko zmienione pliki przygotowane do commita)
 git diff --staged
+
+# Sprawdza aktualny status (powinny być zielone pliki gotowe do commita)
 git status
+
+# Zapisuje przygotowane zmiany z wiadomością komentarza
+# (-m: wiadomość commita, "feat: add...": konwencja opisywania zmian)
 git commit -m "feat: add Hello World console app"
+
+# Wyświetla historię commitów w skróconej formie (--oneline: jeden commit w jednym wierszu)
 git log --oneline</code></pre>
         <p>Połącz lokalne repozytorium z adresem skopiowanym z GitHuba i wyślij gałąź <code>main</code>:</p>
-        <pre class="code-block"><code>git remote add origin https://github.com/USERNAME/REPOSITORY.git
+        <pre class="code-block"><code># Tworzy odnośnik do zdalnego repozytorium o nazwie "origin" 
+# (origin: konwencja dla głównego repozytorium na serwerze)
+git remote add origin https://github.com/USERNAME/REPOSITORY.git
+
+# Wyświetla listę zdanych repozytoriów z ich adresami URL
+# (-v: verbose, pokazuje zarówno fetch jak i push URL)
 git remote -v
+
+# Publikuje lokalną gałąź main na serwer (zdalny branch origin/main)
+# (-u: ustawia tracking, czyli powiązuje lokalną gałąź z gałęzią zdalną)
 git push -u origin main</code></pre>
         <p>Zamień <code>USERNAME</code> i <code>REPOSITORY</code> na wartości z adresu repozytorium. Odśwież stronę GitHuba: powinny być widoczne pliki i commit.</p>
-        <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> Opcja <code>-u</code> ustawia śledzenie gałęzi zdalnej. Przy kolejnych wysyłkach z tej gałęzi wystarczy <code>git push</code>.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>Opcja <code>-u</code> ustawia śledzenie gałęzi zdalnej</li>
+          <li>Przy kolejnych wysyłkach z tej gałęzi wystarczy <code>git push</code></li>
+        </ul>
       </article>
 
       <article class="lesson-step">
-        <div class="step-heading"><span class="step-number">05</span><div><p class="eyebrow">GIT / FETCH I PULL</p><h3>Odbierz zmianę z GitHuba</h3></div></div>
-        <p>Na stronie repozytorium dodaj plik <code>README.md</code> przez <strong>Add a README</strong> i zatwierdź zmianę bezpośrednio na gałęzi <code>main</code>.</p>
+        <div class="step-heading"><span class="step-number">05</span><div><p class="eyebrow">GITHUB / EDYCJA W INTERFEJSIE</p><h3>Dodaj plik README na GitHubie</h3></div></div>
+        <p>Otwórz stronę repozytorium na GitHubie. Będą tam widoczne pliki, które wysłałeś przez <code>git push</code>.</p>
+        <ol class="instruction-list">
+          <li>Kliknij przycisk <strong>Add a README</strong> (jeśli jest widoczny) lub przejdź do <strong>Add file → Create new file</strong>.</li>
+          <li>Wpisz nazwę pliku: <code>README.md</code></li>
+          <li>Dodaj zawartość, np.:
+            <pre class="code-block"><code># HelloWorkshop
+
+Aplikacja konsolowa .NET stworzenia podczas laboratorium.
+
+## Uruchomienie
+\`\`\`bash
+dotnet run
+\`\`\`</code></pre>
+          </li>
+          <li>Przewiń w dół i kliknij <strong>Commit changes</strong>. Dodaj wiadomość commita, np. "docs: add README" i potwierdź.</li>
+        </ol>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>Plik <code>README.md</code> pojawił się w repozytorium na GitHubie</li>
+          <li>Nowy commit "docs: add README" jest widoczny w historii</li>
+          <li>W następnym zadaniu pobierzesz tę zmianę do swojego komputera</li>
+        </ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">06</span><div><p class="eyebrow">GIT / FETCH I PULL</p><h3>Odbierz zmianę z GitHuba</h3></div></div>
+        <p>Teraz pobrania zmianę, którą przed chwilą dodałeś na GitHubie do swojego komputera.</p>
         <p><code>fetch</code> pobiera informacje o zdalnych commitach, ale nie zmienia bieżących plików:</p>
-        <pre class="code-block"><code>git fetch origin
+        <pre class="code-block"><code># Pobiera informacje o zmianach ze zdalnego repozytorium (origin)
+# Nie zmienia lokalnych plików, tylko aktualizuje referencje do gałęzi zdalnej
+git fetch origin
+
+# Pokazuje aktualny status lokalnego repozytorium
 git status
+
+# Wyświetla historię commitów z dodatkowymi informacjami
+# (--all: pokazuje commity ze wszystkich gałęzi, lokalnych i zdalnych)
+# (--decorate: pokazuje gałęzie i tagi)
+# (-5: wyświetla tylko ostatnie 5 commitów)
 git log --oneline --all --decorate -5
+
+# Porównuje różnice między HEAD (aktualnym lokalnym commitem) a origin/main (zdalnym committem)
+# Pokazuje jakie zmiany są na serwerze, których brakuje lokalnie
 git diff HEAD..origin/main</code></pre>
         <p>Teraz zintegruj pobraną zmianę z lokalną gałęzią:</p>
-        <pre class="code-block"><code>git pull --ff-only origin main
+        <pre class="code-block"><code># Pobiera zmiany ze zdalnego repozytorium i integruje je z lokalną gałęzią
+# (--ff-only: fast-forward only, integracza powiedzie się tylko jeśli jest to fast-forward,
+#  czyli brak konfliktów - jeśli byłyby konflikty, komenda się przerywa)
+git pull --ff-only origin main
+
+# Sprawdza status po pull (powinien pokazać brak zmian, wszystko jest synchronizowane)
 git status</code></pre>
-        <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> Po <code>fetch</code> README nie pojawi się jeszcze w katalogu; po <code>pull</code> jest już lokalnie. Opcja <code>--ff-only</code> przerwie operację, jeśli integracja wymagałaby utworzenia merge commita.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>Po <code>fetch</code> README nie pojawi się jeszcze w katalogu</li>
+          <li>Po <code>pull</code> jest już lokalnie</li>
+          <li>Opcja <code>--ff-only</code> przerwie operację, jeśli integracja wymagałaby utworzenia merge commita</li>
+        </ul>
       </article>
     </section>
 
     <section class="section-block" aria-labelledby="git-title">
-      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">ŚCIĄGA</p><h2 id="git-title">Komendy, które właśnie poznałeś</h2></div></div>
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ŚCIĄGA</p><h2 id="git-title">Komendy, które właśnie poznałeś</h2></div></div>
       <dl class="git-glossary">
         <div><dt><code>git status</code></dt><dd>Pokazuje gałąź oraz pliki zmienione, przygotowane i nieśledzone.</dd></div>
         <div><dt><code>git add</code></dt><dd>Wybiera zmiany do commita; <code>git add .</code> dodaje zmiany z bieżącego katalogu.</dd></div>
@@ -139,12 +227,14 @@ git status</code></pre>
     </section>
 
     <section class="section-block" aria-labelledby="assignment-title">
-      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ZADANIE DO WYKONANIA</p><h2 id="assignment-title">Oddaj działające repo</h2></div></div>
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">ZADANIE DO WYKONANIA</p><h2 id="assignment-title">Oddaj działające repo</h2></div></div>
       <p class="assignment-lede">Dokończ ćwiczenie samodzielnie i sprawdź każdy warunek:</p>
       <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Przeanalizowałeś strukturę plików i zrozumiałeś rolę każdego pliku.</span></li>
         <li><span class="check-box" aria-hidden="true"></span><span>Program .NET Console uruchamia się i wypisuje własny tekst powitalny.</span></li>
         <li><span class="check-box" aria-hidden="true"></span><span>Projekt otwiera się i uruchamia w VS Code oraz Riderze; potrafisz wskazać jedną różnicę.</span></li>
         <li><span class="check-box" aria-hidden="true"></span><span>Publiczne repozytorium GitHub zawiera kod, README i historię commitów.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Dodałeś plik <code>README.md</code> na GitHubie przez interfejs webowy i potwierdziłeś zmianę (commit).</span></li>
         <li><span class="check-box" aria-hidden="true"></span><span>Zmianę z GitHuba pobrałeś przez <code>fetch</code>, a potem zintegrowałeś przez <code>pull</code>.</span></li>
         <li><span class="check-box" aria-hidden="true"></span><span>Wykonałeś co najmniej dwa commity i wysłałeś zmiany przez <code>push</code>.</span></li>
         <li><span class="check-box" aria-hidden="true"></span><span>Końcowe <code>git status</code> nie pokazuje niezapisanych zmian.</span></li>
@@ -153,7 +243,7 @@ git status</code></pre>
     </section>
 
     <section class="section-block troubleshooting" aria-labelledby="troubleshooting-title">
-      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="troubleshooting-title">Gdy coś nie działa</h2></div></div>
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="troubleshooting-title">Gdy coś nie działa</h2></div></div>
       <details><summary><code>dotnet</code> nie jest rozpoznawane</summary><p>Sprawdź, czy zainstalowano .NET SDK, a nie tylko runtime. Otwórz ponownie terminal po instalacji i wykonaj <code>dotnet --info</code>.</p></details>
       <details><summary><code>code</code> nie jest rozpoznawane</summary><p>Otwórz VS Code z menu Start i wybierz <strong>File → Open Folder…</strong>. CLI nie jest wymagane.</p></details>
       <details><summary>GitHub odrzuca logowanie w terminalu</summary><p>Użyj logowania przez przeglądarkę oferowanego przez Git Credential Manager. Nie wpisuj hasła do GitHuba jako hasła Git i nie publikuj tokenu.</p></details>
