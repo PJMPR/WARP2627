@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 01: projekt .NET Console, edytory oraz podstawy Git i GitHub.">
+  <title>01. Środowisko pracy i Git | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-01.html" aria-current="page">Laboratorium 01</a>
+      <a class="nav-external" href="https://github.com/" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 01</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 01</span></nav>
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 01 <span class="eyebrow-divider">/</span> MATERIAŁY GOTOWE</p>
+        <h1 id="lab-title">Środowisko<br><span>pracy i Git</span></h1>
+        <p class="intro-lede">Stwórz mały program, uruchom go w dwóch edytorach i prześlij do własnego repozytorium.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">ZAKRES</span><strong>CLI → IDE → REPO</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">PLATFORMA</span><strong>Windows / .NET 10 LTS</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="outcomes-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">CEL SPOTKANIA</p><h2 id="outcomes-title">Po laboratorium potrafisz</h2></div></div>
+      <ul class="outcome-list">
+        <li>Utworzyć i uruchomić aplikację .NET Console z wiersza poleceń.</li>
+        <li>Otworzyć ten sam projekt w VS Code i Riderze oraz porównać ich narzędzia.</li>
+        <li>Utworzyć repozytorium na GitHubie i połączyć je z lokalnym projektem.</li>
+        <li>Zapisać zmiany w Git i rozróżnić <code>fetch</code>, <code>pull</code> oraz <code>push</code>.</li>
+      </ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="prep-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PRZED STARTEM</p><h2 id="prep-title">Przygotuj stanowisko</h2></div></div>
+      <div class="prep-grid">
+        <article class="prep-item"><span class="prep-index">A / SDK</span><h3>.NET 10 SDK</h3><p>Zainstaluj aktualne wydanie .NET 10 LTS. Potrzebujesz SDK, nie tylko runtime.</p><a class="small-link" href="https://dotnet.microsoft.com/download/dotnet/10.0" target="_blank" rel="noreferrer">Pobierz .NET 10 <span aria-hidden="true">↗</span></a></article>
+        <article class="prep-item"><span class="prep-index">B / EDYTOR</span><h3>VS Code + Rider</h3><p>Zainstaluj oba edytory. Do VS Code dodaj rozszerzenie C# Dev Kit.</p><a class="small-link" href="https://code.visualstudio.com/docs/csharp/get-started" target="_blank" rel="noreferrer">C# Dev Kit <span aria-hidden="true">↗</span></a><a class="small-link" href="https://www.jetbrains.com/rider/download/" target="_blank" rel="noreferrer">Pobierz Rider <span aria-hidden="true">↗</span></a></article>
+        <article class="prep-item"><span class="prep-index">C / KONTROLA</span><h3>CLI i Git</h3><p>Otwórz PowerShell lub Windows Terminal i sprawdź dostępność narzędzi.</p><a class="small-link" href="https://git-scm.com/download/win" target="_blank" rel="noreferrer">Pobierz Git dla Windows <span aria-hidden="true">↗</span></a></article>
+      </div>
+      <pre class="code-block"><code>dotnet --version
+git --version</code></pre>
+      <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> Pierwsze polecenie powinno wypisać wersję zaczynającą się od <code>10.</code>, drugie numer wersji Git.</p>
+    </section>
+
+    <section class="section-block" aria-labelledby="steps-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">ĆWICZENIE PROWADZONE</p><h2 id="steps-title">Od Hello World do repo</h2></div></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">TERMINAL / .NET CLI</p><h3>Utwórz projekt</h3></div></div>
+        <p>W PowerShell przejdź do katalogu, w którym trzymasz projekty. Utwórz aplikację i uruchom ją:</p>
+        <pre class="code-block"><code>dotnet new console --name HelloWorkshop
+cd HelloWorkshop
+dotnet run</code></pre>
+        <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> W terminalu pojawi się <code>Hello, World!</code>. Otwórz <code>Program.cs</code>, zmień tekst na <code>Hello, Warsztacie Programisty!</code>, zapisz plik i ponownie wykonaj <code>dotnet run</code>.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">EDYTORY / PORÓWNANIE</p><h3>Otwórz projekt w dwóch narzędziach</h3></div></div>
+        <div class="editor-columns">
+          <div><h4>VS Code</h4><p>W katalogu projektu uruchom <code>code .</code>. Jeśli polecenia nie rozpoznano, otwórz VS Code i wybierz <strong>File → Open Folder…</strong>.</p><p>Dodaj rozszerzenie C# Dev Kit. Otwórz <code>Program.cs</code>, sprawdź podpowiedzi i uruchom program przyciskiem Run lub w terminalu.</p><a class="small-link" href="https://code.visualstudio.com/docs/csharp/get-started" target="_blank" rel="noreferrer">Dokumentacja C# w VS Code <span aria-hidden="true">↗</span></a></div>
+          <div><h4>JetBrains Rider</h4><p>Wybierz <strong>File → Open…</strong> i wskaż katalog <code>HelloWorkshop</code> lub plik <code>HelloWorkshop.csproj</code>.</p><p>Otwórz <code>Program.cs</code> i uruchom projekt. Zwróć uwagę na nawigację po kodzie, podpowiedzi i obsługę uruchamiania.</p><a class="small-link" href="https://www.jetbrains.com/help/rider/Getting_Started.html" target="_blank" rel="noreferrer">Pierwsze kroki w Riderze <span aria-hidden="true">↗</span></a></div>
+        </div>
+        <div class="comparison-prompt"><span class="data-label">ZANOTUJ</span><p>W którym edytorze łatwiej znaleźć błędy? Jak uruchamia się program w każdym z nich? Czy oba wskazują ten sam SDK i projekt?</p></div>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">GITHUB / KONTO I REPOZYTORIUM</p><h3>Utwórz zdalne repozytorium</h3></div></div>
+        <ol class="instruction-list">
+          <li>Załóż konto na <a href="https://github.com/signup" target="_blank" rel="noreferrer">GitHubie</a> lub zaloguj się na istniejące. Włącz uwierzytelnianie dwuskładnikowe i skonfiguruj logowanie zgodnie z instrukcjami GitHub.</li>
+          <li>Wybierz <strong>New repository</strong>, wpisz np. <code>warp-lab01-hello-workshop</code> i ustaw widoczność <strong>Public</strong>. Utwórz puste repozytorium: nie zaznaczaj tworzenia README, licencji ani .gitignore, bo projekt istnieje lokalnie.</li>
+          <li>Skopiuj adres HTTPS repozytorium. Nie udostępniaj hasła ani tokenu. Git może otworzyć przeglądarkę, aby uwierzytelnić się przez Git Credential Manager.</li>
+        </ol>
+        <aside class="safety-note"><strong>Uwaga o prywatności</strong><p>Publiczne repozytorium jest widoczne dla wszystkich. Nie umieszczaj w nim haseł, tokenów ani prywatnych danych. Adres e-mail autora commitów też może być publiczny; w razie potrzeby ustaw prywatność adresu w GitHubie i użyj podanego adresu <code>noreply</code>.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">GIT / PIERWSZY PUSH</p><h3>Zapisz i opublikuj projekt</h3></div></div>
+        <p>W terminalu, w katalogu <code>HelloWorkshop</code>, skonfiguruj autora commitów, zainicjuj repozytorium i sprawdź jego stan. Zastąp przykładowe dane własnymi.</p>
+        <pre class="code-block"><code>git config --global user.name "Imię Nazwisko"
+git config --global user.email "adres@example.com"
+git init -b main
+git status</code></pre>
+        <p>Dodaj pliki do poczekalni, przejrzyj zmiany i utwórz commit:</p>
+        <pre class="code-block"><code>git add .
+git diff --staged
+git status
+git commit -m "feat: add Hello World console app"
+git log --oneline</code></pre>
+        <p>Połącz lokalne repozytorium z adresem skopiowanym z GitHuba i wyślij gałąź <code>main</code>:</p>
+        <pre class="code-block"><code>git remote add origin https://github.com/USERNAME/REPOSITORY.git
+git remote -v
+git push -u origin main</code></pre>
+        <p>Zamień <code>USERNAME</code> i <code>REPOSITORY</code> na wartości z adresu repozytorium. Odśwież stronę GitHuba: powinny być widoczne pliki i commit.</p>
+        <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> Opcja <code>-u</code> ustawia śledzenie gałęzi zdalnej. Przy kolejnych wysyłkach z tej gałęzi wystarczy <code>git push</code>.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">05</span><div><p class="eyebrow">GIT / FETCH I PULL</p><h3>Odbierz zmianę z GitHuba</h3></div></div>
+        <p>Na stronie repozytorium dodaj plik <code>README.md</code> przez <strong>Add a README</strong> i zatwierdź zmianę bezpośrednio na gałęzi <code>main</code>.</p>
+        <p><code>fetch</code> pobiera informacje o zdalnych commitach, ale nie zmienia bieżących plików:</p>
+        <pre class="code-block"><code>git fetch origin
+git status
+git log --oneline --all --decorate -5
+git diff HEAD..origin/main</code></pre>
+        <p>Teraz zintegruj pobraną zmianę z lokalną gałęzią:</p>
+        <pre class="code-block"><code>git pull --ff-only origin main
+git status</code></pre>
+        <p class="expected-result"><span class="result-mark" aria-hidden="true">✓</span> Po <code>fetch</code> README nie pojawi się jeszcze w katalogu; po <code>pull</code> jest już lokalnie. Opcja <code>--ff-only</code> przerwie operację, jeśli integracja wymagałaby utworzenia merge commita.</p>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="git-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">ŚCIĄGA</p><h2 id="git-title">Komendy, które właśnie poznałeś</h2></div></div>
+      <dl class="git-glossary">
+        <div><dt><code>git status</code></dt><dd>Pokazuje gałąź oraz pliki zmienione, przygotowane i nieśledzone.</dd></div>
+        <div><dt><code>git add</code></dt><dd>Wybiera zmiany do commita; <code>git add .</code> dodaje zmiany z bieżącego katalogu.</dd></div>
+        <div><dt><code>git diff</code></dt><dd>Pokazuje różnice; <code>git diff --staged</code> sprawdza poczekalnię.</dd></div>
+        <div><dt><code>git commit</code></dt><dd>Zapisuje przygotowane zmiany jako lokalny punkt historii.</dd></div>
+        <div><dt><code>git log</code></dt><dd>Wyświetla historię commitów; <code>--oneline</code> skraca każdy do jednego wiersza.</dd></div>
+        <div><dt><code>git fetch</code></dt><dd>Odświeża informacje o zdalnych gałęziach, bez zmiany plików.</dd></div>
+        <div><dt><code>git pull</code></dt><dd>Pobiera zmiany i integruje je z aktualną gałęzią.</dd></div>
+        <div><dt><code>git push</code></dt><dd>Publikuje lokalne commity w zdalnym repozytorium.</dd></div>
+        <div><dt><code>git branch</code></dt><dd>Pokazuje i tworzy gałęzie; <code>git branch --list</code> je wyświetla.</dd></div>
+        <div><dt><code>git remote</code></dt><dd>Konfiguruje zdalne repozytorium; opcja <code>-v</code> pokazuje adresy.</dd></div>
+      </dl>
+    </section>
+
+    <section class="section-block" aria-labelledby="assignment-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ZADANIE DO WYKONANIA</p><h2 id="assignment-title">Oddaj działające repo</h2></div></div>
+      <p class="assignment-lede">Dokończ ćwiczenie samodzielnie i sprawdź każdy warunek:</p>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Program .NET Console uruchamia się i wypisuje własny tekst powitalny.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Projekt otwiera się i uruchamia w VS Code oraz Riderze; potrafisz wskazać jedną różnicę.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Publiczne repozytorium GitHub zawiera kod, README i historię commitów.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Zmianę z GitHuba pobrałeś przez <code>fetch</code>, a potem zintegrowałeś przez <code>pull</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wykonałeś co najmniej dwa commity i wysłałeś zmiany przez <code>push</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Końcowe <code>git status</code> nie pokazuje niezapisanych zmian.</span></li>
+      </ul>
+      <aside class="extension-task"><span class="data-label">DLA CHĘTNYCH / ROZSZERZENIE</span><p>Utwórz gałąź <code>feature/greeting</code>, dodaj drugą linię powitania lub wyświetlanie aktualnej daty, zapisz ją w osobnym commicie, wyślij na GitHub i połącz z <code>main</code> przez Pull Request.</p></aside>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="troubleshooting-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="troubleshooting-title">Gdy coś nie działa</h2></div></div>
+      <details><summary><code>dotnet</code> nie jest rozpoznawane</summary><p>Sprawdź, czy zainstalowano .NET SDK, a nie tylko runtime. Otwórz ponownie terminal po instalacji i wykonaj <code>dotnet --info</code>.</p></details>
+      <details><summary><code>code</code> nie jest rozpoznawane</summary><p>Otwórz VS Code z menu Start i wybierz <strong>File → Open Folder…</strong>. CLI nie jest wymagane.</p></details>
+      <details><summary>GitHub odrzuca logowanie w terminalu</summary><p>Użyj logowania przez przeglądarkę oferowanego przez Git Credential Manager. Nie wpisuj hasła do GitHuba jako hasła Git i nie publikuj tokenu.</p></details>
+      <details><summary><code>git push</code> odrzuca wysyłkę</summary><p>Wykonaj <code>git fetch origin</code>, sprawdź <code>git status</code> i historię. Nie używaj <code>git push --force</code>. Jeśli zdalne repo ma niezależną historię, utwórz nowe puste repo albo sklonuj zdalne i przenieś do niego pliki projektu.</p></details>
+    </section>
+
+    <section class="next-step" aria-label="Następny krok"><span class="note-index">KONIEC LABORATORIUM / 01</span><p>Repozytorium jest przygotowane do dalszej pracy na kolejnych zajęciach.</p><a href="../index.html">Wróć do indeksu kursu <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span><a href="../index.html">INDEKS KURSU</a> <span class="footer-slash">·</span> LAB 01</span></footer>
+</body>
+</html>
