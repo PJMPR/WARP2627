@@ -104,44 +104,27 @@ dotnet run</code></pre>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">GIT / PIERWSZY PUSH</p><h3>Zapisz i opublikuj projekt</h3></div></div>
         <p>W terminalu, w katalogu <code>HelloWorkshop</code>, skonfiguruj autora commitów, zainicjuj repozytorium i sprawdź jego stan. Zastąp przykładowe dane własnymi.</p>
-        <pre class="code-block"><code># Ustawia globalne dane autora (--global: dla wszystkich repozytoriów na tym komputerze)
-git config --global user.name "Imię Nazwisko"
+        <pre class="code-block"><code>git config --global user.name "Imię Nazwisko"
 git config --global user.email "adres@example.com"
-
-# Inicjalizuje lokalne repozytorium (-b main: tworzy domyślną gałąź o nazwie main)
 git init -b main
-
-# Wyświetla status: niezleżone pliki, zmienione pliki, przygotowane do commita
 git status</code></pre>
-        <p>Dodaj pliki do poczekalni, przejrzyj zmiany i utwórz commit:</p>
-        <pre class="code-block"><code># Dodaje wszystkie pliki z bieżącego katalogu do poczekalni (staging area)
-git add .
-
-# Wyświetla różnice między wersją w poczekalni a ostatnią wersją w repozytorium
-# (--staged: pokazuje tylko zmienione pliki przygotowane do commita)
-git diff --staged
-
-# Sprawdza aktualny status (powinny być zielone pliki gotowe do commita)
+        <p><strong>git config --global user.name / user.email:</strong> Ustawia globalne dane autora commitów dla wszystkich repozytoriów na tym komputerze.</p>
+        <p><strong>git init -b main:</strong> Inicjalizuje lokalne repozytorium i tworzy domyślną gałąź o nazwie <code>main</code>.</p>
+        <p><strong>git status:</strong> Wyświetla bieżącą gałąź oraz listę plików niezleżonych, zmienionych i przygotowanych do commita.</p>
+        <p>Dodaj pliki do poczekalni i utwórz commit:</p>
+        <pre class="code-block"><code>git add .
 git status
-
-# Zapisuje przygotowane zmiany z wiadomością komentarza
-# (-m: wiadomość commita, "feat: add...": konwencja opisywania zmian)
-git commit -m "feat: add Hello World console app"
-
-# Wyświetla historię commitów w skróconej formie (--oneline: jeden commit w jednym wierszu)
-git log --oneline</code></pre>
+git commit -m "feat: add Hello World console app"</code></pre>
+        <p><strong>git add .:</strong> Dodaje wszystkie zmienione pliki z bieżącego katalogu do poczekalni (staging area), przygotowując je do commita.</p>
+        <p><strong>git status:</strong> Sprawdza aktualny stan repozytorium i pokazuje pliki gotowe do commita.</p>
+        <p><strong>git commit -m "wiadomość":</strong> Zapisuje przygotowane zmiany jako lokalny punkt historii. Parametr <code>-m</code> zawiera wiadomość commita (konwencja: zaczynaj od <code>feat:</code>, <code>fix:</code>, <code>docs:</code> itp.).</p>
         <p>Połącz lokalne repozytorium z adresem skopiowanym z GitHuba i wyślij gałąź <code>main</code>:</p>
-        <pre class="code-block"><code># Tworzy odnośnik do zdalnego repozytorium o nazwie "origin" 
-# (origin: konwencja dla głównego repozytorium na serwerze)
-git remote add origin https://github.com/USERNAME/REPOSITORY.git
-
-# Wyświetla listę zdanych repozytoriów z ich adresami URL
-# (-v: verbose, pokazuje zarówno fetch jak i push URL)
+        <pre class="code-block"><code>git remote add origin https://github.com/USERNAME/REPOSITORY.git
 git remote -v
-
-# Publikuje lokalną gałąź main na serwer (zdalny branch origin/main)
-# (-u: ustawia tracking, czyli powiązuje lokalną gałąź z gałęzią zdalną)
 git push -u origin main</code></pre>
+        <p><strong>git remote add origin URL:</strong> Tworzy odnośnik do zdalnego repozytorium o nazwie <code>origin</code> (standardowa konwencja dla głównego repozytorium na serwerze).</p>
+        <p><strong>git remote -v:</strong> Wyświetla listę wszystkich zdalnych repozytoriów z ich adresami URL. Parametr <code>-v</code> (verbose) pokazuje zarówno adresy fetch jak i push.</p>
+        <p><strong>git push -u origin main:</strong> Publikuje lokalną gałąź <code>main</code> na serwer, tworząc zdalny branch <code>origin/main</code>. Parametr <code>-u</code> ustawia śledzenie (tracking), czyli powiązuje lokalną gałąź z gałęzią zdalną — przy kolejnych push wystarczy samo <code>git push</code>.</p>
         <p>Zamień <code>USERNAME</code> i <code>REPOSITORY</code> na wartości z adresu repozytorium. Odśwież stronę GitHuba: powinny być widoczne pliki i commit.</p>
         <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
           <li>Opcja <code>-u</code> ustawia śledzenie gałęzi zdalnej</li>
@@ -178,30 +161,15 @@ dotnet run
         <div class="step-heading"><span class="step-number">06</span><div><p class="eyebrow">GIT / FETCH I PULL</p><h3>Odbierz zmianę z GitHuba</h3></div></div>
         <p>Teraz pobrania zmianę, którą przed chwilą dodałeś na GitHubie do swojego komputera.</p>
         <p><code>fetch</code> pobiera informacje o zdalnych commitach, ale nie zmienia bieżących plików:</p>
-        <pre class="code-block"><code># Pobiera informacje o zmianach ze zdalnego repozytorium (origin)
-# Nie zmienia lokalnych plików, tylko aktualizuje referencje do gałęzi zdalnej
-git fetch origin
-
-# Pokazuje aktualny status lokalnego repozytorium
-git status
-
-# Wyświetla historię commitów z dodatkowymi informacjami
-# (--all: pokazuje commity ze wszystkich gałęzi, lokalnych i zdalnych)
-# (--decorate: pokazuje gałęzie i tagi)
-# (-5: wyświetla tylko ostatnie 5 commitów)
-git log --oneline --all --decorate -5
-
-# Porównuje różnice między HEAD (aktualnym lokalnym commitem) a origin/main (zdalnym committem)
-# Pokazuje jakie zmiany są na serwerze, których brakuje lokalnie
-git diff HEAD..origin/main</code></pre>
-        <p>Teraz zintegruj pobraną zmianę z lokalną gałęzią:</p>
-        <pre class="code-block"><code># Pobiera zmiany ze zdalnego repozytorium i integruje je z lokalną gałęzią
-# (--ff-only: fast-forward only, integracza powiedzie się tylko jeśli jest to fast-forward,
-#  czyli brak konfliktów - jeśli byłyby konflikty, komenda się przerywa)
-git pull --ff-only origin main
-
-# Sprawdza status po pull (powinien pokazać brak zmian, wszystko jest synchronizowane)
+        <pre class="code-block"><code>git fetch origin
 git status</code></pre>
+        <p><strong>git fetch origin:</strong> Pobiera informacje o zmianach ze zdalnego repozytorium (origin) i aktualizuje referencje do gałęzi zdalnych. Nie zmienia lokalnych plików ani nie integruje zmian — jest to bezpieczna operacja do przeglądania zmian bez ich stosowania.</p>
+        <p><strong>git status:</strong> Pokazuje bieżący stan repozytorium po fetch. Jeśli są nowe zmiany na serwerze, status wskaże, że lokalna gałąź jest za mną (behind) gałęzią zdalną.</p>
+        <p>Teraz zintegruj pobraną zmianę z lokalną gałęzią:</p>
+        <pre class="code-block"><code>git pull --ff-only origin main
+git status</code></pre>
+        <p><strong>git pull --ff-only origin main:</strong> Pobiera zmiany ze zdalnego repozytorium i integruje je z lokalną gałęzią. Parametr <code>--ff-only</code> (fast-forward only) oznacza, że integracja powiedzie się tylko jeśli będzie to fast-forward (przesunięcie wskaźnika bez konfliktów). Jeśli byłyby konflikty lub wymagana by była merge commit, komenda się przerywa — to bezpieczna opcja do zwykłych pobierań zmian.</p>
+        <p><strong>git status:</strong> Sprawdza status po pull. Powinien pokazać, że lokalna gałąź jest zsynchronizowana ze zdalną i brak niezapisanych zmian.</p>
         <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
           <li>Po <code>fetch</code> README nie pojawi się jeszcze w katalogu</li>
           <li>Po <code>pull</code> jest już lokalnie</li>
@@ -215,9 +183,7 @@ git status</code></pre>
       <dl class="git-glossary">
         <div><dt><code>git status</code></dt><dd>Pokazuje gałąź oraz pliki zmienione, przygotowane i nieśledzone.</dd></div>
         <div><dt><code>git add</code></dt><dd>Wybiera zmiany do commita; <code>git add .</code> dodaje zmiany z bieżącego katalogu.</dd></div>
-        <div><dt><code>git diff</code></dt><dd>Pokazuje różnice; <code>git diff --staged</code> sprawdza poczekalnię.</dd></div>
         <div><dt><code>git commit</code></dt><dd>Zapisuje przygotowane zmiany jako lokalny punkt historii.</dd></div>
-        <div><dt><code>git log</code></dt><dd>Wyświetla historię commitów; <code>--oneline</code> skraca każdy do jednego wiersza.</dd></div>
         <div><dt><code>git fetch</code></dt><dd>Odświeża informacje o zdalnych gałęziach, bez zmiany plików.</dd></div>
         <div><dt><code>git pull</code></dt><dd>Pobiera zmiany i integruje je z aktualną gałęzią.</dd></div>
         <div><dt><code>git push</code></dt><dd>Publikuje lokalne commity w zdalnym repozytorium.</dd></div>
