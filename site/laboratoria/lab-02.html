@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 02: gałęzie Git, konflikty, Pull Request oraz strategie merge, squash i rebase.">
+  <title>02. Branch, konflikt i Pull Request | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-02.html" aria-current="page">Laboratorium 02</a>
+      <a class="nav-external" href="https://github.com/" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 02</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 02</span></nav>
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 02 <span class="eyebrow-divider">/</span> MATERIAŁY GOTOWE</p>
+        <h1 id="lab-title">Branch, konflikt<br><span>i Pull Request</span></h1>
+        <p class="intro-lede">Przeprowadź małą zmianę na osobnej gałęzi, rozwiąż kontrolowany konflikt i świadomie wybierz sposób połączenia historii.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">ZAKRES</span><strong>BRANCH → PR → MERGE</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">PLATFORMA</span><strong>Git CLI · GitHub</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="outcomes-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">CEL SPOTKANIA</p><h2 id="outcomes-title">Po laboratorium potrafisz</h2></div></div>
+      <ul class="outcome-list">
+        <li>Utworzyć gałąź, przełączyć się na nią i opublikować ją na GitHubie.</li>
+        <li>Otworzyć Pull Request i odczytać różnice przed połączeniem zmian.</li>
+        <li>Rozpoznać oraz rozwiązać prosty konflikt scalania.</li>
+        <li>Wyjaśnić różnicę między merge commit, squash merge i rebase.</li>
+      </ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="prep-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PRZED STARTEM</p><h2 id="prep-title">Przygotuj repozytorium</h2></div></div>
+      <div class="prep-grid">
+        <article class="prep-item"><span class="prep-index">A / REPO</span><h3>Projekt z Lab 01</h3><p>Pracuj w repozytorium z poprzednich zajęć. Gałąź <code>main</code> powinna być wysłana na GitHub.</p></article>
+        <article class="prep-item"><span class="prep-index">B / EDYTOR</span><h3>Wybierz narzędzie</h3><p>Przygotuj VS Code, Ridera albo Visual Studio. W ćwiczeniu użyjesz graficznego edytora konfliktów.</p></article>
+        <article class="prep-item"><span class="prep-index">C / KONTROLA</span><h3>README i czysty stan</h3><p>Ćwiczenie zmienia prosty plik <code>README.md</code>. Przed utworzeniem gałęzi pobierz zmiany i upewnij się, że katalog roboczy jest czysty.</p></article>
+      </div>
+      <pre class="code-block"><code>git switch main
+git pull --ff-only
+git status</code></pre>
+      <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+        <li>Widzisz <code>On branch main</code></li>
+        <li>Widzisz <code>working tree clean</code></li>
+      </ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="steps-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">ĆWICZENIE PROWADZONE</p><h2 id="steps-title">Jedna zmiana, pełny workflow</h2></div></div>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">GIT / BRANCH</p><h3>Utwórz gałąź funkcjonalną</h3></div></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-branch-caption">
+          <figcaption id="diagram-branch-caption">Branch oddziela pracę w toku i pozwala kontynuować ją na innym komputerze</figcaption>
+          <div class="diagram-stack">
+            <div class="diagram-row"><span class="diagram-label">main</span><div class="diagram-flow"><span class="diagram-node is-commit">C0<br>start</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">main</span></div></div>
+            <div class="diagram-row"><span class="diagram-label">feature/readme-contact</span><div class="diagram-flow"><span class="diagram-node is-commit">C0</span><span class="diagram-branch-point">↘</span><span class="diagram-node is-commit">C1<br>kontakt</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">feature/…</span></div></div>
+          </div>
+          <p class="diagram-note">Na <code>main</code> nadal znajduje się gotowa wersja C0. Niedokończony commit C1 istnieje tylko na branchu funkcjonalnym.</p>
+          <div class="diagram-flow"><span class="diagram-node">komputer<br>w szkole</span><span class="diagram-arrow">push →</span><span class="diagram-node is-branch">GitHub<br>feature/…</span><span class="diagram-arrow">fetch →</span><span class="diagram-node">komputer<br>w domu</span></div>
+          <p class="diagram-note">Publikujesz branch, a nie niedokończoną zmianę na <code>main</code>.</p>
+        </figure>
+        <p><strong>Po co tworzymy osobną gałąź?</strong> Nie każda zmiana jest od razu gotowa. Kod może być rozpoczęty, wymagać testów albo czekać na konsultację. Gdyby każdy taki etap trafiał bezpośrednio na <code>main</code>, główna gałąź mogłaby zawierać niedziałającą lub niekompletną wersję projektu.</p>
+        <p>Branch funkcjonalny jest bezpiecznym miejscem na pracę w toku. Możesz robić na nim małe commity, eksperymentować i poprawiać rozwiązanie, podczas gdy <code>main</code> nadal wskazuje ostatnią uzgodnioną wersję. Dopiero gotową i sprawdzoną zmianę proponujesz do połączenia przez Pull Request.</p>
+        <p>Branch pomaga również przenosić pracę między stanowiskami. Przykładowo: rozpoczynasz zadanie w szkole, zapisujesz aktualny etap w commicie i wysyłasz branch na GitHuba. W domu pobierasz ten sam branch i kontynuujesz dokładnie od zapisanego miejsca. <strong>Push brancha nie oznacza połączenia go z <code>main</code>.</strong></p>
+        <div class="comparison-prompt"><span class="data-label">SCENARIUSZ</span><p>W szkole zmiana jest ukończona w 60%, ale zajęcia się kończą. Zamiast dodawać niegotowy kod do <code>main</code>, wykonujesz commit na <code>feature/readme-contact</code> i publikujesz ten branch. W domu pobierasz go, kończysz zadanie, a dopiero potem otwierasz lub aktualizujesz Pull Request.</p></div>
+        <div class="comparison-prompt"><span class="data-label">W FIRMIE</span><p>Otrzymujesz zadanie dodania formularza kontaktowego. Tworzysz branch <code>feature/contact-form</code>, regularnie zapisujesz postęp w commitach i wysyłasz go na serwer, aby praca była dostępna dla zespołu. Gdy funkcja jest gotowa, otwierasz Pull Request. Inna osoba przegląda kod, proponuje poprawki, a automatyczne testy sprawdzają projekt. Dopiero po akceptacji i poprawnym wyniku testów branch zostaje połączony z <code>main</code>. Dzięki temu główna gałąź zawiera zmiany, które zostały sprawdzone, a zespół może równolegle pracować nad innymi zadaniami.</p></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-company-caption">
+          <figcaption id="diagram-company-caption">Typowy przepływ zmiany w zespole</figcaption>
+          <div class="diagram-flow"><span class="diagram-node">zadanie</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">feature/…</span><span class="diagram-arrow">→</span><span class="diagram-node is-commit">commity<br>+ push</span><span class="diagram-arrow">→</span><span class="diagram-node is-pr">Pull Request<br>review + testy</span><span class="diagram-arrow">→</span><span class="diagram-node is-result">main<br>gotowa zmiana</span></div>
+          <p class="diagram-note">Pull Request jest bramką jakości: zmiana może być poprawiana na swoim branchu bez blokowania stabilnej wersji.</p>
+        </figure>
+        <p>Utwórz gałąź o nazwie opisującej zmianę. <code>git switch -c</code> jednocześnie tworzy gałąź i przełącza na nią.</p>
+        <pre class="code-block"><code>git switch -c feature/readme-contact
+git branch --show-current</code></pre>
+        <p>Dopisz na końcu pliku <code>README.md</code> dwie linie:</p>
+        <pre class="code-block"><code>## Kontakt
+Autor: Student</code></pre>
+        <pre class="code-block"><code>git diff
+git add README.md
+git commit -m "docs: add contact section"
+git log --oneline -3</code></pre>
+        <p>Commit zapisuje bieżący, sensowny etap pracy — nie musi oznaczać, że całe zadanie jest już gotowe do połączenia z <code>main</code>. W następnym kroku opublikujesz branch, aby commit był dostępny również poza tym komputerem.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>Aktualna gałąź to <code>feature/readme-contact</code></li>
+          <li><code>git diff</code> pokazuje dwie dodane linie przed commitem</li>
+          <li>Nowy commit jest pierwszy na krótkiej liście historii</li>
+        </ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">GITHUB / PULL REQUEST</p><h3>Opublikuj zmianę i otwórz PR</h3></div></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-pr-caption">
+          <figcaption id="diagram-pr-caption">Od lokalnego brancha do propozycji zmiany</figcaption>
+          <div class="diagram-flow"><span class="diagram-node is-branch">lokalny<br>feature/…</span><span class="diagram-arrow">push →</span><span class="diagram-node is-branch">GitHub<br>feature/…</span><span class="diagram-arrow">→</span><span class="diagram-node is-pr">Pull Request<br>porównanie</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">base: main</span></div>
+          <p class="diagram-note">Push publikuje branch. Pull Request opisuje i porównuje zmianę, ale jeszcze jej nie scala.</p>
+        </figure>
+        <pre class="code-block"><code>git push -u origin feature/readme-contact</code></pre>
+        <ol class="instruction-list">
+          <li>Otwórz repozytorium na GitHubie i wybierz <strong>Compare &amp; pull request</strong>.</li>
+          <li>Sprawdź ustawienie <code>base: main</code> oraz <code>compare: feature/readme-contact</code>.</li>
+          <li>Wpisz tytuł <code>docs: add contact section</code> i krótko opisz zmianę.</li>
+          <li>Otwórz zakładkę <strong>Files changed</strong>. Nie łącz jeszcze Pull Requestu.</li>
+        </ol>
+        <div class="comparison-prompt"><span class="data-label">SPRAWDŹ</span><p>Czy PR pokazuje dokładnie jeden plik i dwie nowe linie? Pull Request jest propozycją zmiany i miejscem przeglądu — nie osobną kopią repozytorium.</p></div>
+        <a class="small-link" href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request" target="_blank" rel="noreferrer">Tworzenie Pull Requestu — GitHub Docs <span aria-hidden="true">↗</span></a>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">MODEL PRACY / GITHUB</p><h3>Zrozum commit, branch i Pull Request</h3></div></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-model-caption">
+          <figcaption id="diagram-model-caption">Co powstaje na kolejnych etapach pracy</figcaption>
+          <div class="diagram-flow"><span class="diagram-node">zmienione<br>pliki</span><span class="diagram-arrow">git add →</span><span class="diagram-node">staging</span><span class="diagram-arrow">commit →</span><span class="diagram-node is-commit">C1<br>migawka</span><span class="diagram-arrow">← wskazuje</span><span class="diagram-node is-branch">branch</span><span class="diagram-arrow">porównuje →</span><span class="diagram-node is-pr">PR</span></div>
+          <p class="diagram-note">Commit zapisuje stan. Branch wskazuje ostatni commit. PR porównuje historię dwóch branchy.</p>
+        </figure>
+        <p>Zanim wywołasz konflikt, zatrzymaj się i sprawdź, co zostało utworzone. Te trzy pojęcia opisują różne elementy pracy:</p>
+        <dl class="git-glossary">
+          <div><dt><code>commit</code></dt><dd>Zapisany punkt historii: migawka przygotowanych zmian wraz z autorem, datą, opisem i unikalnym identyfikatorem. Commit nie jest wysyłany na GitHub, dopóki nie wykonasz <code>git push</code>.</dd></div>
+          <div><dt><code>branch</code></dt><dd>Lekki wskaźnik na wybrany commit. Gałąź przesuwa się do kolejnych commitów podczas pracy. Nie jest pełną kopią katalogu ani osobnym repozytorium.</dd></div>
+          <div><dt><code>Pull Request</code></dt><dd>Propozycja włączenia zmian z gałęzi porównywanej do gałęzi bazowej. Łączy listę commitów, różnice w plikach, rozmowę i wynik przeglądu.</dd></div>
+        </dl>
+        <div class="comparison-prompt"><span class="data-label">PRZEPŁYW</span><p>Edytujesz pliki → wybierasz zmiany przez <code>git add</code> → zapisujesz commit → wysyłasz branch przez <code>git push</code> → otwierasz Pull Request → przeglądasz i łączysz zmianę.</p></div>
+        <p>Wykonaj krótką analizę lokalnie:</p>
+        <pre class="code-block"><code>git branch
+git log --oneline --graph --all -8
+git show --stat HEAD</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>Gwiazdka przy <code>git branch</code> wskazuje aktualnie wybraną gałąź</li>
+          <li><code>git log</code> pokazuje, na których commitach znajdują się gałęzie</li>
+          <li><code>git show --stat HEAD</code> pokazuje autora, opis oraz pliki ostatniego commita</li>
+        </ul>
+        <p>Teraz zbadaj te same obiekty w interfejsie GitHuba:</p>
+        <ol class="instruction-list">
+          <li>Na stronie repozytorium otwórz listę gałęzi. Przełącz widok między <code>main</code> i <code>feature/readme-contact</code>.</li>
+          <li>Na każdej gałęzi otwórz <code>README.md</code>. Sprawdź, dlaczego ten sam plik może mieć różną zawartość.</li>
+          <li>Kliknij odnośnik z liczbą commitów. Otwórz ostatni commit i obejrzyj jego identyfikator, autora, komunikat oraz zmienione linie.</li>
+          <li>Wróć do Pull Requestu. W zakładce <strong>Commits</strong> znajdź ten sam commit, a w <strong>Files changed</strong> zobacz łączny efekt całego PR.</li>
+          <li>Otwórz widok porównania gałęzi i ustaw <code>base: main</code> oraz <code>compare: feature/readme-contact</code>. Zamień je miejscami i zobacz, jak zmienia się kierunek różnic.</li>
+        </ol>
+        <div class="comparison-prompt"><span class="data-label">ODPOWIEDZ</span><p>Czy branch zawiera pliki, czy wskazuje historię commitów? Czym różni się widok pojedynczego commita od <strong>Files changed</strong> całego PR? Dlaczego kierunek <code>base → compare</code> ma znaczenie?</p></div>
+        <a class="small-link" href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-branches-in-your-repository/viewing-branches-in-your-repository" target="_blank" rel="noreferrer">Przeglądanie gałęzi — GitHub Docs <span aria-hidden="true">↗</span></a>
+        <a class="small-link" href="https://docs.github.com/en/pull-requests/how-tos/commit-changes/comparing-commits" target="_blank" rel="noreferrer">Porównywanie commitów i gałęzi — GitHub Docs <span aria-hidden="true">↗</span></a>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">GIT / KONFLIKT</p><h3>Utwórz kontrolowany konflikt</h3></div></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-conflict-caption">
+          <figcaption id="diagram-conflict-caption">Dwie różne zmiany tego samego miejsca</figcaption>
+          <div class="diagram-flow"><span class="diagram-node is-branch">feature/…<br>Autor: Student</span><span class="diagram-arrow">↘</span><span class="diagram-node is-conflict">KONFLIKT<br>ta sama linia</span><span class="diagram-arrow">↗</span><span class="diagram-node is-branch">main<br>Zespół: WPR</span></div>
+          <p class="diagram-note">Git potrafi połączyć różne fragmenty automatycznie. Tutaj potrzebuje decyzji człowieka.</p>
+        </figure>
+        <p>Na gałęzi <code>main</code> zmień dokładnie tę samą linię, którą zmieniła gałąź funkcjonalna. To bezpieczna symulacja typowego konfliktu.</p>
+        <pre class="code-block"><code>git switch main</code></pre>
+        <p>W <code>README.md</code> dodaj lub zmień sekcję kontaktową tak, aby zawierała:</p>
+        <pre class="code-block"><code>## Kontakt
+Zespół: Warsztat Programisty</code></pre>
+        <pre class="code-block"><code>git add README.md
+git commit -m "docs: add team contact"
+git push</code></pre>
+        <p>Wróć na gałąź funkcjonalną i spróbuj włączyć aktualny <code>main</code>:</p>
+        <pre class="code-block"><code>git switch feature/readme-contact
+git merge main
+git status</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>Git zatrzymuje scalanie i wskazuje konflikt w <code>README.md</code></li>
+          <li><code>git status</code> pokazuje plik jako <code>both modified</code></li>
+        </ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">05</span><div><p class="eyebrow">GIT / NARZĘDZIA</p><h3>Rozwiąż konflikt w edytorze</h3></div></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-resolve-caption">
+          <figcaption id="diagram-resolve-caption">Edytor konfliktów pokazuje wejścia i wynik</figcaption>
+          <div class="diagram-flow"><span class="diagram-node">CURRENT<br>Autor: Student</span><span class="diagram-arrow">+</span><span class="diagram-node">INCOMING<br>Zespół: WPR</span><span class="diagram-arrow">→</span><span class="diagram-node is-result">RESULT<br>Student — WPR</span></div>
+          <p class="diagram-note">Wynik nie musi być prostym wyborem jednej strony — może świadomie łączyć obie.</p>
+        </figure>
+        <p>Najpierw otwórz <code>README.md</code> jako zwykły tekst. Zobacz, jak Git oznaczył wersję bieżącej gałęzi (<code>HEAD</code>) i wersję dołączaną z <code>main</code>:</p>
+        <pre class="code-block"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Autor: Student
+=======
+Zespół: Warsztat Programisty
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; main</code></pre>
+        <p>Następnie uruchom narzędzie do rozwiązywania konfliktów w wybranym IDE. Nie klikaj automatycznie „Accept Current” lub „Accept Incoming” — najpierw ustal, która strona odpowiada bieżącej gałęzi, a która gałęzi <code>main</code>.</p>
+        <div class="prep-grid">
+          <article class="prep-item"><span class="prep-index">A / VS CODE</span><h3>Merge Editor</h3><p>W panelu Source Control wybierz konfliktujący plik, a następnie <strong>Resolve in Merge Editor</strong>. Porównaj widoki Incoming, Current i Result. Możesz też użyć akcji wyświetlanych bezpośrednio nad konfliktem.</p><a class="small-link" href="https://code.visualstudio.com/docs/sourcecontrol/merge-conflicts" target="_blank" rel="noreferrer">Konflikty w VS Code <span aria-hidden="true">↗</span></a></article>
+          <article class="prep-item"><span class="prep-index">B / RIDER</span><h3>Resolve Conflicts</h3><p>W oknie Commit znajdź sekcję <strong>Merge Conflicts</strong> i wybierz <strong>Resolve</strong>. Lewy oraz prawy panel pokazują wersje wejściowe, a środkowy panel — wynik.</p><a class="small-link" href="https://www.jetbrains.com/help/rider/Resolve_conflicts.html" target="_blank" rel="noreferrer">Konflikty w Riderze <span aria-hidden="true">↗</span></a></article>
+          <article class="prep-item"><span class="prep-index">C / VISUAL STUDIO</span><h3>Merge Editor</h3><p>Otwórz okno <strong>Git Changes</strong>, rozwiń listę <strong>Unmerged Changes</strong> i kliknij konfliktujący plik. Porównaj opcje Take Current, Take Incoming oraz ręczną edycję wyniku.</p><a class="small-link" href="https://learn.microsoft.com/en-us/visualstudio/version-control/git-resolve-conflicts?view=vs-2022" target="_blank" rel="noreferrer">Konflikty w Visual Studio <span aria-hidden="true">↗</span></a></article>
+        </div>
+        <ol class="instruction-list">
+          <li>Wybierz wersję bieżącą i zobacz, jak zmienił się panel wyniku. Cofnij ten wybór.</li>
+          <li>Wybierz wersję dołączaną, ponownie obejrzyj wynik i cofnij wybór.</li>
+          <li>Spróbuj przyjąć obie wersje. Zwróć uwagę na ich kolejność oraz powtórzenia.</li>
+          <li>Na końcu ręcznie zbuduj jedną czytelną wersję, zapisz plik i sprawdź go przez <code>git diff</code>.</li>
+        </ol>
+        <p>Końcowy wynik powinien zawierać informacje z obu gałęzi:</p>
+        <pre class="code-block"><code>## Kontakt
+Autor: Student — Warsztat Programisty</code></pre>
+        <pre class="code-block"><code>git diff
+git add README.md
+git commit -m "merge: resolve contact conflict"
+git push
+git status</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li>W pliku nie ma znaczników <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> ani <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code></li>
+          <li>Potrafisz wskazać w swoim edytorze wersję bieżącą, dołączaną oraz wynikową</li>
+          <li>Pull Request na GitHubie ponownie może zostać połączony</li>
+        </ul>
+        <div class="comparison-prompt"><span class="data-label">PORÓWNAJ</span><p>Obejrzyj ten sam konflikt w jeszcze jednym IDE u osoby obok albo na komputerze prowadzącego. Które narzędzie najlepiej pokazuje trzy wersje? Gdzie najłatwiej zbudować wynik z fragmentów obu stron? Czy nazwy „current”, „incoming”, „yours” i „theirs” są równie czytelne?</p></div>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">06</span><div><p class="eyebrow">GITHUB / SQUASH</p><h3>Połącz Pull Request jako jeden commit</h3></div></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-squash-caption">
+          <figcaption id="diagram-squash-caption">Squash upraszcza historię głównej gałęzi</figcaption>
+          <div class="diagram-flow"><span class="diagram-node is-commit">C1<br>kontakt</span><span class="diagram-arrow">+</span><span class="diagram-node is-commit">C2<br>merge main</span><span class="diagram-arrow">+</span><span class="diagram-node is-commit">C3<br>poprawka</span><span class="diagram-arrow">squash →</span><span class="diagram-node is-result">S1<br>jedna zmiana</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">main</span></div>
+          <p class="diagram-note">Commity robocze pozostają w zamkniętym PR, ale na main pojawia się jeden nowy commit.</p>
+        </figure>
+        <p>Na stronie PR wybierz z listy <strong>Squash and merge</strong>, sprawdź komunikat końcowego commita i potwierdź. Ta metoda zbiera wszystkie commity PR w jeden logiczny commit na <code>main</code>.</p>
+        <p>Po połączeniu usuń zdalną gałąź przyciskiem <strong>Delete branch</strong>, a następnie zsynchronizuj lokalne repozytorium:</p>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only
+git branch -D feature/readme-contact
+git log --oneline --graph -5</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span>
+          <li><code>main</code> zawiera uzgodnioną treść README</li>
+          <li>Zmiana z PR jest widoczna na <code>main</code> jako jeden commit; <code>-D</code> usuwa sprawdzoną gałąź, której commitów squash nie zachował osobno</li>
+        </ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">07</span><div><p class="eyebrow">ANALIZA / STRATEGIE</p><h3>Porównaj merge, squash i rebase</h3></div></div>
+        <figure class="concept-diagram" aria-labelledby="diagram-strategies-caption">
+          <figcaption id="diagram-strategies-caption">Ten sam zestaw zmian, trzy kształty historii</figcaption>
+          <div class="diagram-stack">
+            <div class="diagram-row"><span class="diagram-label">merge commit</span><div class="diagram-flow"><span class="diagram-node is-commit">A</span><span class="diagram-branch-point">↗ B → C ↘</span><span class="diagram-node is-result">M</span></div></div>
+            <div class="diagram-row"><span class="diagram-label">squash</span><div class="diagram-flow"><span class="diagram-node is-commit">A</span><span class="diagram-arrow">→</span><span class="diagram-node is-result">S<br>B+C</span></div></div>
+            <div class="diagram-row"><span class="diagram-label">rebase</span><div class="diagram-flow"><span class="diagram-node is-commit">A</span><span class="diagram-arrow">→</span><span class="diagram-node is-commit">B′</span><span class="diagram-arrow">→</span><span class="diagram-node is-commit">C′</span></div></div>
+          </div>
+          <p class="diagram-note">Merge zachowuje rozgałęzienie, squash tworzy jeden commit, a rebase odtwarza commity w linii.</p>
+        </figure>
+        <div class="editor-columns">
+          <div><h4>Merge commit</h4><p>Zachowuje wszystkie commity gałęzi i dodaje commit scalający. Historia pokazuje moment połączenia dwóch linii pracy.</p><pre class="code-block"><code>git switch main
+git merge feature/nazwa</code></pre></div>
+          <div><h4>Squash merge</h4><p>Łączy cały PR w jeden commit na <code>main</code>. Drobne commity robocze nie trafiają osobno do głównej historii.</p><pre class="code-block"><code># wybór na stronie PR:
+Squash and merge</code></pre></div>
+        </div>
+        <div class="comparison-prompt"><span class="data-label">REBASE</span><p><code>git rebase main</code> przenosi commity bieżącej gałęzi na aktualny koniec <code>main</code>, tworząc dla nich nowe identyfikatory. Daje liniową historię. Nie wykonuj rebase na współdzielonej gałęzi bez uzgodnienia z zespołem.</p></div>
+        <pre class="code-block"><code>git switch feature/nazwa
+git rebase main
+git log --oneline --graph --all -8</code></pre>
+        <a class="small-link" href="https://docs.github.com/en/pull-requests/reference/pull-request-merges" target="_blank" rel="noreferrer">Strategie łączenia PR — GitHub Docs <span aria-hidden="true">↗</span></a>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="git-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">ŚCIĄGA</p><h2 id="git-title">Minimalny zestaw komend</h2></div></div>
+      <dl class="git-glossary">
+        <div><dt><code>git status</code></dt><dd>Pokazuje bieżącą gałąź, zmienione pliki i stan trwającego konfliktu.</dd></div>
+        <div><dt><code>git switch -c nazwa</code></dt><dd>Tworzy nową gałąź i od razu na nią przełącza.</dd></div>
+        <div><dt><code>git branch</code></dt><dd>Wyświetla lokalne gałęzie; gwiazdka oznacza gałąź bieżącą.</dd></div>
+        <div><dt><code>git diff</code></dt><dd>Pokazuje niezapisane różnice w katalogu roboczym.</dd></div>
+        <div><dt><code>git log --oneline --graph --all</code></dt><dd>Pokazuje skróconą historię i rozgałęzienia.</dd></div>
+        <div><dt><code>git merge nazwa</code></dt><dd>Włącza wskazaną gałąź do gałęzi bieżącej.</dd></div>
+        <div><dt><code>git merge --abort</code></dt><dd>Przerywa nieukończone scalanie i wraca do stanu sprzed próby.</dd></div>
+        <div><dt><code>git rebase main</code></dt><dd>Odtwarza commity bieżącej gałęzi na końcu <code>main</code>.</dd></div>
+        <div><dt><code>git rebase --abort</code></dt><dd>Przerywa nieukończony rebase i przywraca wcześniejszy stan.</dd></div>
+      </dl>
+    </section>
+
+    <section class="section-block" aria-labelledby="assignment-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ZADANIE DO WYKONANIA</p><h2 id="assignment-title">Dodaj instrukcję uruchomienia</h2></div></div>
+      <p class="assignment-lede">Samodzielnie przeprowadź drugą zmianę przez cały workflow:</p>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Utwórz z aktualnego <code>main</code> gałąź <code>docs/run-instructions</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Dodaj do README sekcję <code>## Uruchomienie</code> z komendą <code>dotnet run</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wykonaj dwa małe commity: dodanie nagłówka oraz dodanie komendy.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Przed publikacją przeanalizuj <code>git status</code>, <code>git diff</code> i <code>git log --oneline -3</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wyślij gałąź i otwórz Pull Request do <code>main</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>W <strong>Files changed</strong> sprawdź, czy PR nie zawiera przypadkowych zmian.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Rozwiąż przynajmniej jeden konflikt w VS Code, Riderze albo Visual Studio i porównaj interfejs z drugim narzędziem.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Połącz PR przez <strong>Squash and merge</strong>, pobierz <code>main</code> i usuń lokalną gałąź.</span></li>
+      </ul>
+      <aside class="extension-task"><span class="data-label">DLA CHĘTNYCH / REBASE</span><p>Utwórz gałąź <code>docs/requirements</code> i zrób na niej dwa commity. Następnie dodaj osobny commit na <code>main</code>, wróć na gałąź i wykonaj <code>git rebase main</code>. Porównaj wykres historii przed i po poleceniem <code>git log --oneline --graph --all</code>.</p></aside>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="troubleshooting-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="troubleshooting-title">Gdy coś nie działa</h2></div></div>
+      <details><summary>Zmiany trafiły na niewłaściwą gałąź</summary><p>Nie twórz kolejnych commitów. Sprawdź <code>git status</code>. Jeśli zmiany nie są jeszcze zapisane, utwórz właściwą gałąź poleceniem <code>git switch -c feature/nazwa</code> — zmiany przejdą razem z Tobą.</p></details>
+      <details><summary><code>git switch</code> odmawia przełączenia</summary><p>Masz lokalne zmiany, które zostałyby nadpisane. Zapisz je w commicie na właściwej gałęzi albo świadomie odłóż. Nie usuwaj ich na ślepo.</p></details>
+      <details><summary>Nie wiem, które linie zachować w konflikcie</summary><p>Porównaj obie strony znaczników i ustal końcową treść z autorem zmiany. Plik po rozwiązaniu ma zawierać poprawny wynik, a nie znaczniki konfliktu. Potem wykonaj <code>git add</code> i <code>git commit</code>.</p></details>
+      <details><summary>IDE nie pokazuje edytora konfliktów</summary><p>Najpierw sprawdź <code>git status</code>. Narzędzie pojawi się tylko podczas rzeczywistego, nierozwiązanego konfliktu. W VS Code zajrzyj do Source Control, w Riderze do Commit → Merge Conflicts, a w Visual Studio do Git Changes → Unmerged Changes. Możesz też zawsze rozwiązać plik ręcznie.</p></details>
+      <details><summary>Chcę wycofać próbę merge lub rebase</summary><p>Podczas merge użyj <code>git merge --abort</code>, a podczas rebase <code>git rebase --abort</code>. Następnie sprawdź stan przez <code>git status</code>.</p></details>
+      <details><summary>GitHub nie pokazuje opcji Squash and merge</summary><p>Właściciel repozytorium musi ją włączyć w <strong>Settings → General → Pull Requests</strong>. Jeśli nie masz uprawnień, użyj dostępnej strategii i opisz różnicę w wynikowej historii.</p></details>
+      <details><summary>Po rebase zwykły push jest odrzucany</summary><p>Rebase zmienia identyfikatory commitów. Na własnej gałęzi funkcjonalnej używa się wtedy ostrożnie <code>git push --force-with-lease</code>. Nie rób tego na <code>main</code> ani na współdzielonej gałęzi bez uzgodnienia.</p></details>
+    </section>
+
+    <section class="next-step" aria-label="Następny krok"><span class="note-index">KONIEC LABORATORIUM / 02</span><p>Potrafisz odseparować zmianę, poddać ją przeglądowi i świadomie włączyć do głównej historii.</p><a href="../index.html">Wróć do indeksu kursu <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span><a href="../index.html">INDEKS KURSU</a> <span class="footer-slash">·</span> LAB 02</span></footer>
+</body>
+</html>
