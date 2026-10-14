@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 03: moja ścieżka w informatyce w Markdownie, repozytorium GitHub, branche i Pull Request.">
+  <title>03. Moja ścieżka w informatyce | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-03.html" aria-current="page">Laboratorium 03</a>
+      <a class="nav-external" href="https://github.com/" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 03</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 03</span></nav>
+
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 03 <span class="eyebrow-divider">/</span> ZADANIE PODSUMOWUJĄCE</p>
+        <h1 id="lab-title">Moja ścieżka<br><span>w informatyce</span></h1>
+        <p class="intro-lede">Przygotuj publiczne repozytorium opisujące Twoją drogę w informatyce, uporządkuj pracę na branchu i przeprowadź ją przez Pull Request.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">ZAKRES</span><strong>MARKDOWN → BRANCH → PR</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">CZAS</span><strong>90 MINUT</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="outcomes-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">CEL SPOTKANIA</p><h2 id="outcomes-title">Po laboratorium potrafisz</h2></div></div>
+      <ul class="outcome-list">
+        <li>Samodzielnie utworzyć publiczne repozytorium na GitHubie.</li>
+        <li>Przygotować czytelny dokument w Markdownie i skorzystać z jego dokumentacji.</li>
+        <li>Podzielić pracę na 3–5 logicznych commitów na osobnej gałęzi.</li>
+        <li>Utworzyć, opisać i połączyć Pull Request z gałęzią <code>main</code>.</li>
+      </ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="safety-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">WAŻNE PRZED STARTEM</p><h2 id="safety-title">Repozytorium będzie publiczne</h2></div></div>
+      <div class="comparison-prompt"><span class="data-label">PRYWATNOŚĆ</span><p>Nie wpisuj prawdziwego numeru telefonu, adresu zamieszkania, numerów dokumentów ani innych wrażliwych danych. Możesz użyć przykładowego adresu e-mail albo pozostawić dane kontaktowe jako ogólny opis.</p></div>
+      <div class="prep-grid">
+        <article class="prep-item"><span class="prep-index">A / REPO</span><h3>Nowy projekt</h3><p>Załóż własne publiczne repozytorium przeznaczone wyłącznie do tego zadania. Nazwa powinna być czytelna, np. <code>sciezka-w-informatyce</code>.</p></article>
+        <article class="prep-item"><span class="prep-index">B / PLIKI</span><h3>Prosta struktura</h3><p>Umieść opis swojej ścieżki w pliku <code>sciezka.md</code>, a w <code>README.md</code> krótko opisz, czego dotyczy repozytorium.</p></article>
+        <article class="prep-item"><span class="prep-index">C / ŹRÓDŁA</span><h3>Dokumentacja</h3><p>Możesz korzystać z dokumentacji Markdowna. W README dodaj link do dokumentacji, z której korzystałeś.</p><a class="small-link" href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noreferrer">Markdown Guide — podstawowa składnia <span aria-hidden="true">↗</span></a></article>
+      </div>
+    </section>
+
+    <section class="section-block" aria-labelledby="assignment-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">ZADANIE GŁÓWNE</p><h2 id="assignment-title">Opisz swoją ścieżkę</h2></div></div>
+      <p class="assignment-lede">Stwórz dokument, który przedstawia Ciebie jako osobę rozpoczynającą lub rozwijającą swoją drogę w informatyce. Treść i styl pozostają Twoją decyzją.</p>
+      <div class="editor-columns">
+        <div>
+          <h4>Dokument powinien zawierać</h4>
+          <ul class="instruction-list">
+            <li>imię lub nazwę prezentowaną w dokumencie oraz krótkie podsumowanie;</li>
+            <li>doświadczenie związane z informatyką, nawet jeśli pochodzi z nauki własnej;</li>
+            <li>cele związane ze studiami i plan rozwoju;</li>
+            <li>znane narzędzia, technologie albo obszary zainteresowań;</li>
+            <li>informację o projektach, kursach, kołach naukowych lub innych aktywnościach.</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Spróbuj użyć</h4>
+          <ul class="instruction-list">
+            <li>nagłówków różnych poziomów;</li>
+            <li>list punktowanych lub numerowanych;</li>
+            <li>wyróżnienia tekstu, linków i poziomego separatora;</li>
+            <li>tabeli umiejętności lub planu rozwoju;</li>
+            <li>odsyłacza do wybranego profilu albo dokumentacji.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="comparison-prompt"><span class="data-label">PUNKT WYJŚCIA</span><p>Nie kopiuj gotowego szablonu. Zbuduj własną strukturę. Jeśli nie masz jeszcze doświadczenia zawodowego, opisz sposób nauki, ukończone ćwiczenia, zainteresowania techniczne i cele na najbliższy rok.</p></div>
+      <pre class="code-block"><code># Imię Nazwisko
+
+&gt; Krótkie podsumowanie
+
+## O mnie
+...
+
+## Umiejętności
+- ...
+
+## Cele na studiach
+...</code></pre>
+    </section>
+
+    <section class="section-block" aria-labelledby="workflow-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">WORKFLOW GIT / GITHUB</p><h2 id="workflow-title">Pokaż uporządkowaną pracę</h2></div></div>
+      <p>Wykonaj pracę samodzielnie, dobierając poznane narzędzia i sposób działania. Instrukcja nie podaje konkretnych komend — ważne jest rozumienie kolejnych etapów.</p>
+      <figure class="concept-diagram" aria-labelledby="workflow-caption">
+        <figcaption id="workflow-caption">Oczekiwany przepływ zadania</figcaption>
+        <div class="diagram-flow"><span class="diagram-node">nowe<br>repozytorium</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">branch<br>do pracy</span><span class="diagram-arrow">→</span><span class="diagram-node is-commit">3–5<br>commitów</span><span class="diagram-arrow">→</span><span class="diagram-node is-pr">Pull Request</span><span class="diagram-arrow">→</span><span class="diagram-node is-result">main<br>gotowa ścieżka</span></div>
+        <p class="diagram-note">Każdy commit powinien opisywać sensowny etap, a Pull Request powinien przedstawiać kompletną zmianę.</p>
+      </figure>
+      <ol class="instruction-list">
+        <li>Utwórz nowe, publiczne repozytorium na swoim koncie GitHub.</li>
+        <li>Przygotuj lokalną kopię repozytorium i rozpocznij pracę na osobnej gałęzi.</li>
+        <li>Rozwijaj dokument w 3–5 logicznych etapach, np. struktura, opis doświadczenia, cele, formatowanie i poprawki.</li>
+        <li>Przed utworzeniem PR sprawdź historię, zawartość plików i różnice względem <code>main</code>.</li>
+        <li>Utwórz Pull Request z opisem wykonanej pracy. Połącz go z <code>main</code> dopiero po sprawdzeniu podglądu zmian.</li>
+        <li>Na końcu sprawdź, czy repozytorium zawiera gotowy opis ścieżki, README i czytelny ślad pracy.</li>
+      </ol>
+    </section>
+
+    <section class="section-block" aria-labelledby="readme-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">DOKUMENTACJA</p><h2 id="readme-title">Uzupełnij README</h2></div></div>
+      <p>README nie jest kopią dokumentu. To krótka dokumentacja repozytorium, która pomaga innej osobie zrozumieć, co znajduje się w projekcie.</p>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Dodaj tytuł repozytorium i jednozdaniowy opis.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wskaż plik zawierający opis Twojej ścieżki.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Napisz, że dokument powstał w Markdownie.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Dodaj link do wykorzystanej dokumentacji Markdowna.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Możesz dodać krótką notatkę o tym, czego nauczyłeś się podczas zadania.</span></li>
+      </ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="done-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">KRYTERIA UKOŃCZENIA</p><h2 id="done-title">Sprawdź przed oddaniem</h2></div></div>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Repozytorium jest publiczne i znajduje się na Twoim koncie GitHub.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Pliki <code>sciezka.md</code> i <code>README.md</code> są czytelne i poprawnie wyświetlają się na GitHubie.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Dokument zawiera doświadczenie informatyczne, cele związane ze studiami i informacje o zainteresowaniach.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>W dokumencie wykorzystano kilka elementów składni Markdowna.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Historia zawiera od 3 do 5 logicznych commitów wykonanych na osobnej gałęzi.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Pull Request został utworzony, opisany i połączony z <code>main</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Link do repozytorium oraz link do Pull Requestu są gotowe do przekazania prowadzącemu.</span></li>
+      </ul>
+      <aside class="extension-task"><span class="data-label">DLA CHĘTNYCH</span><p>Dodaj sekcję „Projekty” z linkami do wcześniejszych prac albo przygotuj drugą wersję dokumentu, np. krótszą wersję profilową.</p></aside>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="troubleshooting-title">
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">POMOC</p><h2 id="troubleshooting-title">Gdy coś nie działa</h2></div></div>
+      <details><summary>GitHub pokazuje surowy tekst zamiast formatowania</summary><p>Sprawdź rozszerzenie pliku i składnię Markdowna. Podgląd pliku na GitHubie powinien pokazywać sformatowany dokument.</p></details>
+      <details><summary>Nie wiem, jak podzielić pracę na commity</summary><p>Potraktuj każdy commit jako osobny, zrozumiały etap: struktura dokumentu, treść, umiejętności, formatowanie albo poprawki.</p></details>
+      <details><summary>Nie mam doświadczenia informatycznego</summary><p>Opisz naukę własną, ćwiczenia, konfigurację środowiska, zainteresowania, udział w zajęciach i cele. Doświadczenie nie musi oznaczać zatrudnienia.</p></details>
+      <details><summary>Nie chcę publikować prywatnych danych</summary><p>To właściwa ostrożność. Użyj danych przykładowych, ogólnego kontaktu albo pomiń informacje, których nie chcesz udostępniać publicznie.</p></details>
+    </section>
+
+    <section class="next-step" aria-label="Następny krok"><span class="note-index">KONIEC LABORATORIUM / 03</span><p>Opis Twojej ścieżki jest dokumentem, a repozytorium pokazuje sposób, w jaki potrafisz nad nim pracować.</p><a href="../index.html">Wróć do indeksu kursu <span aria-hidden="true">↗</span></a></section>
+  </main>
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span><a href="../index.html">INDEKS KURSU</a> <span class="footer-slash">·</span> LAB 03</span></footer>
+</body>
+</html>
