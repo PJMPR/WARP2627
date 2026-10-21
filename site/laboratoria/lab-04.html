@@ -27,7 +27,7 @@
     <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 04</span></nav>
     <section class="lab-hero" aria-labelledby="lab-title">
       <div>
-        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 04 <span class="eyebrow-divider">/</span> 135 MINUT · PRACA W PARACH</p>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 04 <span class="eyebrow-divider">/</span> PRACA W PARACH</p>
         <h1 id="lab-title">Praca zespołowa<br><span>z Git i GitHub</span></h1>
         <p class="intro-lede">Zbudujcie Student IT Knowledge Base: wspólną dokumentację Markdown rozwijaną przez branche, Pull Requesty i wzajemne Code Review.</p>
       </div>
@@ -50,11 +50,10 @@
         <figcaption>Typowy przepływ pracy — Issue jest opcjonalnym rozszerzeniem</figcaption>
         <div class="diagram-flow"><span class="diagram-node">Issue?</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">Branch</span><span class="diagram-arrow">→</span><span class="diagram-node is-commit">Commit</span><span class="diagram-arrow">→</span><span class="diagram-node">Push</span><span class="diagram-arrow">→</span><span class="diagram-node is-pr">Pull Request</span><span class="diagram-arrow">→</span><span class="diagram-node is-conflict">Review</span><span class="diagram-arrow">→</span><span class="diagram-node is-result">Merge</span></div>
       </figure>
-      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Plan spotkania</th><th>Czas</th></tr></thead><tbody><tr><td>Cele, pojęcia i przepływ pracy</td><td>10 min</td></tr><tr><td>Przygotowanie repozytorium</td><td>15 min</td></tr><tr><td>Etap 1 — UKOS</td><td>25 min</td></tr><tr><td>Etap 2 — WARP</td><td>25 min</td></tr><tr><td>Etap 3 — praca równoległa</td><td>40 min</td></tr><tr><td>Etap 4 — kontrolowany konflikt (bonus)</td><td>20 min</td></tr><tr><th>Łącznie z bonusem</th><th>135 min</th></tr></tbody></table></div>
     </section>
 
     <section class="section-block" aria-labelledby="setup-title">
-      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PRZYGOTOWANIE · 15 MIN</p><h2 id="setup-title">Stanowisko i wspólne repozytorium</h2></div></div>
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PRZYGOTOWANIE</p><h2 id="setup-title">Stanowisko i wspólne repozytorium</h2></div></div>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">STUDENT A / GITHUB</p><h3>Utwórz repozytorium i zaproś partnera</h3></div></div>
         <ol class="instruction-list">
@@ -128,7 +127,7 @@ git status
     </section>
 
     <section class="section-block" aria-labelledby="stage1-title">
-      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">ETAP 1 · 25 MIN</p><h2 id="stage1-title">UKOS — Student A tworzy, Student B recenzuje</h2></div></div>
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">ETAP 1</p><h2 id="stage1-title">UKOS — Student A tworzy, Student B recenzuje</h2></div></div>
       <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / AUTOR</span><h4><code>feature/bash-cheatsheet</code></h4><p>Tworzy <code>docs/ukos/bash.md</code>, publikuje branch, otwiera PR i odpowiada na review.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / RECENZENT</span><h4>Review i merge</h4><p>Komentuje konkretną linię, prosi o poprawkę, potem zatwierdza i scala PR.</p></article></div>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">STUDENT A / BRANCH MAIN → FEATURE</p><h3>Zsynchronizuj, utwórz branch i dokument</h3></div></div>
@@ -169,7 +168,7 @@ git log --oneline -3</code></pre>
     </section>
 
     <section class="section-block" aria-labelledby="stage2-title">
-      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ETAP 2 · 25 MIN</p><h2 id="stage2-title">WARP — zamiana ról</h2></div></div>
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ETAP 2</p><h2 id="stage2-title">WARP — zamiana ról</h2></div></div>
       <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / RECENZENT</span><h4>Review i merge</h4><p>Sprawdza kompletność poleceń, zgłasza konkretną uwagę, zatwierdza poprawkę i scala.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / AUTOR</span><h4><code>feature/git-cheatsheet</code></h4><p>Aktualizuje <code>main</code>, tworzy <code>docs/warp/git.md</code>, commit, push i PR.</p></article></div>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">STUDENT B / TERMINAL</p><h3>Zacznij od aktualnego main</h3></div></div>
@@ -193,7 +192,7 @@ git log --oneline -3</code></pre>
     </section>
 
     <section class="section-block" aria-labelledby="stage3-title">
-      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">ETAP 3 · 40 MIN</p><h2 id="stage3-title">Praca równoległa — PRG1 i README</h2></div></div>
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">ETAP 3</p><h2 id="stage3-title">Praca równoległa — PRG1 i README</h2></div></div>
       <p class="assignment-lede">Oboje najpierw pobierają ten sam aktualny <code>main</code>, a następnie jednocześnie pracują na osobnych gałęziach.</p>
       <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / PRG1</span><h4><code>feature/dotnet-cli</code></h4><p>Plik <code>docs/prg1/dotnet-cli.md</code>: <code>dotnet --version</code>, <code>dotnet new console</code>, <code>dotnet new console -n MyApp</code>, <code>restore</code>, <code>build</code>, <code>run</code>, <code>clean</code>.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / README</span><h4><code>feature/readme</code></h4><p><code>README.md</code>: tytuł, opis, autorzy bez danych osobowych, spis treści, linki do UKOS/WARP/PRG1 i instrukcja korzystania.</p></article></div>
       <article class="lesson-step">
@@ -231,7 +230,7 @@ git log --oneline -6</code></pre>
     </section>
 
     <section class="section-block" aria-labelledby="stage4-title">
-      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">ETAP 4 · BONUS · 20 MIN</p><h2 id="stage4-title">Kontrolowany konflikt w README</h2></div></div>
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">ETAP 4 · BONUS</p><h2 id="stage4-title">Kontrolowany konflikt w README</h2></div></div>
       <aside class="safety-note"><strong>Zakres</strong><p>Konflikt dotyczy wyłącznie dokumentacji studentów, nie plików strony WARP. Nie używajcie <code>git push --force</code>, <code>git reset --hard</code> ani innych destrukcyjnych skrótów.</p></aside>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">OBOJE / TEN SAM PUNKT STARTOWY</p><h3>Utwórzcie dwie gałęzie z aktualnego main</h3></div></div>
