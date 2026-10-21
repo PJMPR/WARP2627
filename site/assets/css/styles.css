@@ -499,6 +499,23 @@ h1, h2, h3, h4 { font-family: var(--display); }
 }
 .extension-task .data-label { color: var(--neon-pink); text-shadow: 0 0 5px var(--neon-pink); }
 .extension-task code { color: var(--neon-lime); text-shadow: 0 0 5px var(--neon-lime); }
+.role-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 1rem 0 1.3rem 3.45rem; }
+.role-card { padding: 1rem 1.1rem; border: 1px solid var(--line); background: rgba(10, 14, 18, 0.72); }
+.role-card.is-a { border-top: 2px solid var(--cyan); }
+.role-card.is-b { border-top: 2px solid var(--neon-purple); }
+.role-card h4 { margin-bottom: 0.55rem; color: var(--text); font-size: 1rem; }
+.role-card p, .role-card li { color: var(--muted); font-size: 0.8rem; }
+.role-card ul, .role-card ol { margin: 0; padding-left: 1.15rem; }
+.role-card li { padding-block: 0.22rem; }
+.role-badge { display: inline-block; margin-bottom: 0.65rem; padding: 0.25rem 0.45rem; border: 1px solid currentColor; color: var(--cyan); font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.08em; }
+.is-b .role-badge { color: #efadff; }
+.info-table-wrap { overflow-x: auto; margin: 1rem 0 1.3rem 3.45rem; }
+.info-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+.info-table th, .info-table td { padding: 0.7rem 0.75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+.info-table th { color: var(--neon-lime); font-family: var(--mono); font-weight: 500; background: rgba(57, 255, 20, 0.05); }
+.info-table td { color: var(--muted); }
+.info-table code { color: var(--cyan); }
+.branch-label { margin: 0.8rem 0 0.3rem 3.45rem; color: var(--neon-lime); font-family: var(--mono); font-size: 0.72rem; }
 .troubleshooting details { border-top: 1px solid var(--line); }
 .troubleshooting details:last-child { border-bottom: 1px solid var(--line); }
 .troubleshooting summary { padding: 0.85rem 0; color: var(--text); font-size: 0.86rem; cursor: pointer; transition: all 300ms ease; }
@@ -561,9 +578,10 @@ h1, h2, h3, h4 { font-family: var(--display); }
   .block-heading { grid-template-columns: 2rem minmax(0, 1fr); gap: 0.5rem; }
   .block-heading h2 { font-size: 1.5rem; }
   .outcome-list { grid-template-columns: 1fr; }
-  .lesson-step > p, .lesson-step > ol, .lesson-step > .code-block, .editor-columns, .comparison-prompt, .concept-diagram, .safety-note, .git-glossary, .assignment-lede, .checklist, .extension-task { margin-left: 0; }
+  .lesson-step > p, .lesson-step > ol, .lesson-step > .code-block, .editor-columns, .comparison-prompt, .concept-diagram, .safety-note, .git-glossary, .assignment-lede, .checklist, .extension-task, .role-grid, .info-table-wrap, .branch-label { margin-left: 0; }
   .lesson-step > p, .lesson-step > ol { font-size: 0.82rem; }
   .editor-columns { grid-template-columns: 1fr; gap: 0.7rem; }
+  .role-grid { grid-template-columns: 1fr; }
   .comparison-prompt { grid-template-columns: 1fr; gap: 0.4rem; }
   .diagram-row { grid-template-columns: 1fr; gap: 0.25rem; }
   .diagram-label { text-align: left; }

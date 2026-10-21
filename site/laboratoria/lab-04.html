@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 04: praca zespołowa z Git i GitHub — branche, Pull Requesty, Code Review i konflikty.">
+  <title>04. Praca zespołowa z Git i GitHub | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-04.html" aria-current="page">Laboratorium 04</a>
+      <a class="nav-external" href="https://github.com/" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 04</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 04</span></nav>
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 04 <span class="eyebrow-divider">/</span> 135 MINUT · PRACA W PARACH</p>
+        <h1 id="lab-title">Praca zespołowa<br><span>z Git i GitHub</span></h1>
+        <p class="intro-lede">Zbudujcie Student IT Knowledge Base: wspólną dokumentację Markdown rozwijaną przez branche, Pull Requesty i wzajemne Code Review.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">PROJEKT</span><strong>KNOWLEDGE BASE</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">PRZEPŁYW</span><strong>BRANCH → PR → REVIEW</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="goals-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">CELE LABORATORIUM</p><h2 id="goals-title">Po spotkaniu potrafisz</h2></div></div>
+      <ul class="outcome-list">
+        <li>Współpracować w jednym repozytorium i synchronizować lokalny <code>main</code>.</li>
+        <li>Tworzyć gałęzie <code>feature/*</code>, commity i publikować je przez <code>push</code>.</li>
+        <li>Otwierać Pull Request, komentować konkretne linie i wysyłać review.</li>
+        <li>Poprawiać istniejący PR kolejnym commitem, zatwierdzać i scalać zmiany.</li>
+        <li>Pracować równolegle na osobnych plikach i ograniczać ryzyko konfliktu.</li>
+        <li>Rozpoznać znaczniki konfliktu i bezpiecznie rozwiązać konflikt lokalnie.</li>
+        <li>Tworzyć czytelną dokumentację przy użyciu podstaw Markdown.</li>
+        <li>Sprawdzać gałąź, stan roboczy, historię i repozytorium zdalne.</li>
+      </ul>
+      <figure class="concept-diagram">
+        <figcaption>Typowy przepływ pracy — Issue jest opcjonalnym rozszerzeniem</figcaption>
+        <div class="diagram-flow"><span class="diagram-node">Issue?</span><span class="diagram-arrow">→</span><span class="diagram-node is-branch">Branch</span><span class="diagram-arrow">→</span><span class="diagram-node is-commit">Commit</span><span class="diagram-arrow">→</span><span class="diagram-node">Push</span><span class="diagram-arrow">→</span><span class="diagram-node is-pr">Pull Request</span><span class="diagram-arrow">→</span><span class="diagram-node is-conflict">Review</span><span class="diagram-arrow">→</span><span class="diagram-node is-result">Merge</span></div>
+      </figure>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Plan spotkania</th><th>Czas</th></tr></thead><tbody><tr><td>Cele, pojęcia i przepływ pracy</td><td>10 min</td></tr><tr><td>Przygotowanie repozytorium</td><td>15 min</td></tr><tr><td>Etap 1 — UKOS</td><td>25 min</td></tr><tr><td>Etap 2 — WARP</td><td>25 min</td></tr><tr><td>Etap 3 — praca równoległa</td><td>40 min</td></tr><tr><td>Etap 4 — kontrolowany konflikt (bonus)</td><td>20 min</td></tr><tr><th>Łącznie z bonusem</th><th>135 min</th></tr></tbody></table></div>
+    </section>
+
+    <section class="section-block" aria-labelledby="setup-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PRZYGOTOWANIE · 15 MIN</p><h2 id="setup-title">Stanowisko i wspólne repozytorium</h2></div></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">STUDENT A / GITHUB</p><h3>Utwórz repozytorium i zaproś partnera</h3></div></div>
+        <ol class="instruction-list">
+          <li>Na GitHubie kliknij <strong>+ → New repository</strong>. Wpisz <code>student-it-knowledge-base</code>, wybierz widoczność uzgodnioną z prowadzącym i zaznacz <strong>Add a README file</strong>. Kliknij <strong>Create repository</strong>.</li>
+          <li>Wejdź w <strong>Settings → Collaborators → Add people</strong>, wyszukaj konto Studenta B i wyślij zaproszenie.</li>
+          <li>Skopiuj adres HTTPS z przycisku <strong>Code</strong>. Ma postać <code>https://github.com/NAZWA-UŻYTKOWNIKA/student-it-knowledge-base.git</code>.</li>
+        </ol>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Repozytorium zawiera <code>README.md</code>, a w <strong>Settings → Collaborators</strong> widać zaproszenie.</li></ul>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">STUDENT B / GITHUB</p><h3>Zaakceptuj zaproszenie</h3></div></div>
+        <p>Otwórz powiadomienie lub wiadomość e-mail od GitHuba, przejdź do zaproszenia i kliknij <strong>Accept invitation</strong>. Od tej chwili oboje jesteście collaboratorami i technicznie możecie scalać PR-y.</p>
+        <aside class="safety-note"><strong>Zasada tego ćwiczenia</strong><p>GitHub bez skonfigurowanej ochrony gałęzi nie musi wymagać recenzji. Mimo posiadanych uprawnień nie commitujcie bezpośrednio do <code>main</code> i nie scalajcie własnego PR-u. To reguła zespołu, nie zabezpieczenie techniczne.</p></aside>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">OBOJE / TERMINAL</p><h3>Sklonujcie i sprawdźcie repozytorium</h3></div></div>
+        <p>Każda osoba wykonuje polecenia na swoim komputerze. Zastąpcie <code>URL</code> adresem HTTPS. <code>clone</code> pobiera repozytorium i tworzy katalog; potem VS Code otwiera ten katalog.</p>
+        <pre class="code-block"><code>git clone URL
+cd student-it-knowledge-base
+code .
+git status
+git branch
+git remote -v</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>git status</code> pokazuje <code>On branch main</code> i czyste drzewo pracy.</li><li><code>git branch</code> oznacza <code>* main</code>, a <code>git remote -v</code> pokazuje adres <code>origin</code> dla fetch i push.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="intro-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">WPROWADZENIE</p><h2 id="intro-title">Słownik współpracy</h2></div></div>
+      <dl class="git-glossary">
+        <div><dt><code>branch</code></dt><dd>Osobna linia pracy. Pozwala przygotować zmianę bez naruszania stabilnego <code>main</code>.</dd></div>
+        <div><dt><code>commit</code></dt><dd>Lokalny, nazwany zapis przygotowanego zestawu zmian — punkt w historii projektu.</dd></div>
+        <div><dt><code>push</code></dt><dd>Wysyła lokalne commity i gałąź do repozytorium na GitHubie.</dd></div>
+        <div><dt><code>pull</code></dt><dd>Pobiera zmiany ze zdalnej gałęzi i włącza je do aktualnej gałęzi lokalnej.</dd></div>
+        <div><dt><code>Pull Request</code></dt><dd>Prośba o przejrzenie i włączenie zmian z jednej gałęzi do drugiej, tutaj do <code>main</code>.</dd></div>
+        <div><dt><code>review</code></dt><dd>Recenzja zmian w PR: komentarze, zatwierdzenie albo formalna prośba o poprawki.</dd></div>
+        <div><dt><code>merge</code></dt><dd>Połączenie zaakceptowanej gałęzi roboczej z gałęzią docelową.</dd></div>
+        <div><dt><code>conflict</code></dt><dd>Sytuacja, w której Git nie potrafi sam wybrać między sprzecznymi zmianami; autor musi uzgodnić wynik.</dd></div>
+      </dl>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">MD</span><div><p class="eyebrow">MINIMUM MARKDOWN</p><h3>Jak zapisać czytelną ściągę</h3></div></div>
+        <pre class="code-block"><code># Tytuł
+## Sekcja
+- element listy
+
+[WARP](docs/warp/git.md)
+
+| Polecenie | Znaczenie |
+|---|---|
+| `git status` | Pokazuje stan |
+
+```bash
+git status
+```</code></pre>
+        <p><code>#</code> tworzy nagłówek, <code>-</code> listę, nawiasy kwadratowe i okrągłe — link względny, pionowe kreski — tabelę, a potrójne znaki <code>`</code> blok kodu. Link względny liczy się od położenia pliku, dlatego z głównego <code>README.md</code> użyjcie np. <code>docs/ukos/bash.md</code>.</p>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">DIR</span><div><p class="eyebrow">EFEKT KOŃCOWY</p><h3>Docelowa struktura repozytorium</h3></div></div>
+        <p>Po wykonaniu wszystkich etapów repozytorium powinno mieć poniższą strukturę. Nie twórzcie od razu pustych katalogów — kolejne pliki i foldery powstaną podczas pracy na branchach.</p>
+        <pre class="code-block"><code>student-it-knowledge-base/
+├── README.md
+└── docs/
+    ├── prg1/
+    │   └── dotnet-cli.md
+    ├── ukos/
+    │   └── bash.md
+    └── warp/
+        └── git.md</code></pre>
+        <p><code>README.md</code> pełni rolę strony startowej i zawiera linki względne do trzech ściąg umieszczonych w katalogach odpowiadających przedmiotom.</p>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="stage1-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">ETAP 1 · 25 MIN</p><h2 id="stage1-title">UKOS — Student A tworzy, Student B recenzuje</h2></div></div>
+      <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / AUTOR</span><h4><code>feature/bash-cheatsheet</code></h4><p>Tworzy <code>docs/ukos/bash.md</code>, publikuje branch, otwiera PR i odpowiada na review.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / RECENZENT</span><h4>Review i merge</h4><p>Komentuje konkretną linię, prosi o poprawkę, potem zatwierdza i scala PR.</p></article></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">STUDENT A / BRANCH MAIN → FEATURE</p><h3>Zsynchronizuj, utwórz branch i dokument</h3></div></div>
+        <p>Najpierw przejdź na <code>main</code>. <code>pull --ff-only</code> pobiera aktualny stan i zatrzyma się zamiast tworzyć nieoczekiwany merge. Dopiero potem utwórz gałąź roboczą.</p>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git switch -c feature/bash-cheatsheet
+git status</code></pre>
+        <p>W VS Code utwórz <code>docs/ukos/bash.md</code>. Dla każdego polecenia <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code>, <code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>cat</code> i <code>clear</code> dodaj opis oraz przykład. Użyj nagłówków, tabeli lub listy i bloków <code>bash</code>.</p>
+        <p class="branch-label">GAŁĄŹ: feature/bash-cheatsheet</p>
+        <pre class="code-block"><code>git status
+git add docs/ukos/bash.md
+git commit -m "docs: add bash cheatsheet"
+git push -u origin feature/bash-cheatsheet
+git log --oneline -3</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>status</code> po commicie jest czysty; <code>log</code> pokazuje <code>docs: add bash cheatsheet</code>.</li><li>Na GitHubie istnieje branch <code>feature/bash-cheatsheet</code> z nowym plikiem.</li></ul>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">STUDENT A / GITHUB</p><h3>Otwórz Pull Request do main</h3></div></div>
+        <ol class="instruction-list"><li>Kliknij <strong>Compare &amp; pull request</strong> (lub <strong>Pull requests → New pull request</strong>).</li><li>Ustaw <strong>base: main</strong> i <strong>compare: feature/bash-cheatsheet</strong>.</li><li>Tytuł: <code>docs: add Bash cheatsheet</code>. W opisie napisz, co dodano i jak sprawdzono linki/formatowanie.</li><li>Kliknij <strong>Create pull request</strong>. Nie scalaj własnej zmiany.</li></ol>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">STUDENT B / GITHUB</p><h3>Wykonaj Code Review</h3></div></div>
+        <ol class="instruction-list"><li>Otwórz PR i kartę <strong>Files changed</strong>.</li><li>Najedź na konkretną linię, kliknij niebieski <strong>+</strong> i dodaj rzeczowy komentarz, np. „Dodaj ostrzeżenie, że <code>rm</code> usuwa pliki bez kosza”. Wybierz <strong>Start a review</strong>.</li><li>Kliknij <strong>Review changes</strong>, wybierz <strong>Request changes</strong>, podsumuj oczekiwaną poprawkę i wyślij review.</li></ol>
+        <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Opcja</th><th>Znaczenie</th><th>Kiedy użyć</th></tr></thead><tbody><tr><td><strong>Comment</strong></td><td>Uwagi bez decyzji.</td><td>Pytanie lub sugestia, która nie blokuje akceptacji.</td></tr><tr><td><strong>Request changes</strong></td><td>Formalna prośba o poprawki.</td><td>Zmiana powinna zostać poprawiona przed merge.</td></tr><tr><td><strong>Approve</strong></td><td>Zatwierdzenie zmian.</td><td>Po sprawdzeniu poprawionej wersji.</td></tr></tbody></table></div>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">STUDENT A → STUDENT B</p><h3>Popraw ten sam PR, zatwierdź i scal</h3></div></div>
+        <p>Student A pozostaje na <code>feature/bash-cheatsheet</code>, poprawia plik, a następnie wykonuje kolejny commit i zwykły push. GitHub automatycznie doda commit do już otwartego PR-u.</p>
+        <pre class="code-block"><code>git status
+git add docs/ukos/bash.md
+git commit -m "docs: clarify rm command"
+git push
+git log --oneline -3</code></pre>
+        <p>Student B ponownie sprawdza <strong>Files changed</strong>, wybiera <strong>Review changes → Approve</strong>, a potem <strong>Merge pull request → Confirm merge</strong>. Może usunąć zdalny branch przyciskiem <strong>Delete branch</strong>.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>PR jest oznaczony jako <strong>Merged</strong>, a <code>docs/ukos/bash.md</code> znajduje się na <code>main</code>.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="stage2-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ETAP 2 · 25 MIN</p><h2 id="stage2-title">WARP — zamiana ról</h2></div></div>
+      <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / RECENZENT</span><h4>Review i merge</h4><p>Sprawdza kompletność poleceń, zgłasza konkretną uwagę, zatwierdza poprawkę i scala.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / AUTOR</span><h4><code>feature/git-cheatsheet</code></h4><p>Aktualizuje <code>main</code>, tworzy <code>docs/warp/git.md</code>, commit, push i PR.</p></article></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">STUDENT B / TERMINAL</p><h3>Zacznij od aktualnego main</h3></div></div>
+        <p>To obowiązkowy początek nowej pracy: po merge etapu 1 lokalny <code>main</code> Studenta B jest starszy niż GitHub.</p>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git switch -c feature/git-cheatsheet
+git status</code></pre>
+        <p>Utwórz <code>docs/warp/git.md</code>. Każde polecenie opisz i zilustruj przykładem: <code>git clone</code>, <code>git status</code>, <code>git add</code>, <code>git commit</code>, <code>git push</code>, <code>git pull</code>, <code>git fetch</code>, <code>git branch</code>, <code>git switch</code>, <code>git log</code>.</p>
+        <pre class="code-block"><code>git add docs/warp/git.md
+git commit -m "docs: add Git cheatsheet"
+git push -u origin feature/git-cheatsheet
+git log --oneline -3</code></pre>
+        <p>Na GitHubie utwórz PR <code>docs: add Git cheatsheet</code> z <code>feature/git-cheatsheet</code> do <code>main</code>.</p>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">STUDENT A / GITHUB</p><h3>Zrecenzuj i scal</h3></div></div>
+        <p>Powtórz pełne review z etapu 1: komentarz do linii, <strong>Request changes</strong>, poprawka autora jako kolejny commit, ponowne sprawdzenie, <strong>Approve</strong> i merge przez Studenta A.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Drugi PR jest scalony, a <code>main</code> zawiera ściągi UKOS i WARP.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="stage3-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">ETAP 3 · 40 MIN</p><h2 id="stage3-title">Praca równoległa — PRG1 i README</h2></div></div>
+      <p class="assignment-lede">Oboje najpierw pobierają ten sam aktualny <code>main</code>, a następnie jednocześnie pracują na osobnych gałęziach.</p>
+      <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / PRG1</span><h4><code>feature/dotnet-cli</code></h4><p>Plik <code>docs/prg1/dotnet-cli.md</code>: <code>dotnet --version</code>, <code>dotnet new console</code>, <code>dotnet new console -n MyApp</code>, <code>restore</code>, <code>build</code>, <code>run</code>, <code>clean</code>.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / README</span><h4><code>feature/readme</code></h4><p><code>README.md</code>: tytuł, opis, autorzy bez danych osobowych, spis treści, linki do UKOS/WARP/PRG1 i instrukcja korzystania.</p></article></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">OBOJE / WŁASNY KOMPUTER</p><h3>Synchronizacja i osobne branche</h3></div></div>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status</code></pre>
+        <p>Po czystym statusie Student A wykonuje:</p>
+        <pre class="code-block"><code>git switch -c feature/dotnet-cli</code></pre>
+        <p>Student B na swoim komputerze wykonuje:</p>
+        <pre class="code-block"><code>git switch -c feature/readme</code></pre>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">RÓWNOLEGLE / COMMIT I PUSH</p><h3>Przygotujcie dwa niezależne PR-y</h3></div></div>
+        <p>Student A po utworzeniu dokumentu PRG1:</p>
+        <pre class="code-block"><code>git add docs/prg1/dotnet-cli.md
+git commit -m "docs: add .NET CLI cheatsheet"
+git push -u origin feature/dotnet-cli</code></pre>
+        <p>Student B po zmianie strony głównej dokumentacji:</p>
+        <pre class="code-block"><code>git add README.md
+git commit -m "docs: expand knowledge base README"
+git push -u origin feature/readme</code></pre>
+        <p>Każda osoba sprawdza <code>git status</code> i <code>git log --oneline -3</code>, a następnie otwiera osobny PR do <code>main</code>.</p>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">WZAJEMNE REVIEW</p><h3>Recenzujcie na krzyż i scalcie kolejno</h3></div></div>
+        <ol class="instruction-list"><li>Student A recenzuje PR <code>feature/readme</code> Studenta B.</li><li>Student B recenzuje PR <code>feature/dotnet-cli</code> Studenta A.</li><li>Każdy autor wprowadza ewentualną poprawkę na swoim branchu, robi commit i <code>git push</code>.</li><li>Po zatwierdzeniu scalcie najpierw jeden, a potem drugi PR.</li><li>Na obu komputerach wykonajcie synchronizację poniżej.</li></ol>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status
+git log --oneline -6</code></pre>
+        <aside class="safety-note"><strong>Dlaczego to zwykle nie powoduje konfliktu?</strong><p>Git najłatwiej łączy zmiany dotyczące różnych plików lub różnych linii. Student A tworzy plik PRG1, a Student B zmienia README, więc zmiany się nie nakładają. Konflikt nadal jest możliwy, jeśli obie osoby zmienią ten sam fragment.</p></aside>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>main</code> zawiera <code>README.md</code> oraz dokumenty <code>bash.md</code>, <code>git.md</code> i <code>dotnet-cli.md</code>.</li><li>Linki z README otwierają wszystkie trzy dokumenty.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="stage4-title">
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">ETAP 4 · BONUS · 20 MIN</p><h2 id="stage4-title">Kontrolowany konflikt w README</h2></div></div>
+      <aside class="safety-note"><strong>Zakres</strong><p>Konflikt dotyczy wyłącznie dokumentacji studentów, nie plików strony WARP. Nie używajcie <code>git push --force</code>, <code>git reset --hard</code> ani innych destrukcyjnych skrótów.</p></aside>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">OBOJE / TEN SAM PUNKT STARTOWY</p><h3>Utwórzcie dwie gałęzie z aktualnego main</h3></div></div>
+        <p>Każda osoba wykonuje na swoim komputerze pierwsze trzy polecenia. Następnie Student A tworzy <code>feature/readme-purpose-a</code>, a Student B — <code>feature/readme-purpose-b</code>.</p>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status
+
+# Student A:
+git switch -c feature/readme-purpose-a
+
+# Student B (na swoim komputerze):
+git switch -c feature/readme-purpose-b</code></pre>
+        <p>Oboje zmieniają dokładnie tę samą linię opisu celu w <code>README.md</code>, ale wpisują różne zdania. Każdy zapisuje i publikuje swoją zmianę.</p>
+        <pre class="code-block"><code>git add README.md
+git commit -m "docs: refine knowledge base purpose"
+git push -u origin NAZWA-WŁASNEJ-GAŁĘZI</code></pre>
+        <p>Utwórzcie dwa PR-y do <code>main</code>. Zrecenzujcie i scalcie PR Studenta A. PR Studenta B pozostaje otwarty i GitHub powinien zgłosić konflikt.</p>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">STUDENT B / OBSŁUGIWANY PR: PURPOSE-B</p><h3>Scal aktualny main do gałęzi roboczej</h3></div></div>
+        <p>Teraz obsługujecie drugi, nadal otwarty PR: <code>feature/readme-purpose-b</code> → <code>main</code>. Student B pozostaje autorem tej gałęzi. Pobiera nowe dane i scala aktualny zdalny <code>main</code> do swojej gałęzi:</p>
+        <pre class="code-block"><code>git switch feature/readme-purpose-b
+git status
+git fetch origin
+git merge origin/main</code></pre>
+        <p><code>fetch</code> aktualizuje informacje o GitHubie bez zmiany plików. <code>merge origin/main</code> próbuje włączyć już scalony PR Studenta A do aktualnej gałęzi Studenta B. Git zatrzyma operację na konflikcie i zapisze w <code>README.md</code> znaczniki:</p>
+        <pre class="code-block"><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+Wersja celu ze Studenta B.
+=======
+Wersja celu już scalona od Studenta A.
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main</code></pre>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">STUDENT B / ROZWIĄZANIE</p><h3>Uzgodnij treść i dokończ merge</h3></div></div>
+        <ol class="instruction-list"><li>Uruchom <code>git status</code> — plik będzie oznaczony jako <strong>both modified</strong>.</li><li>Wspólnie wybierzcie lub zredagujcie docelową treść. Usuńcie wszystkie linie <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> i <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>.</li><li>Zapiszcie plik, sprawdźcie podgląd Markdown i wyszukajcie, czy nie pozostały znaczniki.</li></ol>
+        <pre class="code-block"><code>git status
+git add README.md
+git commit -m "docs: resolve README purpose conflict"
+git push
+git log --oneline -5</code></pre>
+        <p>Push aktualizuje ten sam drugi PR. Student A ponownie sprawdza <strong>Files changed</strong>, zatwierdza i scala PR Studenta B. Na koniec oboje przechodzą na <code>main</code> i wykonują <code>git pull --ff-only origin main</code>.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Drugi PR nie ma konfliktu, zawiera uzgodniony opis i może zostać scalony.</li><li>W <code>README.md</code> nie ma znaczników konfliktu.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="cheatsheet-title">
+      <div class="block-heading"><span class="block-number">08</span><div><p class="eyebrow">ŚCIĄGA</p><h2 id="cheatsheet-title">Najważniejsze komendy Git</h2></div></div>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Polecenie</th><th>Gdzie jesteś?</th><th>Co robi / oczekiwany wynik</th><th>Jak sprawdzić?</th></tr></thead><tbody>
+        <tr><td><code>git clone URL</code></td><td>Katalog nadrzędny</td><td>Pobiera repo i tworzy jego katalog.</td><td>Wejdź do katalogu, uruchom <code>git status</code>.</td></tr>
+        <tr><td><code>git switch main</code></td><td>Dowolny czysty branch</td><td>Przełącza na <code>main</code>.</td><td><code>git branch</code> pokazuje <code>* main</code>.</td></tr>
+        <tr><td><code>git pull --ff-only origin main</code></td><td><code>main</code></td><td>Pobiera aktualny <code>main</code> bez automatycznego merge commita.</td><td><code>git status</code> pokazuje zgodność z <code>origin/main</code>.</td></tr>
+        <tr><td><code>git switch -c feature/nazwa</code></td><td>Aktualny <code>main</code></td><td>Tworzy branch i od razu na niego przełącza.</td><td><code>git branch</code> oznacza nową nazwę gwiazdką.</td></tr>
+        <tr><td><code>git status</code></td><td>Dowolny branch</td><td>Pokazuje branch oraz pliki zmienione i przygotowane.</td><td>Sam wynik jest weryfikacją.</td></tr>
+        <tr><td><code>git add .</code></td><td>Branch roboczy</td><td>Przygotowuje wszystkie zmiany w bieżącym katalogu. Najpierw sprawdź, co dodajesz.</td><td><code>git status</code> pokazuje „changes to be committed”.</td></tr>
+        <tr><td><code>git commit -m "docs: ..."</code></td><td>Branch roboczy</td><td>Tworzy lokalny zapis przygotowanych zmian.</td><td><code>git log --oneline -3</code>.</td></tr>
+        <tr><td><code>git push -u origin feature/nazwa</code></td><td>Nowy branch roboczy</td><td>Publikuje branch i ustawia śledzenie.</td><td>Branch jest widoczny na GitHubie.</td></tr>
+        <tr><td><code>git push</code></td><td>Opublikowany branch</td><td>Wysyła kolejne commity, aktualizując otwarty PR.</td><td>Commit pojawia się w karcie <strong>Commits</strong> PR-u.</td></tr>
+        <tr><td><code>git fetch origin</code></td><td>Branch roboczy</td><td>Pobiera informacje o zdalnych zmianach bez modyfikowania plików.</td><td><code>git log --oneline origin/main -3</code>.</td></tr>
+        <tr><td><code>git merge origin/main</code></td><td>Branch roboczy PR-u</td><td>Włącza aktualny zdalny <code>main</code>; może ujawnić konflikt.</td><td><code>git status</code> i <code>git log --oneline</code>.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="section-block" aria-labelledby="done-title">
+      <div class="block-heading"><span class="block-number">09</span><div><p class="eyebrow">KRYTERIA UKOŃCZENIA</p><h2 id="done-title">Sprawdźcie rezultat pary</h2></div></div>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Jedno wspólne repozytorium GitHub z dwiema osobami jako collaborators.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span><code>README.md</code> i trzy dokumenty: UKOS, WARP oraz PRG1.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Co najmniej cztery scalone Pull Requesty.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Minimum dwa PR-y utworzone przez każdego studenta.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wzajemne review z konkretnymi uwagami do zmian.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Co najmniej jedna poprawka dodana do istniejącego PR-u.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Aktualny, spójny <code>main</code> na GitHubie i obu komputerach.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wszystkie linki względne z README działają.</span></li>
+      </ul>
+      <div class="extension-task"><span class="data-label">BONUS</span><p>Konflikt dokumentacji został wywołany, rozwiązany lokalnie bez force push i scalony po ponownym review.</p></div>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="problems-title">
+      <div class="block-heading"><span class="block-number">10</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="problems-title">Najczęstsze problemy</h2></div></div>
+      <details><summary><code>git pull --ff-only</code> odmawia wykonania</summary><p>Sprawdź <code>git status</code>. Prawdopodobnie jesteś na złej gałęzi, masz niezapisane zmiany albo lokalny <code>main</code> zawiera własne commity. Nie resetuj historii. Zabezpiecz pracę na osobnym branchu i poproś prowadzącego o sprawdzenie.</p></details>
+      <details><summary>Commit trafił bezpośrednio na <code>main</code></summary><p>Nie wysyłaj go od razu. Utwórz branch wskazujący ten commit (<code>git switch -c feature/nazwa</code>) i poproś prowadzącego o pomoc w bezpiecznym przywróceniu lokalnego <code>main</code>. Nie używaj <code>reset --hard</code>.</p></details>
+      <details><summary>GitHub nie pokazuje przycisku Compare &amp; pull request</summary><p>Wejdź w <strong>Pull requests → New pull request</strong> i ręcznie wybierz <code>base: main</code> oraz swój branch jako <code>compare</code>. Sprawdź też, czy wykonano <code>git push -u origin ...</code>.</p></details>
+      <details><summary>Opcja Request changes jest niedostępna</summary><p>W niektórych konfiguracjach GitHub ogranicza formalne żądanie zmian. Dodaj komentarz do linii i podsumowanie review, a autor niech potraktuje je jako wymaganą poprawkę zgodnie z zasadami ćwiczenia.</p></details>
+      <details><summary>Push został odrzucony albo pyta o logowanie</summary><p>Sprawdź <code>git remote -v</code>, dostęp do Internetu i zaakceptowanie zaproszenia. Dla HTTPS zaloguj się w oknie Git Credential Manager; nie wpisuj hasła do konta jako hasła Git i nie udostępniaj tokenów.</p></details>
+      <details><summary>Po merge lokalnie nie widać plików partnera</summary><p>Merge na GitHubie nie aktualizuje automatycznie komputera. Wykonaj <code>git switch main</code>, potem <code>git pull --ff-only origin main</code> i sprawdź <code>git log --oneline</code>.</p></details>
+      <details><summary>W README zostały znaczniki konfliktu</summary><p>Wyszukaj <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, <code>=======</code> i <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>. Uzgodnij jedną treść, usuń wszystkie znaczniki, sprawdź podgląd Markdown, a dopiero potem wykonaj <code>git add</code> i commit.</p></details>
+      <details><summary>Link względny zwraca 404</summary><p>Sprawdź wielkość liter i ścieżkę. Z głównego README poprawne przykłady to <code>docs/ukos/bash.md</code>, <code>docs/warp/git.md</code> i <code>docs/prg1/dotnet-cli.md</code>.</p></details>
+    </section>
+
+    <div class="next-step"><span class="note-index">KONIEC / LAB 04</span><p>Przed oddaniem otwórzcie repozytorium na GitHubie, przejdźcie wszystkie linki i porównajcie wynik z checklistą.</p><a href="../index.html">WRÓĆ DO KURSU →</a></div>
+  </main>
+
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span>PRG-WPR <span class="footer-slash">·</span> 2026–27</span></footer>
+</body>
+</html>
