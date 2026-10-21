@@ -136,6 +136,19 @@ git status
 git pull --ff-only origin main
 git switch -c feature/bash-cheatsheet
 git status</code></pre>
+        <h4>Zestaw komend UKOS do udokumentowania</h4>
+        <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Polecenie</th><th>Przykład użycia</th><th>Co opisać</th></tr></thead><tbody>
+          <tr><td><code>pwd</code></td><td><code>pwd</code></td><td>Wyświetlanie ścieżki bieżącego katalogu.</td></tr>
+          <tr><td><code>ls</code></td><td><code>ls -la</code></td><td>Listowanie plików, także ukrytych, w formacie szczegółowym.</td></tr>
+          <tr><td><code>cd</code></td><td><code>cd docs/ukos</code> oraz <code>cd ..</code></td><td>Przechodzenie do katalogu i katalogu nadrzędnego.</td></tr>
+          <tr><td><code>mkdir</code></td><td><code>mkdir -p docs/ukos</code></td><td>Tworzenie katalogu wraz z brakującymi katalogami nadrzędnymi.</td></tr>
+          <tr><td><code>touch</code></td><td><code>touch bash.md</code></td><td>Tworzenie pustego pliku lub aktualizacja czasu jego modyfikacji.</td></tr>
+          <tr><td><code>cp</code></td><td><code>cp bash.md bash-backup.md</code></td><td>Kopiowanie pliku; wspomnij o opcji <code>-r</code> dla katalogów.</td></tr>
+          <tr><td><code>mv</code></td><td><code>mv bash-backup.md archive.md</code></td><td>Przenoszenie i zmiana nazwy pliku.</td></tr>
+          <tr><td><code>rm</code></td><td><code>rm archive.md</code></td><td>Usuwanie pliku i ostrzeżenie, że operacja omija kosz.</td></tr>
+          <tr><td><code>cat</code></td><td><code>cat bash.md</code></td><td>Wyświetlanie zawartości pliku w terminalu.</td></tr>
+          <tr><td><code>clear</code></td><td><code>clear</code></td><td>Czyszczenie widoku terminala bez usuwania historii poleceń.</td></tr>
+        </tbody></table></div>
         <p>W VS Code utwórz <code>docs/ukos/bash.md</code>. Dla każdego polecenia <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code>, <code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>cat</code> i <code>clear</code> dodaj opis oraz przykład. Użyj nagłówków, tabeli lub listy i bloków <code>bash</code>.</p>
         <p class="branch-label">GAŁĄŹ: feature/bash-cheatsheet</p>
         <pre class="code-block"><code>git status
@@ -177,6 +190,19 @@ git log --oneline -3</code></pre>
 git pull --ff-only origin main
 git switch -c feature/git-cheatsheet
 git status</code></pre>
+        <h4>Zestaw komend WARP do udokumentowania</h4>
+        <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Polecenie</th><th>Przykład użycia</th><th>Co opisać</th></tr></thead><tbody>
+          <tr><td><code>git clone</code></td><td><code>git clone URL</code></td><td>Pobranie repozytorium i utworzenie lokalnego katalogu.</td></tr>
+          <tr><td><code>git status</code></td><td><code>git status</code></td><td>Sprawdzenie gałęzi oraz plików zmienionych i przygotowanych.</td></tr>
+          <tr><td><code>git add</code></td><td><code>git add docs/warp/git.md</code></td><td>Dodanie konkretnego pliku do obszaru staging.</td></tr>
+          <tr><td><code>git commit</code></td><td><code>git commit -m "docs: add Git cheatsheet"</code></td><td>Zapis przygotowanych zmian z czytelnym komunikatem.</td></tr>
+          <tr><td><code>git push</code></td><td><code>git push -u origin feature/git-cheatsheet</code></td><td>Publikacja nowej gałęzi i ustawienie śledzenia.</td></tr>
+          <tr><td><code>git pull</code></td><td><code>git pull --ff-only origin main</code></td><td>Pobranie zmian bez tworzenia nieoczekiwanego merge commita.</td></tr>
+          <tr><td><code>git fetch</code></td><td><code>git fetch origin</code></td><td>Pobranie informacji o zmianach bez modyfikowania plików roboczych.</td></tr>
+          <tr><td><code>git branch</code></td><td><code>git branch</code></td><td>Wyświetlenie lokalnych gałęzi i oznaczenie aktywnej.</td></tr>
+          <tr><td><code>git switch</code></td><td><code>git switch -c feature/nazwa</code></td><td>Utworzenie gałęzi roboczej i przełączenie na nią.</td></tr>
+          <tr><td><code>git log</code></td><td><code>git log --oneline -5</code></td><td>Skrócony podgląd pięciu ostatnich commitów.</td></tr>
+        </tbody></table></div>
         <p>Utwórz <code>docs/warp/git.md</code>. Każde polecenie opisz i zilustruj przykładem: <code>git clone</code>, <code>git status</code>, <code>git add</code>, <code>git commit</code>, <code>git push</code>, <code>git pull</code>, <code>git fetch</code>, <code>git branch</code>, <code>git switch</code>, <code>git log</code>.</p>
         <pre class="code-block"><code>git add docs/warp/git.md
 git commit -m "docs: add Git cheatsheet"
@@ -207,6 +233,18 @@ git status</code></pre>
       </article>
       <article class="lesson-step">
         <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">RÓWNOLEGLE / COMMIT I PUSH</p><h3>Przygotujcie dwa niezależne PR-y</h3></div></div>
+        <h4>Zestaw komend PRG1 do udokumentowania</h4>
+        <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Polecenie</th><th>Przykład użycia</th><th>Co opisać</th></tr></thead><tbody>
+          <tr><td><code>dotnet --version</code></td><td><code>dotnet --version</code></td><td>Sprawdzenie zainstalowanej wersji zestawu .NET SDK.</td></tr>
+          <tr><td><code>dotnet --list-sdks</code></td><td><code>dotnet --list-sdks</code></td><td>Wyświetlenie wszystkich dostępnych wersji SDK.</td></tr>
+          <tr><td><code>dotnet new list</code></td><td><code>dotnet new list</code></td><td>Wyświetlenie dostępnych szablonów projektów.</td></tr>
+          <tr><td><code>dotnet new console</code></td><td><code>dotnet new console</code></td><td>Utworzenie aplikacji konsolowej w bieżącym katalogu.</td></tr>
+          <tr><td><code>dotnet new console -n</code></td><td><code>dotnet new console -n MyApp</code></td><td>Utworzenie aplikacji konsolowej w katalogu <code>MyApp</code>.</td></tr>
+          <tr><td><code>dotnet restore</code></td><td><code>dotnet restore</code></td><td>Pobranie zależności wymaganych przez projekt.</td></tr>
+          <tr><td><code>dotnet build</code></td><td><code>dotnet build</code></td><td>Kompilacja projektu i odczyt komunikatów o błędach.</td></tr>
+          <tr><td><code>dotnet run</code></td><td><code>dotnet run --project MyApp</code></td><td>Zbudowanie i uruchomienie wskazanego projektu.</td></tr>
+          <tr><td><code>dotnet clean</code></td><td><code>dotnet clean</code></td><td>Usunięcie plików wygenerowanych podczas kompilacji.</td></tr>
+        </tbody></table></div>
         <p>Student A po utworzeniu dokumentu PRG1:</p>
         <pre class="code-block"><code>git add docs/prg1/dotnet-cli.md
 git commit -m "docs: add .NET CLI cheatsheet"
