@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 06: wielostronicowy serwis HTML i CSS — semantyczna struktura, estetyczne komponenty, dokumentacja i publikacja w GitHub Pages.">
+  <title>06. Serwis HTML i CSS oraz GitHub Pages | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="../assets/js/code-copy.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-06.html" aria-current="page">Laboratorium 06</a>
+      <a class="nav-external" href="https://github.com/" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 06</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 06</span></nav>
+
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 06 <span class="eyebrow-divider">/</span> HTML OD PODSTAW</p>
+        <h1 id="lab-title">Od Markdown<br><span>do strony WWW</span></h1>
+        <p class="intro-lede">Przekształćcie bazę wiedzy z poprzednich zajęć w spójny, estetyczny serwis HTML i CSS, dodajcie odsyłacze do dokumentacji, a następnie opublikujcie całość przez GitHub Pages.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">TECHNOLOGIA</span><strong>HTML + CSS</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">PUBLIKACJA</span><strong>MAIN / ROOT</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="goals-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">CELE LABORATORIUM</p><h2 id="goals-title">Po spotkaniu potrafisz</h2></div></div>
+      <ul class="outcome-list">
+        <li>Zbudować poprawny dokument HTML z deklaracją <code>&lt;!doctype html&gt;</code>, sekcjami <code>head</code> i <code>body</code>.</li>
+        <li>Rozróżnić metadane dokumentu od treści widocznej w przeglądarce.</li>
+        <li>Stosować nagłówki, akapity, listy, tabele, linki, kod i podstawowe znaczniki semantyczne.</li>
+        <li>Połączyć wszystkie dokumenty ze wspólnym arkuszem CSS i zbudować spójny wygląd serwisu.</li>
+        <li>Stylować akapity, listy, tabele, nawigację i bloki kodu z zachowaniem czytelności.</li>
+        <li>Łączyć kilka stron przy użyciu linków względnych i poprawnej struktury katalogów.</li>
+        <li>Sprawdzić dokument w przeglądarce i walidatorze HTML.</li>
+        <li>Rozwijać stronę na branchach, wykonywać review i scalać Pull Requesty.</li>
+        <li>Opublikować statyczną stronę z gałęzi <code>main</code> przez GitHub Pages bez GitHub Actions.</li>
+      </ul>
+      <aside class="safety-note"><strong>Ograniczenie technologiczne</strong><p>Używajcie HTML i jednego zewnętrznego arkusza <code>styles.css</code>. Nie stosujcie atrybutu <code>style</code>, znacznika <code>&lt;style&gt;</code>, frameworków CSS ani JavaScriptu. Celem jest samodzielne przećwiczenie struktury HTML, selektorów, klas i podstawowych właściwości CSS.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="start-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PUNKT STARTOWY</p><h2 id="start-title">Wróćcie do repozytorium z laboratorium 04</h2></div></div>
+      <p>Pliki Markdown pozostają w repozytorium jako dokumentacja źródłowa. Nie usuwajcie ani nie zmieniajcie rozszerzeń plików <code>.md</code>. Nowe dokumenty HTML powstaną obok katalogu <code>docs</code>.</p>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">A+B</span><div><p class="eyebrow">PRACA W PARZE</p><h3>Kontynuujcie wspólne repozytorium</h3></div></div>
+        <p>Obie osoby korzystają z repozytorium <code>student-it-knowledge-base</code> utworzonego podczas poprzednich zajęć. Każda osoba na swoim komputerze aktualizuje lokalny <code>main</code>:</p>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status
+git log --oneline -5</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>git status</code> pokazuje czysty <code>main</code> zgodny z <code>origin/main</code>.</li><li>Repozytorium zawiera <code>README.md</code> i ściągi Markdown z laboratorium 04.</li></ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">1×</span><div><p class="eyebrow">PRACA INDYWIDUALNA</p><h3>Najpierw wykonaj fork</h3></div></div>
+        <p>Jeżeli pracujesz samodzielnie, nie rozwijaj dalej repozytorium należącego do pary. Na GitHubie otwórz repozytorium z laboratorium 04, kliknij <strong>Fork → Create fork</strong>, a następnie sklonuj swój fork. Dalsze branche i PR-y twórz już we własnej kopii.</p>
+        <pre class="code-block"><code>git clone URL_TWOJEGO_FORKA
+cd student-it-knowledge-base
+git remote -v
+git status</code></pre>
+        <p>W pracy indywidualnej wykonujesz zadania obu ról. Otwieraj PR-y do <code>main</code> własnego forka i przed scaleniem samodzielnie sprawdzaj kartę <strong>Files changed</strong>. GitHub może nie pozwolić na formalne zatwierdzenie własnego PR-u — w tym wariancie nie jest ono wymagane.</p>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="html-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">WPROWADZENIE</p><h2 id="html-title">Anatomia dokumentu HTML</h2></div></div>
+      <p>HTML opisuje strukturę i znaczenie treści. Znacznik otwierający, zawartość i znacznik zamykający tworzą element, np. <code>&lt;p&gt;Akapit&lt;/p&gt;</code>. Wcięcia nie zmieniają działania strony, ale pomagają zobaczyć zagnieżdżenie elementów.</p>
+      <pre class="code-block"><code>&lt;!doctype html&gt;
+&lt;html lang="pl"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Student IT Knowledge Base&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;h1&gt;Student IT Knowledge Base&lt;/h1&gt;
+  &lt;/header&gt;
+  &lt;main&gt;
+    &lt;p&gt;Ściągi z przedmiotów informatycznych.&lt;/p&gt;
+  &lt;/main&gt;
+  &lt;footer&gt;
+    &lt;p&gt;Materiały edukacyjne&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Element</th><th>Rola</th><th>Ważna uwaga</th></tr></thead><tbody>
+        <tr><td><code>&lt;!doctype html&gt;</code></td><td>Informuje przeglądarkę, że dokument używa współczesnego HTML.</td><td>To pierwsza linia każdego pliku.</td></tr>
+        <tr><td><code>&lt;html lang="pl"&gt;</code></td><td>Obejmuje cały dokument i określa język treści.</td><td>Atrybut <code>lang</code> pomaga czytnikom ekranu i wyszukiwarkom.</td></tr>
+        <tr><td><code>&lt;head&gt;</code></td><td>Zawiera metadane, kodowanie i tytuł karty.</td><td>Nie umieszczaj tutaj widocznej treści strony.</td></tr>
+        <tr><td><code>&lt;body&gt;</code></td><td>Zawiera treść wyświetlaną w oknie przeglądarki.</td><td>W środku umieść strukturę strony.</td></tr>
+        <tr><td><code>&lt;header&gt;</code></td><td>Wprowadzenie do strony lub sekcji.</td><td>To nie to samo co <code>&lt;head&gt;</code>.</td></tr>
+        <tr><td><code>&lt;nav&gt;</code></td><td>Grupa najważniejszych odnośników nawigacyjnych.</td><td>Umieść w niej menu między stronami.</td></tr>
+        <tr><td><code>&lt;main&gt;</code></td><td>Główna, unikalna treść dokumentu.</td><td>Na stronie powinien wystąpić tylko raz.</td></tr>
+        <tr><td><code>&lt;section&gt;</code></td><td>Tematyczna część dokumentu.</td><td>Zwykle zaczyna się nagłówkiem.</td></tr>
+        <tr><td><code>&lt;footer&gt;</code></td><td>Stopka strony lub sekcji.</td><td>Może zawierać autora lub informację o projekcie.</td></tr>
+      </tbody></table></div>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">TAG</span><div><p class="eyebrow">ZESTAW OBOWIĄZKOWY</p><h3>Elementy, których użyjecie</h3></div></div>
+        <dl class="git-glossary">
+          <div><dt><code>h1–h3</code></dt><dd>Nagłówki tworzą logiczną hierarchię. Nie wybieraj poziomu ze względu na rozmiar tekstu.</dd></div>
+          <div><dt><code>p</code></dt><dd>Akapit tekstu. Kolejnych akapitów nie rozdzielaj pustymi znacznikami <code>br</code>.</dd></div>
+          <div><dt><code>ul / ol / li</code></dt><dd>Lista nieuporządkowana, uporządkowana oraz pojedynczy element listy.</dd></div>
+          <div><dt><code>table</code></dt><dd>Tabela danych z <code>caption</code>, <code>thead</code>, <code>tbody</code>, wierszami <code>tr</code> oraz komórkami <code>th</code> i <code>td</code>.</dd></div>
+          <div><dt><code>a</code></dt><dd>Odnośnik. Atrybut <code>href</code> wskazuje dokument, miejsce w dokumencie albo adres zewnętrzny.</dd></div>
+          <div><dt><code>code / pre</code></dt><dd><code>code</code> oznacza kod w zdaniu, a połączenie <code>pre</code> i <code>code</code> zachowuje układ bloku poleceń.</dd></div>
+          <div><dt><code>strong / em</code></dt><dd>Ważność i akcent znaczeniowy — nie narzędzia do dekorowania tekstu.</dd></div>
+        </dl>
+        <aside class="safety-note"><strong>Tabela służy do danych</strong><p>Nie używajcie tabeli do rozmieszczania elementów strony. W tym projekcie tabela ma przedstawiać polecenia, przykłady i opisy.</p></aside>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="structure-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">ARCHITEKTURA</p><h2 id="structure-title">Przygotujcie strukturę pod GitHub Pages</h2></div></div>
+      <p>GitHub Pages będzie publikować katalog główny gałęzi <code>main</code>. Dlatego strona startowa musi nazywać się dokładnie <code>index.html</code> i znajdować się w katalogu głównym repozytorium. Wielkość liter w nazwach ma znaczenie.</p>
+      <pre class="code-block"><code>student-it-knowledge-base/
+├── index.html
+├── README.md
+├── styles.css
+├── docs/
+│   ├── prg1/
+│   │   └── dotnet-cli.md
+│   ├── ukos/
+│   │   └── bash.md
+│   └── warp/
+│       └── git.md
+└── pages/
+    ├── bash.html
+    ├── git.html
+    └── dotnet-cli.html</code></pre>
+      <p>Pliki <code>.md</code> są zachowane. <code>index.html</code> będzie stroną startową, katalog <code>pages</code> pomieści trzy ściągi HTML, a jeden plik <code>styles.css</code> nada wszystkim dokumentom spójny wygląd.</p>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Miejsce linku</th><th>Cel</th><th>Poprawny <code>href</code></th></tr></thead><tbody>
+        <tr><td><code>index.html</code></td><td>Ściąga Bash</td><td><code>pages/bash.html</code></td></tr>
+        <tr><td><code>pages/bash.html</code></td><td>Strona główna</td><td><code>../index.html</code></td></tr>
+        <tr><td><code>pages/bash.html</code></td><td>Ściąga Git</td><td><code>git.html</code></td></tr>
+        <tr><td><code>pages/git.html</code></td><td>Oryginalny Markdown</td><td><code>../docs/warp/git.md</code></td></tr>
+        <tr><td><code>index.html</code></td><td>Wspólny arkusz CSS</td><td><code>styles.css</code></td></tr>
+        <tr><td><code>pages/bash.html</code></td><td>Wspólny arkusz CSS</td><td><code>../styles.css</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="section-block" aria-labelledby="design-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">SPECYFIKACJA WIZUALNA</p><h2 id="design-title">Zbudujcie spójny i czytelny interfejs</h2></div></div>
+      <p>Nie musicie odwzorowywać konkretnego projektu piksel w piksel. Serwis ma jednak wyglądać jak jedna całość. Najpierw ustalcie prosty system wizualny, a następnie stosujcie go konsekwentnie na wszystkich stronach.</p>
+      <ul class="outcome-list">
+        <li><strong>Kolory:</strong> tło strony, powierzchnia elementów, czytelny tekst i jeden kolor akcentu.</li>
+        <li><strong>Typografia:</strong> systemowy krój pisma, hierarchia <code>h1–h3</code> i wygodna wysokość linii.</li>
+        <li><strong>Szerokość:</strong> treść ograniczona przez <code>max-width</code> i wyśrodkowana.</li>
+        <li><strong>Odstępy:</strong> powtarzalne wartości, np. <code>8px</code>, <code>16px</code>, <code>24px</code> i <code>32px</code>.</li>
+        <li><strong>Komponenty:</strong> wspólny wygląd nawigacji, paneli, list, tabel, kodu i linków.</li>
+        <li><strong>Responsywność:</strong> brak poziomego przewijania całej strony przy szerokości około 375 px.</li>
+        <li><strong>Interakcja:</strong> linki mają widoczny stan <code>:hover</code> oraz <code>:focus-visible</code>.</li>
+      </ul>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">BASE</span><div><p class="eyebrow">WSPÓLNY FUNDAMENT</p><h3>Połącz dokumenty z styles.css</h3></div></div>
+        <p>W <code>head</code> głównego <code>index.html</code> dodaj <code>&lt;link rel="stylesheet" href="styles.css"&gt;</code>. W dokumentach z katalogu <code>pages</code> użyj <code>&lt;link rel="stylesheet" href="../styles.css"&gt;</code>.</p>
+        <pre class="code-block"><code>:root {
+  --page: #0f172a;
+  --surface: #172033;
+  --text: #e5edf7;
+  --muted: #a8b3c7;
+  --accent: #5eead4;
+  --line: #334155;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--page);
+  font-family: system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+header, main, footer {
+  width: min(100% - 32px, 960px);
+  margin-inline: auto;
+}
+
+a { color: var(--accent); }
+
+a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">P</span><div><p class="eyebrow">AKAPIT INFORMACYJNY</p><h3>Wyróżnij ważną informację</h3></div></div>
+        <div class="editor-columns">
+          <div><h4>HTML</h4><pre class="code-block"><code>&lt;p class="info-note"&gt;
+  Polecenie rm usuwa pliki bez użycia kosza.
+  Przed wykonaniem sprawdź bieżący katalog.
+&lt;/p&gt;</code></pre></div>
+          <div><h4>CSS</h4><pre class="code-block"><code>.info-note {
+  padding: 16px;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  background: var(--surface);
+}</code></pre></div>
+        </div>
+        <h4>Przykładowy wynik</h4>
+        <div class="style-demo"><p class="demo-info-note">Polecenie <code>rm</code> usuwa pliki bez użycia kosza. Przed wykonaniem sprawdź bieżący katalog.</p></div>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">UL</span><div><p class="eyebrow">LISTA TEMATÓW</p><h3>Zamień zwykłe punkty w czytelne elementy</h3></div></div>
+        <div class="editor-columns">
+          <div><h4>HTML</h4><pre class="code-block"><code>&lt;ul class="topic-list"&gt;
+  &lt;li&gt;&lt;strong&gt;UKOS&lt;/strong&gt; — terminal Bash&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;WARP&lt;/strong&gt; — Git i GitHub&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;PRG1&lt;/strong&gt; — narzędzia .NET&lt;/li&gt;
+&lt;/ul&gt;</code></pre></div>
+          <div><h4>CSS</h4><pre class="code-block"><code>.topic-list {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.topic-list li {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}</code></pre></div>
+        </div>
+        <h4>Przykładowy wynik</h4>
+        <div class="style-demo"><ul class="demo-topic-list"><li><strong>UKOS</strong> — terminal Bash</li><li><strong>WARP</strong> — Git i GitHub</li><li><strong>PRG1</strong> — narzędzia .NET</li></ul></div>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">TABLE</span><div><p class="eyebrow">TABELA POLECEŃ</p><h3>Zadbaj o hierarchię i czytelność wierszy</h3></div></div>
+        <div class="editor-columns">
+          <div><h4>HTML</h4><pre class="code-block"><code>&lt;div class="table-scroll"&gt;
+  &lt;table class="command-table"&gt;
+    &lt;caption&gt;Podstawowe polecenia Git&lt;/caption&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;&lt;th&gt;Polecenie&lt;/th&gt;&lt;th&gt;Znaczenie&lt;/th&gt;&lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;git status&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Pokazuje stan repozytorium.&lt;/td&gt;&lt;/tr&gt;
+      &lt;tr&gt;&lt;td&gt;&lt;code&gt;git log&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Wyświetla historię commitów.&lt;/td&gt;&lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/div&gt;</code></pre></div>
+          <div><h4>CSS</h4><pre class="code-block"><code>.table-scroll { overflow-x: auto; }
+
+.command-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+.command-table caption {
+  margin-bottom: 8px;
+  text-align: left;
+  font-weight: 700;
+}
+
+.command-table th,
+.command-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.command-table th { color: var(--accent); }</code></pre></div>
+        </div>
+        <h4>Przykładowy wynik</h4>
+        <div class="style-demo"><div class="demo-table-scroll"><table class="demo-command-table"><caption>Podstawowe polecenia Git</caption><thead><tr><th>Polecenie</th><th>Znaczenie</th></tr></thead><tbody><tr><td><code>git status</code></td><td>Pokazuje stan repozytorium.</td></tr><tr><td><code>git log</code></td><td>Wyświetla historię commitów.</td></tr></tbody></table></div></div>
+      </article>
+
+      <aside class="safety-note"><strong>Przykład jest punktem startowym</strong><p>Możecie zmienić paletę, promienie, odstępy i układ, ale zachowajcie kontrast, czytelność i spójność. Podczas review trzeba umieć wyjaśnić rolę każdej użytej klasy.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="stage1-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">ETAP 1</p><h2 id="stage1-title">Strona główna i pierwsza ściąga</h2></div></div>
+      <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / AUTOR</span><h4><code>feature/html-home</code></h4><p>Tworzy <code>index.html</code> oraz wspólny <code>styles.css</code>: układ, nawigację i podstawowe komponenty.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / AUTOR</span><h4><code>feature/html-bash</code></h4><p>Tworzy <code>pages/bash.html</code>, podłącza wspólny CSS i opracowuje ściągę UKOS.</p></article></div>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">OBOJE / OSOBNE BRANCHE</p><h3>Zacznijcie od tego samego main</h3></div></div>
+        <p>Każda osoba wykonuje synchronizację na swoim komputerze, a następnie tworzy branch przypisany do swojej roli.</p>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status
+
+# Student A:
+git switch -c feature/html-home
+
+# Student B, na swoim komputerze:
+git switch -c feature/html-bash</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">A</span><div><p class="eyebrow">STUDENT A / INDEX.HTML</p><h3>Zbuduj stronę startową</h3></div></div>
+        <p>Utwórz w katalogu głównym <code>index.html</code>. Dokument musi zawierać:</p>
+        <ul class="instruction-list">
+          <li>pełny szkielet HTML, język polski, kodowanie UTF-8, viewport oraz opisowy <code>title</code>;</li>
+          <li><code>header</code> z jednym <code>h1</code> i krótkim opisem bazy wiedzy;</li>
+          <li><code>nav</code> z linkami do trzech przyszłych stron w katalogu <code>pages</code>;</li>
+          <li><code>main</code>, a w nim sekcję „Przedmioty” z listą UKOS, WARP i PRG1;</li>
+          <li>sekcję „Jak korzystać” z numerowaną instrukcją;</li>
+          <li><code>footer</code> z informacją, że jest to projekt edukacyjny.</li>
+          <li>sekcję „Dokumentacja” z linkami do <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" target="_blank" rel="noreferrer">MDN HTML</a> i <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" target="_blank" rel="noreferrer">MDN CSS</a>.</li>
+        </ul>
+        <p>Utwórz również <code>styles.css</code> zgodny ze specyfikacją wizualną. Linki do podstron mogą na tym etapie prowadzić do plików, które dopiero powstaną.</p>
+        <pre class="code-block"><code>git status
+git add index.html styles.css
+git commit -m "feat: add styled HTML home page"
+git push -u origin feature/html-home</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">B</span><div><p class="eyebrow">STUDENT B / PAGES/BASH.HTML</p><h3>Przekształć ściągę UKOS</h3></div></div>
+        <p>Otwórz <code>docs/ukos/bash.md</code> i na jego podstawie utwórz <code>pages/bash.html</code>. Nie kopiuj składni Markdown do HTML — dobierz odpowiadające jej elementy.</p>
+        <ul class="instruction-list">
+          <li>Dodaj pełny szkielet dokumentu oraz jeden nagłówek <code>h1</code>.</li>
+          <li>W <code>nav</code> umieść link do <code>../index.html</code> i pozostałych stron.</li>
+          <li>Dodaj krótkie wprowadzenie oraz listę zasad bezpiecznej pracy w terminalu.</li>
+          <li>Utwórz tabelę z elementami <code>caption</code>, <code>thead</code> i <code>tbody</code>. Kolumny: polecenie, przykład, opis.</li>
+          <li>Uwzględnij co najmniej: <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code>, <code>touch</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>cat</code> i <code>clear</code>.</li>
+          <li>Dodaj link do oryginalnego pliku <code>../docs/ukos/bash.md</code>.</li>
+          <li>Dodaj link do oficjalnego <a href="https://www.gnu.org/software/bash/manual/" target="_blank" rel="noreferrer">GNU Bash Manual</a>.</li>
+          <li>Podłącz arkusz przez <code>&lt;link rel="stylesheet" href="../styles.css"&gt;</code> i użyj przygotowanych klas.</li>
+        </ul>
+        <pre class="code-block"><code>git status
+git add pages/bash.html
+git commit -m "feat: add Bash HTML cheatsheet"
+git push -u origin feature/html-bash</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">PR</span><div><p class="eyebrow">WZAJEMNE REVIEW</p><h3>Otwórzcie dwa Pull Requesty</h3></div></div>
+        <ol class="instruction-list"><li>Każda osoba otwiera PR ze swojego brancha do <code>main</code>.</li><li>Student B najpierw sprawdza PR Studenta A: semantykę strony głównej, nazwy klas i wspólny <code>styles.css</code>.</li><li>Po poprawkach Student B zatwierdza PR Studenta A i scala go jako pierwszy.</li><li>Student B pobiera scalony CSS do nadal otwartego brancha <code>feature/html-bash</code> poleceniami poniżej i sprawdza wygląd strony Bash.</li><li>Student A recenzuje zaktualizowany PR Studenta B: HTML, link do dokumentacji, ścieżkę CSS oraz widok szeroki i mobilny.</li><li>Po ewentualnych poprawkach Student A zatwierdza i scala drugi PR.</li></ol>
+        <pre class="code-block"><code>git switch feature/html-bash
+git fetch origin
+git merge origin/main
+git push</code></pre>
+        <p>Ta kolejność sprawia, że podczas review strony Bash dostępny jest już wspólny arkusz CSS, mimo że obie osoby rozpoczęły pracę równolegle.</p>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="stage2-title">
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">ETAP 2</p><h2 id="stage2-title">Pozostałe strony i zamiana ról</h2></div></div>
+      <p class="assignment-lede">Po scaleniu etapu 1 oboje pobierają aktualny <code>main</code>. Tym razem Student A opracowuje Git, a Student B — .NET CLI.</p>
+      <div class="role-grid"><article class="role-card is-a"><span class="role-badge">STUDENT A / WARP</span><h4><code>feature/html-git</code></h4><p>Tworzy <code>pages/git.html</code> na podstawie <code>docs/warp/git.md</code>.</p></article><article class="role-card is-b"><span class="role-badge">STUDENT B / PRG1</span><h4><code>feature/html-dotnet</code></h4><p>Tworzy <code>pages/dotnet-cli.html</code> na podstawie <code>docs/prg1/dotnet-cli.md</code>.</p></article></div>
+      <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status
+
+# Student A:
+git switch -c feature/html-git
+
+# Student B, na swoim komputerze:
+git switch -c feature/html-dotnet</code></pre>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">A</span><div><p class="eyebrow">STUDENT A / GIT.HTML</p><h3>Opracuj tabelę poleceń Git</h3></div></div>
+        <p>Strona ma zawierać nawigację, wprowadzenie, ostylowaną tabelę oraz krótką numerowaną procedurę pracy: synchronizacja → branch → zmiana → commit → push → PR. Uwzględnij co najmniej <code>git clone</code>, <code>status</code>, <code>add</code>, <code>commit</code>, <code>push</code>, <code>pull</code>, <code>fetch</code>, <code>branch</code>, <code>switch</code> i <code>log</code>. Dodaj linki do <code>../docs/warp/git.md</code> oraz oficjalnej <a href="https://git-scm.com/docs" target="_blank" rel="noreferrer">dokumentacji Git</a>. Podłącz <code>../styles.css</code>.</p>
+        <pre class="code-block"><code>git add pages/git.html
+git commit -m "feat: add Git HTML cheatsheet"
+git push -u origin feature/html-git</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">B</span><div><p class="eyebrow">STUDENT B / DOTNET-CLI.HTML</p><h3>Opracuj instrukcję .NET CLI</h3></div></div>
+        <p>Strona ma zawierać nawigację, ostylowaną tabelę oraz blok <code>pre</code> z kompletną sekwencją utworzenia i uruchomienia aplikacji. Uwzględnij co najmniej <code>dotnet --version</code>, <code>--list-sdks</code>, <code>new list</code>, <code>new console</code>, <code>restore</code>, <code>build</code>, <code>run</code> i <code>clean</code>. Dodaj linki do <code>../docs/prg1/dotnet-cli.md</code> oraz oficjalnej <a href="https://learn.microsoft.com/dotnet/core/tools/" target="_blank" rel="noreferrer">dokumentacji .NET CLI</a>. Podłącz <code>../styles.css</code>.</p>
+        <pre class="code-block"><code>git add pages/dotnet-cli.html
+git commit -m "feat: add .NET CLI HTML cheatsheet"
+git push -u origin feature/html-dotnet</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">PR</span><div><p class="eyebrow">REVIEW I MERGE</p><h3>Sprawdźcie treść oraz semantykę</h3></div></div>
+        <p>Otwórzcie dwa PR-y i zrecenzujcie je na krzyż. Sprawdźcie semantykę, działanie linków, poprawne podłączenie CSS oraz wygląd przy szerokim i wąskim oknie. Tabela ma zawierać dane tabelaryczne, nagłówki mają opisywać sekcje, a kod powinien znajdować się w <code>code</code> lub <code>pre</code> i <code>code</code>. Po poprawkach zatwierdźcie i scalcie oba PR-y.</p>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="test-title">
+      <div class="block-heading"><span class="block-number">08</span><div><p class="eyebrow">INTEGRACJA</p><h2 id="test-title">Sprawdźcie całość przed publikacją</h2></div></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">OBOJE / MAIN</p><h3>Pobierzcie kompletną wersję</h3></div></div>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status
+git log --oneline -8</code></pre>
+        <p>Otwórzcie lokalny <code>index.html</code> w przeglądarce. Kliknijcie każdy link w menu, linki między podstronami, powrót do strony głównej oraz odnośniki do plików Markdown. Nie wystarczy sprawdzić sam tekst ścieżki w edytorze.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">WALIDACJA</p><h3>Sprawdźcie poprawność HTML</h3></div></div>
+        <ol class="instruction-list"><li>Wejdźcie na <a href="https://validator.w3.org/" target="_blank" rel="noreferrer">validator.w3.org</a>.</li><li>Użyjcie zakładki <strong>Validate by File Upload</strong> i sprawdźcie kolejno cztery pliki HTML.</li><li>Sprawdźcie <code>styles.css</code> w <a href="https://jigsaw.w3.org/css-validator/" target="_blank" rel="noreferrer">walidatorze CSS W3C</a>.</li><li>Poprawcie błędy oznaczone jako <strong>Error</strong>. Przeczytajcie również ostrzeżenia — nie każde wymaga zmiany, ale każde trzeba rozumieć.</li><li>Jeśli walidacja wymaga poprawek, utwórzcie branch <code>fix/html-css-validation</code>, wykonajcie commit i przeprowadźcie jeszcze jeden PR.</li></ol>
+        <aside class="safety-note"><strong>Nie publikuj danych osobowych</strong><p>Repozytorium i strona mogą być publiczne. Używajcie nazw kont GitHub lub neutralnego określenia zespołu. Nie umieszczajcie numerów indeksów, prywatnych adresów e-mail, tokenów ani haseł.</p></aside>
+      </article>
+
+      <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>index.html</code> otwiera się lokalnie i prowadzi do wszystkich trzech stron.</li><li>Każda podstrona pozwala wrócić do strony głównej i korzysta ze wspólnego CSS.</li><li>W repozytorium pozostały wszystkie wcześniejsze pliki Markdown.</li><li>Walidatory nie zgłaszają błędów HTML ani CSS.</li><li>Linki do MDN, GNU Bash, Git i .NET CLI otwierają właściwą dokumentację.</li></ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="pages-title">
+      <div class="block-heading"><span class="block-number">09</span><div><p class="eyebrow">PUBLIKACJA</p><h2 id="pages-title">Włączcie GitHub Pages bez Actions</h2></div></div>
+      <p>Publikację konfiguruje właściciel repozytorium po scaleniu wszystkich potrzebnych zmian do <code>main</code>. Nie twórzcie workflow i nie dodawajcie plików w <code>.github/workflows</code>.</p>
+      <ol class="instruction-list">
+        <li>Na GitHubie otwórzcie repozytorium i przejdźcie do <strong>Settings → Pages</strong>.</li>
+        <li>W sekcji <strong>Build and deployment</strong> jako <strong>Source</strong> wybierzcie <strong>Deploy from a branch</strong>.</li>
+        <li>Wybierzcie branch <strong>main</strong> oraz katalog <strong>/(root)</strong>, następnie kliknijcie <strong>Save</strong>.</li>
+        <li>Poczekajcie, aż GitHub pokaże adres opublikowanej strony. Pierwsze wdrożenie może potrwać kilka minut.</li>
+        <li>Otwórzcie otrzymany adres w nowej karcie i ponownie sprawdźcie wszystkie linki. Nie oceniajcie publikacji wyłącznie na podstawie lokalnego podglądu.</li>
+        <li>Dodajcie adres działającej strony w polu <strong>About → Website</strong> repozytorium.</li>
+      </ol>
+      <aside class="safety-note"><strong>Źródłem jest main</strong><p>GitHub Pages publikuje tylko stan scalony do <code>main</code>. Sam <code>push</code> brancha roboczego ani otwarty PR nie zmienia publicznej strony.</p></aside>
+      <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Adres ma zwykle postać <code>https://NAZWA-UŻYTKOWNIKA.github.io/NAZWA-REPOZYTORIUM/</code>.</li><li>Pod tym adresem automatycznie otwiera się główny <code>index.html</code>.</li><li>Wszystkie podstrony, linki względne i polskie znaki działają po publikacji.</li></ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="review-title">
+      <div class="block-heading"><span class="block-number">10</span><div><p class="eyebrow">CHECKLISTA REVIEW</p><h2 id="review-title">Jak sprawdzać HTML i CSS partnera</h2></div></div>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Obszar</th><th>Pytanie kontrolne</th><th>Przykład uwagi</th></tr></thead><tbody>
+        <tr><td>Szkielet</td><td>Czy dokument ma doctype, <code>lang="pl"</code>, UTF-8, viewport, title i body?</td><td>„Dodaj opisowy tytuł karty zamiast nazwy pliku.”</td></tr>
+        <tr><td>Nagłówki</td><td>Czy istnieje jeden <code>h1</code>, a kolejne poziomy nie są pomijane?</td><td>„Ta sekcja jest częścią h2, więc użyj tutaj h3.”</td></tr>
+        <tr><td>Semantyka</td><td>Czy użyto elementu zgodnego ze znaczeniem treści?</td><td>„To sekwencja kroków — lista ol będzie czytelniejsza niż osobne akapity.”</td></tr>
+        <tr><td>Tabela</td><td>Czy ma caption, nagłówki kolumn oraz poprawne wiersze i komórki?</td><td>„Dodaj caption opisujący zawartość tabeli.”</td></tr>
+        <tr><td>Linki</td><td>Czy ścieżki względne działają z położenia bieżącego pliku?</td><td>„Z katalogu pages powrót wymaga ../index.html.”</td></tr>
+        <tr><td>Kod</td><td>Czy polecenia oznaczono przez code, a bloki również przez pre?</td><td>„Obejmij tę wielowierszową sekwencję elementami pre i code.”</td></tr>
+        <tr><td>CSS</td><td>Czy wszystkie strony korzystają z jednego arkusza i klas o czytelnych nazwach?</td><td>„Przenieś ten styl do klasy w styles.css, aby użyć go na pozostałych stronach.”</td></tr>
+        <tr><td>Responsywność</td><td>Czy strona i tabela działają przy szerokości około 375 px?</td><td>„Umieść tabelę w kontenerze z overflow-x: auto.”</td></tr>
+        <tr><td>Ograniczenia</td><td>Czy nie dodano stylów inline, frameworka, JavaScriptu ani danych osobowych?</td><td>„Usuń atrybut style i przenieś deklarację do styles.css.”</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="section-block" aria-labelledby="done-title">
+      <div class="block-heading"><span class="block-number">11</span><div><p class="eyebrow">KRYTERIA UKOŃCZENIA</p><h2 id="done-title">Sprawdźcie gotowy projekt</h2></div></div>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Projekt rozwija repozytorium z laboratorium 04, a wcześniejsze pliki <code>.md</code> nadal istnieją.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>W katalogu głównym znajduje się poprawny <code>index.html</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Katalog <code>pages</code> zawiera <code>bash.html</code>, <code>git.html</code> i <code>dotnet-cli.html</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Każdy dokument ma metadane, logiczną hierarchię nagłówków, nawigację i semantyczną strukturę.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>W projekcie wykorzystano akapity, listy, tabelę, linki oraz elementy <code>code</code> i <code>pre</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wszystkie strony korzystają z jednego <code>styles.css</code>; nie użyto stylów inline, frameworków ani JavaScriptu.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Akapity informacyjne, listy, tabele, nawigacja i kod są estetycznie oraz spójnie ostylowane.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Każda ściąga zawiera link do swojego pliku Markdown oraz oficjalnej dokumentacji.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>W pracy pary każda osoba utworzyła branche, commity i PR-y oraz zrecenzowała zmiany partnera.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wszystkie pliki przeszły walidację bez błędów.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>GitHub Pages publikuje <code>main</code> z katalogu <code>/(root)</code>, a publiczny adres działa.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wszystkie linki zostały sprawdzone na opublikowanej stronie.</span></li>
+      </ul>
+      <div class="extension-task"><span class="data-label">BONUS</span><p>Dodajcie czwartą stronę <code>pages/html.html</code> — ściągę z elementów HTML poznanych podczas laboratorium. Połączcie ją z nawigacją wszystkich stron i przeprowadźcie zmianę przez osobny PR.</p></div>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="problems-title">
+      <div class="block-heading"><span class="block-number">12</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="problems-title">Najczęstsze problemy</h2></div></div>
+      <details><summary>GitHub Pages pokazuje stronę 404</summary><p>Sprawdź, czy plik nazywa się dokładnie <code>index.html</code>, znajduje się w katalogu głównym gałęzi <code>main</code>, a w Settings → Pages wybrano <strong>Deploy from a branch</strong>, <strong>main</strong> i <strong>/(root)</strong>. Po zmianie ustawień odczekaj kilka minut.</p></details>
+      <details><summary>Link działa lokalnie, ale nie na GitHub Pages</summary><p>Sprawdź wielkość liter w nazwie pliku i katalogu. Serwer rozróżnia <code>Bash.html</code> i <code>bash.html</code>. Używaj linków względnych bez początkowego ukośnika, np. <code>pages/bash.html</code>.</p></details>
+      <details><summary>Na stronie widać dosłownie znaczniki HTML</summary><p>Sprawdź, czy zamiast znaków <code>&lt;</code> i <code>&gt;</code> nie wpisano encji <code>&amp;lt;</code> i <code>&amp;gt;</code> w miejscu, w którym miały tworzyć element. Encji używamy wtedy, gdy chcemy pokazać znacznik jako tekst.</p></details>
+      <details><summary>Polskie znaki wyświetlają się niepoprawnie</summary><p>Plik zapisz jako UTF-8 i upewnij się, że w <code>head</code> możliwie wcześnie znajduje się <code>&lt;meta charset="utf-8"&gt;</code>.</p></details>
+      <details><summary>Tabela „rozsypuje się” w przeglądarce</summary><p>Każdy wiersz musi być elementem <code>tr</code>, a wewnątrz powinien mieć tę samą liczbę komórek <code>th</code> lub <code>td</code>. Sprawdź domknięcie elementów i wynik walidatora.</p></details>
+      <details><summary>Po scaleniu PR-a nie widzę pliku partnera</summary><p>Scalenie na GitHubie nie aktualizuje automatycznie plików lokalnych. Wykonaj <code>git switch main</code>, <code>git pull --ff-only origin main</code> i ponownie sprawdź katalog projektu.</p></details>
+      <details><summary>Link do strony partnera zwraca błąd podczas pierwszego PR-a</summary><p>To oczekiwane, jeśli drugi plik znajduje się jeszcze na osobnym branchu. Pełne działanie linków sprawdzajcie ponownie po scaleniu obu PR-ów do <code>main</code>.</p></details>
+      <details><summary>CSS działa na index.html, ale nie na podstronach</summary><p>Dokumenty w katalogu <code>pages</code> muszą cofnąć się o jeden poziom. Użyj <code>href="../styles.css"</code> i sprawdź w DevTools → Network, czy arkusz nie zwraca błędu 404.</p></details>
+      <details><summary>Tabela poszerza całą stronę na telefonie</summary><p>Umieść tabelę w elemencie z klasą <code>table-scroll</code> i ustaw dla niego <code>overflow-x: auto</code>. Przetestuj szerokość 375 px w trybie urządzenia DevTools.</p></details>
+      <details><summary>Przypadkowo dodano JavaScript lub style inline</summary><p>Usuń skrypt albo atrybuty <code>style</code>, przenieś potrzebne deklaracje do <code>styles.css</code>, wykonaj kolejny commit i zaktualizuj PR zwykłym <code>git push</code>.</p></details>
+    </section>
+
+    <div class="next-step"><span class="note-index">KONIEC / LAB 06</span><p>Oddajcie adres repozytorium oraz publiczny adres GitHub Pages. Otwórzcie stronę w trybie prywatnym przeglądarki, aby upewnić się, że jest dostępna bez logowania.</p><a href="../index.html">WRÓĆ DO KURSU →</a></div>
+  </main>
+
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span>PRG-WPR <span class="footer-slash">·</span> 2026–27</span></footer>
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 05: wspólna budowa pierwszej strony internetowej z HTML, CSS i JavaScript podczas live codingu.">
+  <title>05. Pierwsza strona HTML, CSS i JavaScript | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="../assets/js/code-copy.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-05.html" aria-current="page">Laboratorium 05</a>
+      <a class="nav-external" href="https://developer.mozilla.org/" target="_blank" rel="noreferrer">MDN <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 05</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 05</span></nav>
+
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 05 <span class="eyebrow-divider">/</span> LIVE CODING</p>
+        <h1 id="lab-title">Pierwsza strona<br><span>HTML · CSS · JS</span></h1>
+        <p class="intro-lede">Prowadzący buduje projekt na ekranie, a cała grupa wykonuje te same kroki. Po każdym etapie zatrzymujemy się, przewidujemy rezultat i sprawdzamy go w przeglądarce.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">PROJEKT</span><strong>WIZYTÓWKA PROGRAMISTY</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">TRYB</span><strong>KODUJEMY RAZEM</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="format-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">ORGANIZACJA</p><h2 id="format-title">Jak pracujemy podczas tych zajęć</h2></div></div>
+      <p>To nie jest zadanie wykonywane od razu samodzielnie. Nie kopiuj całego materiału naprzód. Obserwuj ekran prowadzącego, wpisuj kod razem z nim i uruchamiaj stronę w tych samych momentach.</p>
+      <ol class="instruction-list">
+        <li><strong>Najpierw przewidujemy.</strong> Zanim odświeżymy stronę, próbujemy określić, co się zmieni.</li>
+        <li><strong>Potem uruchamiamy.</strong> Po małym fragmencie zapisujemy plik i sprawdzamy rezultat.</li>
+        <li><strong>Porównujemy.</strong> Jeżeli wynik jest inny niż na ekranie, zatrzymujemy się i wspólnie szukamy różnicy.</li>
+        <li><strong>Eksperymentujemy.</strong> Po działającym kroku zmieniamy jedną wartość i obserwujemy konsekwencję.</li>
+        <li><strong>Wracamy do wersji bazowej.</strong> Dopiero wtedy przechodzimy do następnego etapu.</li>
+      </ol>
+      <aside class="safety-note"><strong>Zasada prowadzącego</strong><p>Nie wklejaj gotowego projektu. Pisz kod w tempie grupy, nazywaj znaki, wcięcia i plik, w którym pracujesz. Po każdym większym fragmencie pokaż jednocześnie edytor, stronę i narzędzia deweloperskie.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="goals-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">CELE</p><h2 id="goals-title">Trzy warstwy jednej strony</h2></div></div>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Warstwa</th><th>Pytanie</th><th>Plik</th><th>Przykład</th></tr></thead><tbody>
+        <tr><td><strong>HTML</strong></td><td>Co znajduje się na stronie?</td><td><code>index.html</code></td><td>Nagłówek, akapit, lista, przycisk.</td></tr>
+        <tr><td><strong>CSS</strong></td><td>Jak strona wygląda i układa treść?</td><td><code>styles.css</code></td><td>Kolory, odstępy, krój pisma, układ.</td></tr>
+        <tr><td><strong>JavaScript</strong></td><td>Co dzieje się po akcji użytkownika?</td><td><code>script.js</code></td><td>Obsługa kliknięcia i zmiana treści.</td></tr>
+      </tbody></table></div>
+      <p>Po zajęciach potrafisz utworzyć te trzy pliki, połączyć je, odczytać podstawowe komunikaty w DevTools i wyjaśnić, dlaczego strona nadal pokazuje treść, gdy CSS lub JavaScript nie działa.</p>
+      <figure class="concept-diagram">
+        <figcaption>Przeglądarka łączy trzy pliki w jeden działający interfejs</figcaption>
+        <div class="diagram-flow"><span class="diagram-node is-branch">HTML · struktura</span><span class="diagram-arrow">+</span><span class="diagram-node is-commit">CSS · wygląd</span><span class="diagram-arrow">+</span><span class="diagram-node is-pr">JS · zachowanie</span><span class="diagram-arrow">→</span><span class="diagram-node is-result">STRONA</span></div>
+      </figure>
+    </section>
+
+    <section class="section-block" aria-labelledby="setup-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">0–10 MIN</p><h2 id="setup-title">Przygotuj projekt i narzędzia</h2></div></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">IDE</span><div><p class="eyebrow">WYBIERZ ŚRODOWISKO</p><h3>Visual Studio Code albo WebStorm</h3></div></div>
+        <p>W pracowni dostępne są dwa edytory odpowiednie do tego laboratorium. Wybierz jeden i używaj go przez całe zajęcia. Kod projektu będzie taki sam niezależnie od wybranego programu.</p>
+        <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Środowisko</th><th>Jak otworzyć projekt</th><th>Jak uruchomić stronę</th></tr></thead><tbody>
+          <tr><td><strong>Visual Studio Code</strong></td><td><strong>File → Open Folder…</strong> i wybierz katalog <code>developer-card</code>. Możesz również użyć polecenia <code>code .</code> w tym katalogu.</td><td>Otwórz <code>index.html</code> z eksploratora plików w przeglądarce. Jeśli w pracowni jest dostępne rozszerzenie Live Server, możesz użyć <strong>Open with Live Server</strong>, ale nie jest ono wymagane.</td></tr>
+          <tr><td><strong>WebStorm</strong></td><td>Na ekranie powitalnym wybierz <strong>Open</strong> albo użyj <strong>File → Open…</strong> i wskaż katalog <code>developer-card</code>.</td><td>Kliknij prawym przyciskiem <code>index.html</code> i wybierz <strong>Open in Browser</strong> lub użyj ikony przeglądarki widocznej przy pliku.</td></tr>
+        </tbody></table></div>
+        <aside class="safety-note"><strong>Nie instalujemy niczego dodatkowego</strong><p>Do wykonania ćwiczenia wystarczą edytor i współczesna przeglądarka. Node.js, npm, frameworki, rozszerzenia VS Code i dodatkowy serwer nie są wymagane. JavaScript jest domyślnie obsługiwany przez przeglądarkę.</p></aside>
+        <h4>Ustawienia do sprawdzenia przed rozpoczęciem</h4>
+        <ul class="instruction-list">
+          <li>Pliki zapisuj w kodowaniu <strong>UTF-8</strong>. Oba środowiska używają go domyślnie; w VS Code informacja jest widoczna na dolnym pasku, a w WebStorm w prawym dolnym rogu.</li>
+          <li>Włącz automatyczne domykanie cudzysłowów i nawiasów, jeśli zostało wcześniej wyłączone. Domyślna konfiguracja obu środowisk jest prawidłowa.</li>
+          <li>Nie włączaj generatorów projektu ani frameworków. Tworzymy trzy zwykłe pliki: HTML, CSS i JavaScript.</li>
+          <li>Do podglądu użyj Chrome, Edge albo Firefox. Upewnij się, że potrafisz otworzyć DevTools klawiszem <strong>F12</strong> lub skrótem <strong>Ctrl+Shift+I</strong>.</li>
+        </ul>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Wybrane IDE pokazuje cały katalog projektu, a nie pojedynczy plik.</li><li>Wiesz, w jaki sposób uruchomisz <code>index.html</code> i gdzie otworzysz konsolę przeglądarki.</li></ul>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">TERMINAL</p><h3>Utwórz pusty katalog</h3></div></div>
+        <p>Wybierz miejsce przeznaczone na projekty. Polecenia poniżej tworzą katalog. Trzecie polecenie jest przeznaczone dla osób używających Visual Studio Code.</p>
+        <pre class="code-block"><code>mkdir developer-card
+cd developer-card
+code .  # tylko Visual Studio Code</code></pre>
+        <p>Jeżeli pracujesz w WebStormie, po wykonaniu dwóch pierwszych poleceń otwórz katalog <code>developer-card</code> przez <strong>File → Open…</strong>. Nie wykonuj polecenia <code>code .</code>.</p>
+        <p>W panelu projektu wybranego IDE utwórz pięć pustych plików:</p>
+        <pre class="code-block"><code>developer-card/
+├── about.html
+├── index.html
+├── resources.html
+├── styles.css
+└── script.js</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>W VS Code lub WebStormie jest otwarty dokładnie katalog <code>developer-card</code>, a nie katalog nadrzędny.</li><li>Nazwy plików używają małych liter i właściwych rozszerzeń.</li></ul>
+      </article>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">PRZEGLĄDARKA</p><h3>Otwórz stronę i DevTools</h3></div></div>
+        <ol class="instruction-list"><li>Otwórz <code>index.html</code> w przeglądarce.</li><li>Otwórz narzędzia deweloperskie klawiszem <strong>F12</strong>.</li><li>Znajdź zakładki <strong>Elements</strong> oraz <strong>Console</strong>.</li><li>Ustaw edytor i przeglądarkę obok siebie.</li></ol>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W zakładce <strong>Network</strong> odśwież stronę i znajdź dokument <code>index.html</code>. Zakładka <strong>Console</strong> nie powinna zawierać czerwonych błędów.</p></aside>
+        <aside class="safety-note"><strong>Na razie pusta strona jest sukcesem</strong><p>Plik istnieje, ale nie zawiera elementów do wyświetlenia. Brak widocznej treści nie oznacza jeszcze błędu.</p></aside>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="html-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">10–45 MIN</p><h2 id="html-title">HTML — zbuduj znaczenie i strukturę</h2></div></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">SZKIELET</p><h3>Zacznij od pełnego dokumentu</h3></div></div>
+        <p>Wpisz poniższy kod do <code>index.html</code>. Prowadzący objaśnia każdą linię przed jej wpisaniem.</p>
+        <pre class="code-block"><code>&lt;!doctype html&gt;
+&lt;html lang="pl"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Wizytówka programisty&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Moja wizytówka&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p>Zapisz plik i odśwież stronę. Porównaj tekst widoczny w karcie przeglądarki z tekstem wyświetlanym w dokumencie.</p>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W zakładce <strong>Elements</strong> rozwiń <code>html</code>, <code>head</code> i <code>body</code>. Odszukaj <code>lang="pl"</code>, <code>meta charset</code>, <code>title</code> oraz <code>h1</code>. Zwróć uwagę, że DevTools pokazuje drzewo DOM utworzone przez przeglądarkę.</p></aside>
+        <div class="extension-task"><span class="data-label">PYTANIA DO GRUPY</span><p>Dlaczego <code>title</code> nie pojawia się jako treść strony? Czym różnią się <code>head</code> i <code>header</code>? Co może się stać z polskimi znakami bez deklaracji UTF-8?</p></div>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">SEMANTYKA</p><h3>Dodaj wizytówkę wewnątrz body</h3></div></div>
+        <p>Zastąp dotychczasową zawartość <code>body</code> poniższą strukturą. Tekst w nawiasach kwadratowych zastąp własnymi, niesensytywnymi informacjami.</p>
+        <pre class="code-block"><code>&lt;header&gt;
+  &lt;p&gt;Pierwszy projekt WWW&lt;/p&gt;
+  &lt;nav aria-label="Główna nawigacja"&gt;
+    &lt;a href="index.html"&gt;Start&lt;/a&gt;
+    &lt;a href="about.html"&gt;O projekcie&lt;/a&gt;
+    &lt;a href="resources.html"&gt;Materiały&lt;/a&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;main&gt;
+  &lt;article class="card"&gt;
+    &lt;p class="eyebrow"&gt;STUDENT / PROGRAMISTA&lt;/p&gt;
+    &lt;h1&gt;[Twoja nazwa]&lt;/h1&gt;
+    &lt;p id="bio"&gt;Uczę się tworzyć dostępne i czytelne strony internetowe.&lt;/p&gt;
+
+    &lt;section aria-labelledby="skills-title"&gt;
+      &lt;h2 id="skills-title"&gt;Poznaję&lt;/h2&gt;
+      &lt;ul&gt;
+        &lt;li&gt;HTML&lt;/li&gt;
+        &lt;li&gt;CSS&lt;/li&gt;
+        &lt;li&gt;JavaScript&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/section&gt;
+
+    &lt;a href="https://github.com/"&gt;Otwórz GitHub&lt;/a&gt;
+    &lt;button id="fact-button" type="button"&gt;Pokaż ciekawostkę&lt;/button&gt;
+  &lt;/article&gt;
+&lt;/main&gt;
+
+&lt;footer&gt;
+  &lt;p&gt;Projekt wykonany podczas Warsztatu Programisty.&lt;/p&gt;
+&lt;/footer&gt;</code></pre>
+        <p>Zapisz, odśwież i obejrzyj drzewo elementów w zakładce <strong>Elements</strong>. Przycisk jeszcze niczego nie robi — na tym etapie to oczekiwane.</p>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>Użyj narzędzia wyboru elementu i kliknij kolejno nagłówek, listę, link oraz przycisk. Sprawdź ich zagnieżdżenie, a w panelu <strong>Accessibility</strong> rozpoznaną rolę i nazwę przycisku.</p></aside>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Strona zawiera nagłówek główny, opis, listę trzech technologii, link i przycisk.</li><li>Elementy są zagnieżdżone wewnątrz <code>html → body → main → article</code>.</li></ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">PODSTRONY I ODSYŁACZE</p><h3>Zbuduj mały serwis zamiast pojedynczego pliku</h3></div></div>
+        <p>Skopiuj szkielet dokumentu z <code>index.html</code> do plików <code>about.html</code> i <code>resources.html</code>. Każda podstrona musi mieć własny, opisowy <code>title</code>, tę samą nawigację, jeden nagłówek <code>h1</code> oraz stopkę.</p>
+        <h4>Zawartość main w about.html</h4>
+        <pre class="code-block"><code>&lt;main&gt;
+  &lt;h1&gt;O projekcie&lt;/h1&gt;
+  &lt;p&gt;To ćwiczenie pokazuje współpracę HTML, CSS i JavaScriptu.&lt;/p&gt;
+
+  &lt;h2&gt;Jak powstaje strona?&lt;/h2&gt;
+  &lt;ol&gt;
+    &lt;li&gt;HTML opisuje treść.&lt;/li&gt;
+    &lt;li&gt;CSS nadaje wygląd.&lt;/li&gt;
+    &lt;li&gt;JavaScript dodaje zachowanie.&lt;/li&gt;
+  &lt;/ol&gt;
+&lt;/main&gt;</code></pre>
+        <h4>Zawartość main w resources.html</h4>
+        <pre class="code-block"><code>&lt;main&gt;
+  &lt;h1&gt;Materiały do nauki&lt;/h1&gt;
+  &lt;p&gt;Dokumentacja użyta podczas tutorialu:&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a href="https://developer.mozilla.org/docs/Web/HTML"&gt;HTML — MDN&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="https://developer.mozilla.org/docs/Web/CSS"&gt;CSS — MDN&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="https://developer.mozilla.org/docs/Web/JavaScript"&gt;JavaScript — MDN&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;&lt;a href="index.html"&gt;Wróć do wizytówki&lt;/a&gt;&lt;/p&gt;
+&lt;/main&gt;</code></pre>
+        <p>Skopiuj z <code>index.html</code> również <code>header</code> z nawigacją i <code>footer</code>. Na podstronach nie kopiuj karty ani przycisku — ich treść ma odpowiadać tematowi dokumentu.</p>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W <strong>Elements</strong> wybierz odsyłacz i odczytaj jego <code>href</code>. Kliknij wszystkie pozycje nawigacji, obserwując adres strony. W <strong>Network</strong> sprawdź, który dokument HTML jest wczytywany po kliknięciu. Użyj przycisku Wstecz i potwierdź, że historia nawigacji działa.</p></aside>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Nawigacja pozwala przejść między trzema dokumentami.</li><li>Każda podstrona ma właściwy tytuł karty i nagłówek <code>h1</code>.</li><li>Odsyłacze w <code>resources.html</code> prowadzą do dokumentacji HTML, CSS i JavaScriptu.</li></ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">MINI-EKSPERYMENT</p><h3>Zepsuj i napraw strukturę</h3></div></div>
+        <ol class="instruction-list"><li>Usuń na chwilę zamknięcie jednego elementu <code>&lt;/li&gt;</code> i odśwież stronę.</li><li>W DevTools sprawdź, jak przeglądarka naprawiła drzewo dokumentu.</li><li>Przywróć brakujący znacznik.</li><li>Zmień kolejność dwóch elementów listy i sprawdź rezultat.</li></ol>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>Porównaj kod w edytorze z drzewem w <strong>Elements</strong>. Przeglądarka mogła automatycznie domknąć element lub zmienić jego położenie. Po naprawie wyszukaj w panelu Elements wybrany tekst listy.</p></aside>
+        <aside class="safety-note"><strong>Przeglądarka bywa wyrozumiała</strong><p>To, że strona „jakoś wygląda”, nie dowodzi poprawności kodu. Przeglądarka próbuje naprawić błędy, ale może zrobić to inaczej, niż oczekuje autor.</p></aside>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="css-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">45–70 MIN</p><h2 id="css-title">CSS — nadaj stronie wygląd</h2></div></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">POŁĄCZENIE</p><h3>Dołącz arkusz stylów</h3></div></div>
+        <p>Wewnątrz <code>head</code>, pod elementem <code>title</code>, dodaj:</p>
+        <pre class="code-block"><code>&lt;link rel="stylesheet" href="styles.css"&gt;</code></pre>
+        <p>Dodaj ten sam element <code>link</code> w sekcji <code>head</code> wszystkich trzech dokumentów HTML. Jeden arkusz stylów może obsługiwać cały serwis.</p>
+        <p>W <code>styles.css</code> wpisz testową regułę, zapisz oba pliki i odśwież stronę:</p>
+        <pre class="code-block"><code>body {
+  background: tomato;
+}</code></pre>
+        <p>Jeżeli tło się zmieniło, połączenie działa. Usuń testową regułę — jej zadaniem było wyłącznie potwierdzenie poprawnej ścieżki.</p>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W <strong>Network</strong> odśwież każdą podstronę i znajdź żądanie <code>styles.css</code>. Powinno zakończyć się bez błędu 404. W <strong>Elements → Styles</strong> wybierz <code>body</code> i sprawdź, czy reguła <code>background: tomato</code> pochodzi z pliku <code>styles.css</code>.</p></aside>
+        <div class="extension-task"><span class="data-label">PYTANIE DO GRUPY</span><p>Co oznaczają trzy części reguły: selektor <code>body</code>, właściwość <code>background</code> i wartość <code>tomato</code>?</p></div>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">BAZA</p><h3>Ustal kolory, typografię i model pudełkowy</h3></div></div>
+        <p>Wpisuj reguły blok po bloku. Po każdym bloku zapisz plik i zobacz zmianę.</p>
+        <pre class="code-block"><code>/* Wszystkie elementy wliczają padding i border do swojej szerokości. */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0; /* Usuwa domyślny margines przeglądarki. */
+  min-height: 100vh; /* Zapewnia wysokość co najmniej całego okna. */
+  font-family: Arial, sans-serif; /* Ustawia krój pisma z zapasem. */
+  color: #e8fff5; /* Ustawia podstawowy kolor tekstu. */
+  background: #101815; /* Ustawia tło całej strony. */
+}
+
+header,
+footer {
+  padding: 16px 24px; /* Dodaje przestrzeń wewnątrz nagłówka i stopki. */
+}
+
+main {
+  min-height: 75vh; /* Rezerwuje większość wysokości okna na treść. */
+  display: grid; /* Włącza układ Grid. */
+  place-items: center; /* Wyśrodkowuje zawartość w obu osiach. */
+  padding: 24px; /* Odsuwa treść od krawędzi. */
+}</code></pre>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>Wybierz <code>body</code> i odnajdź zakładkę <strong>Computed</strong> oraz diagram modelu pudełkowego. Zmień tymczasowo <code>margin</code> lub <code>padding</code> w panelu Styles. Wyłączaj reguły polami wyboru i obserwuj, która z nich odpowiada za daną zmianę. Modyfikacje w DevTools nie zapisują się w pliku.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">KOMPONENT</p><h3>Ostyluj kartę i jej elementy</h3></div></div>
+        <pre class="code-block"><code>/* Główny kontener wizytówki. */
+.card {
+  width: min(100%, 560px); /* Szerokość elastyczna, maksymalnie 560 px. */
+  padding: 32px; /* Wewnętrzny odstęp od krawędzi karty. */
+  border: 1px solid #4cffb0; /* Zielone obramowanie karty. */
+  border-radius: 16px; /* Zaokrągla narożniki. */
+  background: #17231f; /* Odróżnia kartę od tła strony. */
+}
+
+/* Mała etykieta nad głównym nagłówkiem. */
+.eyebrow {
+  color: #4cffb0; /* Kolor akcentu. */
+  font-size: 12px; /* Zmniejsza tekst etykiety. */
+  letter-spacing: 0.12em; /* Zwiększa odstępy między literami. */
+}
+
+/* Główny nagłówek strony. */
+h1 {
+  margin-top: 8px; /* Zmniejsza odstęp nad nagłówkiem. */
+  font-size: 40px; /* Powiększa najważniejszy tekst. */
+}
+
+/* Elementy każdej listy. */
+li {
+  margin-block: 8px; /* Dodaje pionowy odstęp między elementami. */
+}
+
+/* Wspólne ustawienia linku i przycisku. */
+a,
+button {
+  display: inline-block; /* Pozwala stosować marginesy jak dla pudełka. */
+  margin-top: 16px; /* Oddziela kontrolki od treści powyżej. */
+}
+
+/* Wygląd przycisku interakcji. */
+button {
+  margin-left: 8px; /* Oddziela przycisk od linku. */
+  padding: 10px 14px; /* Powiększa obszar przycisku. */
+  border: 0; /* Usuwa domyślne obramowanie. */
+  border-radius: 6px; /* Zaokrągla narożniki przycisku. */
+  font: inherit; /* Dziedziczy krój pisma ze strony. */
+  color: #101815; /* Ustawia ciemny tekst. */
+  background: #4cffb0; /* Ustawia kontrastowe tło. */
+  cursor: pointer; /* Pokazuje kursor dłoni nad przyciskiem. */
+}</code></pre>
+        <p>Porównaj selektory typu (<code>h1</code>, <code>button</code>) z selektorami klas (<code>.card</code>, <code>.eyebrow</code>). Klasa może wystąpić na wielu elementach; identyfikator powinien wskazywać unikalny element.</p>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>Wybierz element z klasą <code>card</code>. W panelu <strong>Styles</strong> znajdź regułę <code>.card</code>, a w <strong>Computed</strong> odczytaj końcową szerokość, padding i kolor tła. Zmień szerokość okna i obserwuj działanie <code>width: min(100%, 560px)</code>.</p></aside>
+        <div class="extension-task"><span class="data-label">MINI-EKSPERYMENT</span><p>Zmień kolejno <code>padding</code>, <code>border-radius</code> i kolor akcentu. Po każdej zmianie odpowiedz, która część pudełka lub interfejsu została zmodyfikowana.</p></div>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="js-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">70–90 MIN</p><h2 id="js-title">JavaScript — zareaguj na kliknięcie</h2></div></div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">KONSOLA</p><h3>Najpierw potwierdź uruchomienie skryptu</h3></div></div>
+        <p>Przed zamknięciem <code>body</code> w <code>index.html</code> dodaj:</p>
+        <pre class="code-block"><code>&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+        <p>W <code>script.js</code> wpisz:</p>
+        <pre class="code-block"><code>console.log("Skrypt działa");</code></pre>
+        <p>Zapisz pliki, odśwież stronę i odczytaj komunikat w zakładce <strong>Console</strong>. Komunikat nie pojawia się w treści strony, ponieważ konsola jest narzędziem dla programisty.</p>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W <strong>Network</strong> znajdź wczytany <code>script.js</code>, a w <strong>Sources</strong> otwórz jego treść. Konsola powinna pokazać jeden komunikat po każdym odświeżeniu. Filtr <strong>Errors</strong> nie powinien zawierać wpisów.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">DOM + ZDARZENIE</p><h3>Znajdź elementy i obsłuż kliknięcie</h3></div></div>
+        <p>Zastąp testowy kod w <code>script.js</code> następującym programem:</p>
+        <pre class="code-block"><code>const factButton = document.querySelector("#fact-button");
+const bio = document.querySelector("#bio");
+
+factButton.addEventListener("click", function () {
+  bio.textContent = "Ta treść została zmieniona przez JavaScript.";
+  factButton.textContent = "Gotowe!";
+});</code></pre>
+        <p>Nie klikaj od razu. Najpierw wspólnie przeczytajcie program od góry i przewidźcie:</p>
+        <ul class="instruction-list"><li>który element trafi do zmiennej <code>factButton</code>;</li><li>kiedy wykona się funkcja przekazana do <code>addEventListener</code>;</li><li>które dwa teksty zmienią się po kliknięciu;</li><li>co wydarzy się po drugim kliknięciu.</li></ul>
+        <p>Dopiero potem odśwież stronę, kliknij przycisk i porównaj rezultat z przewidywaniem.</p>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W <strong>Elements</strong> obserwuj elementy <code>#bio</code> i <code>#fact-button</code> podczas kliknięcia — zmienione węzły zostaną na chwilę podświetlone. Następnie w konsoli wpisz <code>bio</code> oraz <code>factButton</code> i sprawdź, jakie elementy przechowują zmienne.</p></aside>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Po kliknięciu zmienia się opis i etykieta przycisku.</li><li>W konsoli nie ma czerwonych błędów.</li></ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">DEBUGOWANIE</p><h3>Wywołaj kontrolowany błąd</h3></div></div>
+        <ol class="instruction-list"><li>W selektorze zmień chwilowo <code>#fact-button</code> na <code>#fact-buton</code>.</li><li>Odśwież stronę i kliknij przycisk.</li><li>Odczytaj pierwszy czerwony komunikat oraz numer linii w konsoli.</li><li>Sprawdź w konsoli wartość wyrażenia <code>document.querySelector("#fact-buton")</code>.</li><li>Przywróć poprawny identyfikator i upewnij się, że interakcja znów działa.</li></ol>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>Kliknij numer linii przy błędzie, aby przejść do pliku w <strong>Sources</strong>. Dodaj breakpoint w pierwszej linii funkcji obsługującej kliknięcie, kliknij przycisk i obejrzyj wartości zmiennych w panelu <strong>Scope</strong>. Wznów wykonanie przyciskiem Resume.</p></aside>
+        <aside class="safety-note"><strong>Błąd to informacja</strong><p><code>null</code> oznacza tutaj, że selektor nie znalazł elementu. Zacznij diagnozę od pierwszego błędu, numeru linii i sprawdzenia nazw po obu stronach połączenia HTML–JavaScript.</p></aside>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="connections-title">
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">MAPA POŁĄCZEŃ</p><h2 id="connections-title">Jak pliki odnajdują siebie nawzajem</h2></div></div>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Połączenie</th><th>Punkt zaczepienia</th><th>Co zepsuje połączenie?</th></tr></thead><tbody>
+        <tr><td>HTML → CSS</td><td><code>&lt;link href="styles.css"&gt;</code></td><td>Zła nazwa pliku, ścieżka lub brak <code>rel="stylesheet"</code>.</td></tr>
+        <tr><td>CSS → HTML</td><td><code>.card</code> pasuje do <code>class="card"</code></td><td>Literówka, brak kropki przy klasie lub inna nazwa.</td></tr>
+        <tr><td>HTML → JavaScript</td><td><code>&lt;script src="script.js"&gt;</code></td><td>Zła nazwa pliku, ścieżka albo niedomknięty element script.</td></tr>
+        <tr><td>JavaScript → HTML</td><td><code>#bio</code> pasuje do <code>id="bio"</code></td><td>Literówka, brak <code>#</code> albo nieistniejący identyfikator.</td></tr>
+      </tbody></table></div>
+      <p>Przeglądarka nie zgaduje nazw. <code>styles.css</code>, <code>Styles.css</code> i <code>style.css</code> to potencjalnie trzy różne pliki. Ta sama zasada dotyczy klas, identyfikatorów i ścieżek.</p>
+      <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W <strong>Network</strong> włącz filtr <strong>All</strong> i odśwież stronę. W jednym miejscu zobaczysz dokument HTML, arkusz CSS i skrypt JavaScript. Kliknij każdy zasób i porównaj jego typ, adres oraz odpowiedź.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="challenge-title">
+      <div class="block-heading"><span class="block-number">08</span><div><p class="eyebrow">90–105 MIN</p><h2 id="challenge-title">Małe zadanie samodzielne</h2></div></div>
+      <p>Teraz każdy wybiera jedno rozszerzenie. Pracuj przez 10 minut bez przepisywania rozwiązania z ekranu. Prowadzący pomaga pytaniami, nie podaje od razu całego kodu.</p>
+      <div class="role-grid">
+        <article class="role-card is-a"><span class="role-badge">WARIANT A / HTML + CSS</span><h4>Nowa sekcja</h4><p>Dodaj sekcję „Chcę stworzyć” z listą trzech pomysłów. Nadaj jej klasę i odróżnij wizualnie obramowaniem lub tłem.</p></article>
+        <article class="role-card is-b"><span class="role-badge">WARIANT B / JAVASCRIPT</span><h4>Licznik kliknięć</h4><p>Dodaj zmienną liczbową. Przy każdym kliknięciu zwiększ ją o jeden i pokaż liczbę w tekście przycisku.</p></article>
+      </div>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">?</span><div><p class="eyebrow">WSKAZÓWKI</p><h3>Jeśli utkniesz</h3></div></div>
+        <details><summary>Wskazówka do wariantu A</summary><p>Najpierw dodaj poprawny element <code>section</code> w <code>article</code>. Dopiero potem dodaj klasę i napisz dla niej regułę CSS.</p></details>
+        <details><summary>Wskazówka do wariantu B</summary><p>Przed obsługą zdarzenia utwórz <code>let clickCount = 0;</code>. Wewnątrz funkcji użyj <code>clickCount = clickCount + 1;</code>, a wynik połącz z tekstem.</p></details>
+        <details><summary>Jak sprawdzić rozwiązanie?</summary><p>Wariant A nie może psuć hierarchii nagłówków ani układu karty. Wariant B powinien po kolejnych kliknięciach wyświetlać kolejno 1, 2 i 3, bez błędów w konsoli.</p></details>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>Dla wariantu A obejrzyj nową sekcję w <strong>Elements</strong> i jej reguły w <strong>Styles</strong>. Dla wariantu B obserwuj zmieniany tekst w Elements oraz wartość licznika w <strong>Console</strong>. W obu wariantach wykonaj test przy wąskim oknie przeglądarki.</p></aside>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="pages-title">
+      <div class="block-heading"><span class="block-number">09</span><div><p class="eyebrow">PUBLIKACJA</p><h2 id="pages-title">Udostępnij stronę przez GitHub Pages</h2></div></div>
+      <p>Gotową stronę można opublikować bez tworzenia własnego pipeline’u i bez pliku GitHub Actions. GitHub Pages pobierze statyczne pliki bezpośrednio z gałęzi <code>main</code> i katalogu głównego repozytorium.</p>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">STRUKTURA REPOZYTORIUM</p><h3>Umieść index.html w katalogu głównym</h3></div></div>
+        <p>Plik wejściowy musi nazywać się dokładnie <code>index.html</code>. GitHub Pages odnajdzie go automatycznie pod głównym adresem witryny. Wszystkie ścieżki powinny być względne i zachowywać wielkość liter.</p>
+        <pre class="code-block"><code>developer-card/
+├── index.html       # strona otwierana jako pierwsza
+├── about.html       # podstrona „O projekcie”
+├── resources.html   # podstrona z odsyłaczami
+├── styles.css       # wspólny arkusz stylów
+└── script.js        # skrypt używany przez index.html</code></pre>
+        <p>Przy takiej strukturze linki w dokumentach mają prostą postać:</p>
+        <pre class="code-block"><code>&lt;link rel="stylesheet" href="styles.css"&gt;
+&lt;a href="about.html"&gt;O projekcie&lt;/a&gt;
+&lt;a href="resources.html"&gt;Materiały&lt;/a&gt;
+&lt;script src="script.js"&gt;&lt;/script&gt;</code></pre>
+        <aside class="safety-note"><strong>Nie używaj ścieżek z dysku</strong><p>Odwołania takie jak <code>C:\Users\...</code> albo <code>file:///...</code> działają wyłącznie na Twoim komputerze. W repozytorium używaj nazw i ścieżek względnych. Serwer rozróżnia także <code>About.html</code> od <code>about.html</code>.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">GIT + GITHUB</p><h3>Wyślij projekt na gałąź main</h3></div></div>
+        <p>Utwórz na GitHubie nowe repozytorium, np. <code>developer-card</code>. Nie dodawaj podczas tworzenia README, licencji ani <code>.gitignore</code>, jeżeli lokalny katalog zawiera już gotowy projekt. Następnie w terminalu, wewnątrz katalogu <code>developer-card</code>, wykonaj:</p>
+        <pre class="code-block"><code>git init
+git add .
+git commit -m "feat: add developer card website"
+git branch -M main
+git remote add origin URL_REPOZYTORIUM
+git push -u origin main</code></pre>
+        <p>Zastąp <code>URL_REPOZYTORIUM</code> adresem HTTPS skopiowanym z GitHuba. Przed użyciem <code>git add .</code> uruchom <code>git status</code> i upewnij się, że dodajesz wyłącznie pięć plików projektu.</p>
+        <aside class="safety-note"><strong>Bez własnego pipeline’u</strong><p>Nie twórz katalogu <code>.github/workflows</code>, pliku <code>deploy.yml</code> ani konfiguracji npm. Dla tej statycznej strony wystarczy publikowanie bezpośrednio z brancha.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">SETTINGS → PAGES</p><h3>Wybierz main oraz /(root)</h3></div></div>
+        <ol class="instruction-list">
+          <li>Otwórz repozytorium na GitHubie i przejdź do <strong>Settings → Pages</strong>.</li>
+          <li>W sekcji <strong>Build and deployment</strong>, przy opcji <strong>Source</strong>, wybierz <strong>Deploy from a branch</strong>.</li>
+          <li>Jako branch wybierz <strong>main</strong>, a jako katalog <strong>/(root)</strong>.</li>
+          <li>Kliknij <strong>Save</strong> i poczekaj, aż GitHub pokaże adres opublikowanej strony.</li>
+          <li>Otwórz adres w nowej karcie. Pierwsza publikacja może potrwać kilka minut.</li>
+        </ol>
+        <p>Adres strony projektu ma zwykle postać:</p>
+        <pre class="code-block"><code>https://NAZWA-UŻYTKOWNIKA.github.io/developer-card/</code></pre>
+        <aside class="safety-note"><strong>Repozytorium a dostępność strony</strong><p>Na bezpłatnym koncie najprościej użyć repozytorium publicznego. Nie publikuj w nim haseł, tokenów, prywatnych adresów ani innych danych, których nie chcesz udostępnić w Internecie.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">TEST PRODUKCYJNY</p><h3>Sprawdź opublikowaną wersję</h3></div></div>
+        <ol class="instruction-list"><li>Otwórz stronę w trybie prywatnym przeglądarki, bez logowania do GitHuba.</li><li>Przejdź z <code>index.html</code> do obu podstron i wróć przez nawigację.</li><li>Sprawdź wygląd strony i działanie przycisku JavaScript.</li><li>Otwórz DevTools i upewnij się, że Console nie zawiera błędów, a pliki w Network nie zwracają statusu 404.</li><li>Zmniejsz szerokość okna i sprawdź, czy karta mieści się na ekranie.</li></ol>
+        <aside class="safety-note"><strong>DevTools — sprawdź</strong><p>W <strong>Network</strong> odśwież publiczny adres i sprawdź statusy dla <code>index.html</code>, <code>styles.css</code> i <code>script.js</code>. Po przejściu na podstrony znajdź również <code>about.html</code> i <code>resources.html</code>. Każdy zasób powinien zostać pobrany bez błędu 404.</p></aside>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Publiczny adres automatycznie otwiera <code>index.html</code>.</li><li>CSS, JavaScript, nawigacja i odsyłacze działają również poza lokalnym komputerem.</li><li>Repozytorium nie zawiera własnego workflow publikacyjnego.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="summary-title">
+      <div class="block-heading"><span class="block-number">10</span><div><p class="eyebrow">PODSUMOWANIE</p><h2 id="summary-title">Opowiedz, jak działa projekt</h2></div></div>
+      <p>W parach wyjaśnijcie sobie projekt bez czytania kodu linia po linii. Jedna osoba odpowiada za HTML i CSS, druga za JavaScript, a następnie zamieniacie się rolami.</p>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Potrafię wskazać treść widoczną w dokumencie i metadane w <code>head</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Potrafię wyjaśnić różnicę między elementem, klasą i identyfikatorem.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Wiem, jak HTML dołącza pliki <code>styles.css</code> oraz <code>script.js</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Rozumiem selektor, właściwość i wartość w regule CSS.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Potrafię odnaleźć element przez <code>querySelector</code> i obsłużyć zdarzenie <code>click</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Potrafię znaleźć pierwszy błąd i numer linii w konsoli.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Projekt działa po ponownym otwarciu <code>index.html</code>.</span></li>
+      </ul>
+      <div class="extension-task"><span class="data-label">EXIT TICKET</span><p>Napisz na kartce lub w wiadomości trzy zdania: „HTML odpowiada za…”, „CSS odpowiada za…”, „JavaScript odpowiada za…”. Dodaj jedno pytanie, które nadal masz po zajęciach.</p></div>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="problems-title">
+      <div class="block-heading"><span class="block-number">11</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="problems-title">Gdy rezultat różni się od ekranu</h2></div></div>
+      <details><summary>Po odświeżeniu nic się nie zmienia</summary><p>Najpierw zapisz aktywny plik. Sprawdź, czy przeglądarka pokazuje <code>index.html</code> z właściwego katalogu. Wykonaj pełne odświeżenie i porównaj nazwę katalogu w pasku adresu.</p></details>
+      <details><summary>HTML działa, ale nie ma stylów</summary><p>Sprawdź nazwę <code>styles.css</code>, element <code>link</code> w <code>head</code> oraz zakładkę Network w DevTools. Błąd 404 oznacza zwykle złą ścieżkę.</p></details>
+      <details><summary>Jedna reguła CSS nie działa</summary><p>Sprawdź selektor, nawiasy klamrowe, dwukropek i średnik. W zakładce Elements zobacz, czy reguła jest widoczna i czy inna reguła jej nie zastępuje.</p></details>
+      <details><summary>Przycisk nie reaguje</summary><p>Otwórz Console i zacznij od pierwszego błędu. Porównaj <code>id</code> w HTML z selektorem w <code>querySelector</code>. Sprawdź również, czy <code>script.js</code> jest poprawnie dołączony.</p></details>
+      <details><summary>W konsoli pojawia się null</summary><p>JavaScript nie znalazł elementu pasującego do selektora. Sprawdź znak <code>#</code> dla identyfikatora, znak <code>.</code> dla klasy i dokładną pisownię nazwy.</p></details>
+      <details><summary>Zmiany w DevTools zniknęły</summary><p>DevTools pozwala eksperymentować na aktualnie wyświetlanej stronie. Aby zachować zmianę, przepisz ją do odpowiedniego pliku w wybranym IDE i zapisz.</p></details>
+    </section>
+
+    <div class="next-step"><span class="note-index">KONIEC / LAB 05</span><p>Zachowaj pięć plików projektu. Na następnym laboratorium wykorzystasz znajomość HTML do przekształcenia bazy wiedzy z plików Markdown w wielostronicowy serwis.</p><a href="lab-06.html">PRZEJDŹ DO LABORATORIUM 06 →</a></div>
+  </main>
+
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span>PRG-WPR <span class="footer-slash">·</span> 2026–27</span></footer>
+</body>
+</html>
