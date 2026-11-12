@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 07: pierwsze kroki z GitHub Actions — YAML, ręczne uruchomienie, automatyczny build po pushu i kontrola Pull Requestów.">
+  <title>07. Wprowadzenie do GitHub Actions | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="../assets/js/code-copy.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-07.html" aria-current="page">Laboratorium 07</a>
+      <a class="nav-external" href="https://github.com/" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 07</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 07</span></nav>
+
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span> LABORATORIUM 07 <span class="eyebrow-divider">/</span> LIVE CODING</p>
+        <h1 id="lab-title">Pierwszy workflow<br><span>GitHub Actions</span></h1>
+        <p class="intro-lede">Student wykonuje laboratorium krok po kroku razem z prowadzącym. Wspólnie zautomatyzujemy budowanie i uruchamianie projektu .NET 10: najpierw ręcznie, potem po pushu, a na końcu przy Pull Requeście.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">PLIK</span><strong>YAML</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">PIPELINE</span><strong>BUILD / RUN</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="work-mode-title">
+      <div class="block-heading"><span class="block-number">00</span><div><p class="eyebrow">TRYB ZAJĘĆ / LIVE CODING</p><h2 id="work-mode-title">Pracujemy razem z prowadzącym</h2></div></div>
+      <p>To laboratorium nie jest zadaniem do samodzielnego przeczytania i wykonania we własnym tempie. Prowadzący tworzy workflow na ekranie, a każdy student równolegle powtarza te same zmiany we własnym repozytorium.</p>
+      <ol class="instruction-list">
+        <li><strong>Najpierw omawiamy.</strong> Przed dodaniem fragmentu wspólnie ustalamy, do czego służy i gdzie powinien znaleźć się w YAML.</li>
+        <li><strong>Potem zapisujemy.</strong> Prowadzący i studenci dodają ten sam mały fragment konfiguracji.</li>
+        <li><strong>Uruchamiamy.</strong> Wykonujemy commit i push, a następnie obserwujemy workflow w zakładce Actions.</li>
+        <li><strong>Porównujemy logi.</strong> Zatrzymujemy się przy nowym stepie i sprawdzamy jego wejście, wynik oraz kod zakończenia.</li>
+        <li><strong>Wspólnie diagnozujemy.</strong> Jeżeli wynik studenta różni się od wyniku prowadzącego, nie przechodzimy dalej, tylko szukamy różnicy w ścieżce, wcięciach lub konfiguracji.</li>
+        <li><strong>Dopiero potem rozwijamy workflow.</strong> Następny step dodajemy, gdy bieżąca wersja działa u wszystkich.</li>
+      </ol>
+      <aside class="safety-note"><strong>Nie kopiuj gotowego pliku</strong><p>Pełna wersja YAML znajduje się na końcu wyłącznie do porównania. Podczas zajęć student buduje plik razem z prowadzącym, jeden fragment na raz.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="goals-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">CELE LABORATORIUM</p><h2 id="goals-title">Po spotkaniu potrafisz</h2></div></div>
+      <ul class="outcome-list">
+        <li>Wyjaśnić, czym są workflow, event, job, step, runner i action.</li>
+        <li>Rozpoznać strukturę pliku YAML i poprawnie stosować wcięcia.</li>
+        <li>Utworzyć workflow w katalogu <code>.github/workflows</code>.</li>
+        <li>Przygotować środowisko .NET na runnerze GitHub.</li>
+        <li>Uruchomić polecenia Bash budujące i uruchamiające projekt z pliku <code>.csproj</code>.</li>
+        <li>Stopniowo skonfigurować triggery <code>workflow_dispatch</code>, <code>push</code> i <code>pull_request</code>.</li>
+        <li>Odczytać logi workflow i znaleźć krok, który zakończył się błędem.</li>
+        <li>Zablokować merge Pull Requesta, dopóki wymagany build nie zakończy się sukcesem.</li>
+      </ul>
+      <aside class="safety-note"><strong>Zakres laboratorium</strong><p>Nie tworzymy solution <code>.sln</code>, nie uruchamiamy testów i nie wdrażamy aplikacji. Workflow pracuje z jednym istniejącym projektem <code>.csproj</code>.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="start-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PUNKT STARTOWY</p><h2 id="start-title">Przygotuj działający projekt</h2></div></div>
+      <p>Skorzystaj z projektu .NET z poprzednich laboratoriów. Projekt musi korzystać z <code>net10.0</code>, zawierać plik <code>.csproj</code>, budować się lokalnie i kończyć działanie po uruchomieniu. Najwygodniejsza będzie aplikacja konsolowa.</p>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">LOCAL</span><div><p class="eyebrow">KONTROLA PRZED AUTOMATYZACJĄ</p><h3>Sprawdź projekt na swoim komputerze</h3></div></div>
+        <p>W terminalu Bash przejdź do katalogu repozytorium. Zastąp przykładową ścieżkę rzeczywistym położeniem swojego pliku projektu.</p>
+        <pre class="code-block"><code>find . -name "*.csproj"
+
+PROJECT_PATH="./src/MyApp/MyApp.csproj"
+dotnet restore "$PROJECT_PATH"
+dotnet build "$PROJECT_PATH" --configuration Release --no-restore
+dotnet run --project "$PROJECT_PATH" --configuration Release --no-build</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>find</code> pokazuje plik projektu, którego chcesz użyć.</li><li><code>dotnet build</code> kończy się komunikatem <code>Build succeeded</code>.</li><li><code>dotnet run</code> wypisuje wynik programu i sam się kończy.</li></ul>
+        <aside class="safety-note"><strong>Dlaczego cudzysłowy?</strong><p>Zapis <code>"$PROJECT_PATH"</code> chroni ścieżkę zawierającą spacje. To dobra praktyka w skryptach Bash.</p></aside>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="concepts-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">WPROWADZENIE</p><h2 id="concepts-title">Jak działa GitHub Actions</h2></div></div>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Pojęcie</th><th>Znaczenie</th><th>Przykład w tym laboratorium</th></tr></thead><tbody>
+        <tr><td>Workflow</td><td>Cała automatyzacja opisana w jednym pliku YAML.</td><td><code>.github/workflows/build.yml</code></td></tr>
+        <tr><td>Event / trigger</td><td>Zdarzenie rozpoczynające workflow.</td><td>Ręczne kliknięcie, push albo Pull Request.</td></tr>
+        <tr><td>Job</td><td>Zestaw kroków wykonywany na jednym runnerze.</td><td><code>build</code></td></tr>
+        <tr><td>Runner</td><td>Maszyna wykonująca job.</td><td><code>ubuntu-latest</code></td></tr>
+        <tr><td>Step</td><td>Pojedyncza czynność w jobie.</td><td>Pobranie kodu lub <code>dotnet build</code>.</td></tr>
+        <tr><td>Action</td><td>Gotowy, wielokrotnego użytku krok.</td><td><code>actions/checkout</code></td></tr>
+      </tbody></table></div>
+      <p>GitHub tworzy czysty runner dla każdego uruchomienia. Dlatego workflow musi pobrać repozytorium, zainstalować właściwą wersję .NET, odtworzyć zależności, zbudować projekt i dopiero potem go uruchomić.</p>
+    </section>
+
+    <section class="section-block" aria-labelledby="yaml-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">YAML</p><h2 id="yaml-title">Struktura pliku workflow</h2></div></div>
+      <p>YAML opisuje dane za pomocą kluczy, wartości i list. Poziom zagnieżdżenia wyznaczają spacje. W tym pliku używamy dwóch spacji na poziom i nie używamy tabulatorów.</p>
+      <pre class="code-block"><code>name: Build .NET project       # klucz i wartość
+
+on:                            # obiekt zagnieżdżony
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:                     # lista
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Show directory
+        run: pwd</code></pre>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Składnia</th><th>Znaczenie</th><th>Uwaga</th></tr></thead><tbody>
+        <tr><td><code>klucz: wartość</code></td><td>Pojedyncza właściwość.</td><td>Po dwukropku występuje spacja.</td></tr>
+        <tr><td><code>klucz:</code> i wcięcie</td><td>Zagnieżdżony obiekt.</td><td>Dzieci mają większe wcięcie.</td></tr>
+        <tr><td><code>- element</code></td><td>Element listy.</td><td>Każdy step zaczyna się myślnikiem.</td></tr>
+        <tr><td><code>|</code></td><td>Wielowierszowy tekst.</td><td>Przydatny dla kilku poleceń Bash.</td></tr>
+        <tr><td><code># komentarz</code></td><td>Opis ignorowany przez parser.</td><td>Komentarze wyjaśniają intencję.</td></tr>
+      </tbody></table></div>
+      <aside class="safety-note"><strong>Uwaga na klucz on</strong><p><code>on</code> określa zdarzenia uruchamiające workflow. Edytor może traktować to słowo jak wartość logiczną, jeżeli używa starego parsera YAML. GitHub Actions rozpoznaje je poprawnie jako klucz.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="manual-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">ETAP 1 / RĘCZNIE</p><h2 id="manual-title">Uruchom workflow przyciskiem</h2></div></div>
+      <p>Najpierw użyjemy wyłącznie <code>workflow_dispatch</code>. Workflow zbudujemy krok po kroku. Po każdym rozszerzeniu pliku wykonaj commit, push i ręczne uruchomienie. Nie dodawaj kolejnego stepu, dopóki bieżąca wersja nie zakończy się sukcesem.</p>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">SZKIELET</p><h3>Utwórz pierwszy działający workflow</h3></div></div>
+        <p>Utwórz katalog <code>.github/workflows</code>, a w nim plik <code>build.yml</code>. Na razie workflow tylko potwierdzi uruchomienie runnera.</p>
+        <pre class="code-block"><code>name: Build .NET project
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Confirm runner
+        shell: bash
+        run: echo "Runner is ready"</code></pre>
+        <p><code>name</code> nadaje nazwę workflow. <code>workflow_dispatch</code> pozwala uruchomić go przyciskiem. <code>jobs</code> zawiera job <code>build</code>, wykonywany na świeżej maszynie Ubuntu. Lista <code>steps</code> ma na razie jedno polecenie Bash.</p>
+        <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git add .github/workflows/build.yml
+git commit -m "ci: add workflow skeleton"
+git push origin main</code></pre>
+        <aside class="safety-note"><strong>Dlaczego najpierw main?</strong><p>GitHub udostępnia ręczne uruchamianie przez <code>workflow_dispatch</code> dopiero wtedy, gdy plik workflow istnieje na domyślnej gałęzi repozytorium. Na tym etapie <code>main</code> nie jest jeszcze chroniony — ochronę włączysz po przygotowaniu kontroli PR.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">RUN</span><div><p class="eyebrow">PO KAŻDEJ ZMIANIE</p><h3>Zapisz, uruchom i przeczytaj logi</h3></div></div>
+        <ol class="instruction-list">
+          <li>Po każdej zmianie wykonaj <code>git add</code>, <code>git commit</code> i <code>git push origin main</code>.</li>
+          <li>Otwórz repozytorium na GitHubie i przejdź do zakładki <strong>Actions</strong>.</li>
+          <li>Z lewej strony wybierz workflow <strong>Build .NET project</strong>.</li>
+          <li>Kliknij <strong>Run workflow</strong>, wybierz branch <code>main</code> i ponownie kliknij <strong>Run workflow</strong>.</li>
+          <li>Otwórz nowe uruchomienie, a następnie job <strong>build</strong>.</li>
+          <li>Rozwiń nowo dodany step i sprawdź jego log. Zielony znacznik oznacza kod wyjścia <code>0</code>.</li>
+        </ol>
+        <p>W kolejnych punktach pokazane są tylko fragmenty, które należy dopisać do rosnącego pliku. Nie usuwaj wcześniej dodanych stepów.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">CHECKOUT</p><h3>Pobierz kod repozytorium</h3></div></div>
+        <p>Dodaj nowy element na końcu listy <code>steps</code>:</p>
+        <pre class="code-block"><code>      - name: Checkout repository
+        uses: actions/checkout@v4</code></pre>
+        <p>Runner jest pustą maszyną — samo uruchomienie workflow nie kopiuje na nią repozytorium. Gotowa akcja <code>actions/checkout</code> pobiera właściwy commit i ustawia go jako bieżący katalog. <code>uses</code> oznacza użycie gotowej akcji zamiast własnego polecenia.</p>
+        <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: checkout repository"
+git push origin main</code></pre>
+        <p>Uruchom workflow ręcznie. W logu kroku <strong>Checkout repository</strong> znajdź informację o pobranym repozytorium i commicie.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">SETUP</p><h3>Wybierz wersję .NET</h3></div></div>
+        <p>Nad sekcją <code>jobs</code> dodaj zmienną z wersją SDK. W tym laboratorium projekt korzysta z <code>net10.0</code>, dlatego konfigurujemy .NET SDK 10.</p>
+        <pre class="code-block"><code>env:
+  DOTNET_VERSION: 10.0.x</code></pre>
+        <p>Na końcu listy <code>steps</code> dopisz:</p>
+        <pre class="code-block"><code>      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}</code></pre>
+        <p><code>actions/setup-dotnet</code> udostępnia wybrane SDK w zmiennej <code>PATH</code>. Sekcja <code>with</code> przekazuje parametry do akcji, a zapis <code>${{ env.DOTNET_VERSION }}</code> odczytuje zmienną w składni GitHub Actions.</p>
+        <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: configure dotnet sdk"
+git push origin main</code></pre>
+        <p>Uruchom workflow ręcznie i sprawdź, czy krok <strong>Setup .NET</strong> pokazuje oczekiwaną wersję SDK.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">RESTORE</p><h3>Odtwórz zależności projektu</h3></div></div>
+        <p>W istniejącej sekcji <code>env</code> dopisz ścieżkę do swojego projektu:</p>
+        <pre class="code-block"><code>  PROJECT_PATH: ./src/MyApp/MyApp.csproj</code></pre>
+        <p>Na końcu listy <code>steps</code> dodaj:</p>
+        <pre class="code-block"><code>      - name: Restore dependencies
+        shell: bash
+        run: dotnet restore "$PROJECT_PATH"</code></pre>
+        <p><code>dotnet restore</code> czyta wskazany <code>.csproj</code> i pobiera wymagane pakiety. <code>shell: bash</code> jawnie wybiera powłokę, a <code>"$PROJECT_PATH"</code> odczytuje zmienną środowiskową i bezpiecznie obsługuje spacje w ścieżce.</p>
+        <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: restore project dependencies"
+git push origin main</code></pre>
+        <p>Uruchom workflow ręcznie. Jeżeli step nie znajduje projektu, porównaj wartość <code>PROJECT_PATH</code> z wynikiem <code>find . -name "*.csproj"</code>.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">05</span><div><p class="eyebrow">BUILD</p><h3>Zbuduj projekt w konfiguracji Release</h3></div></div>
+        <p>Na końcu listy <code>steps</code> dodaj:</p>
+        <pre class="code-block"><code>      - name: Build project
+        shell: bash
+        run: dotnet build "$PROJECT_PATH" --configuration Release --no-restore</code></pre>
+        <p><code>--configuration Release</code> wybiera konfigurację przeznaczoną do gotowego programu. <code>--no-restore</code> zapobiega powtórnemu pobieraniu zależności — restore został wykonany w poprzednim stepie. Jeśli kompilator zwróci błąd, job zatrzyma się i następny step nie zostanie wykonany.</p>
+        <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: build dotnet project"
+git push origin main</code></pre>
+        <p>Uruchom workflow ręcznie. Rozwiń <strong>Build project</strong> i znajdź komunikat <code>Build succeeded</code>.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">06</span><div><p class="eyebrow">RUN</p><h3>Uruchom zbudowany program</h3></div></div>
+        <p>Na końcu listy <code>steps</code> dodaj ostatni krok:</p>
+        <pre class="code-block"><code>      - name: Run project
+        shell: bash
+        run: dotnet run --project "$PROJECT_PATH" --configuration Release --no-build</code></pre>
+        <p><code>--project</code> wskazuje konkretny <code>.csproj</code>. <code>--no-build</code> uruchamia pliki utworzone przez poprzedni step, zamiast ponownie kompilować projekt. Wynik programu pojawi się bezpośrednio w logu.</p>
+        <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: run built project"
+git push origin main</code></pre>
+        <p>Uruchom workflow ręcznie. Znajdź wynik aplikacji w kroku <strong>Run project</strong>.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Workflow ma sześć widocznych stepów, łącznie z krokiem kontrolnym.</li><li><strong>Build project</strong> zawiera komunikat <code>Build succeeded</code>.</li><li><strong>Run project</strong> pokazuje wynik programu i kończy się sukcesem.</li><li>Dopiero teraz przejdź do etapu 2.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="push-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">ETAP 2 / PUSH</p><h2 id="push-title">Uruchamiaj workflow po wysłaniu zmian</h2></div></div>
+      <p>Zachowaj możliwość ręcznego uruchomienia i dodaj drugi trigger. Od tej chwili każdy push do brancha <code>main</code> uruchomi workflow automatycznie.</p>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">ON</span><div><p class="eyebrow">ZMIEŃ TYLKO TRIGGER</p><h3>Dodaj zdarzenie push</h3></div></div>
+        <p>W pliku <code>build.yml</code> zastąp dotychczasową sekcję <code>on</code> poniższą konfiguracją. Pozostała część pliku nie zmienia się.</p>
+        <pre class="code-block"><code>on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main</code></pre>
+        <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: run build on push"
+git push</code></pre>
+        <p>Sam <code>git push</code> powinien teraz utworzyć nowe uruchomienie w zakładce <strong>Actions</strong>. Nie klikaj przycisku <strong>Run workflow</strong>.</p>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Nowe uruchomienie ma zdarzenie <strong>push</strong>.</li><li>Workflow zakończył się sukcesem bez ręcznego startu.</li><li>Dopiero po tym wyniku przejdź do etapu 3.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="pr-title">
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">ETAP 3 / PULL REQUEST</p><h2 id="pr-title">Sprawdzaj kod przed scaleniem</h2></div></div>
+      <p>Ostatnia wersja uruchomi workflow dla zmian wysyłanych do <code>main</code> oraz dla Pull Requestów skierowanych do <code>main</code>. Branch roboczy nie musi mieć konkretnej nazwy.</p>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">PR</span><div><p class="eyebrow">DOCELOWY TRIGGER</p><h3>Dodaj pull_request</h3></div></div>
+        <p>Utwórz branch roboczy, a następnie zastąp sekcję <code>on</code> wersją docelową:</p>
+        <pre class="code-block"><code>git switch -c ci/github-actions</code></pre>
+        <pre class="code-block"><code>on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main</code></pre>
+        <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: validate pull requests to main"
+git push</code></pre>
+        <ol class="instruction-list"><li>Na GitHubie otwórz Pull Request z <code>ci/github-actions</code> do <code>main</code>.</li><li>Przejdź do zakładki <strong>Checks</strong> albo sekcji kontroli na dole zakładki <strong>Conversation</strong>.</li><li>Otwórz szczegóły kontroli <strong>build</strong> i sprawdź logi.</li><li>Nie scalaj PR-a, dopóki kontrola jest w toku albo zakończyła się błędem.</li></ol>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Otwarcie PR-a uruchamia workflow ze zdarzeniem <strong>pull_request</strong>.</li><li>PR pokazuje zieloną kontrolę <strong>build</strong>.</li><li>Po kolejnym pushu do brancha PR-a kontrola uruchamia się ponownie.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="protection-title">
+      <div class="block-heading"><span class="block-number">08</span><div><p class="eyebrow">OCHRONA MAIN</p><h2 id="protection-title">Zablokuj merge po nieudanym buildzie</h2></div></div>
+      <p>Sama kontrola informuje o błędzie, ale bez reguły repozytorium nadal można ją zignorować. Właściciel repozytorium powinien wymagać pomyślnego statusu <code>build</code>.</p>
+      <ol class="instruction-list">
+        <li>Upewnij się, że workflow dla PR-a wykonał się przynajmniej raz — dopiero wtedy status <code>build</code> pojawi się na liście.</li>
+        <li>Przejdź do <strong>Settings → Rules → Rulesets</strong> i wybierz <strong>New ruleset → New branch ruleset</strong>.</li>
+        <li>Nazwij regułę <code>Protect main</code>, ustaw ją jako aktywną i w <strong>Target branches</strong> wskaż branch <code>main</code>.</li>
+        <li>Włącz <strong>Require a pull request before merging</strong>.</li>
+        <li>Włącz <strong>Require status checks to pass</strong> i dodaj kontrolę <code>build</code>.</li>
+        <li>Jeżeli opcja jest dostępna, włącz wymaganie aktualnego brancha przed scaleniem.</li>
+        <li>Zapisz ruleset.</li>
+      </ol>
+      <aside class="safety-note"><strong>Nazwa wymaganej kontroli</strong><p><code>Build .NET project</code> to nazwa całego workflow, a <code>build</code> to identyfikator joba i nazwa kontroli wymagana przy merge. Nie zmieniaj identyfikatora joba po skonfigurowaniu reguły.</p></aside>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">FAIL</span><div><p class="eyebrow">KONTROLOWANA PRÓBA</p><h3>Sprawdź, czy ochrona naprawdę działa</h3></div></div>
+        <p>Na branchu PR-a wprowadź tymczasowy błąd kompilacji, np. usuń średnik w pliku <code>.cs</code>. Wykonaj commit i push, a następnie obserwuj PR.</p>
+        <pre class="code-block"><code>git add .
+git commit -m "test: verify failed build blocks merge"
+git push</code></pre>
+        <p>GitHub powinien pokazać czerwoną kontrolę i zablokować merge. Następnie napraw błąd, wykonaj kolejny commit oraz push. Nie wyłączaj reguły i nie scalaj zepsutej wersji.</p>
+        <pre class="code-block"><code>git add .
+git commit -m "fix: restore successful build"
+git push</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Nieudany build blokuje merge.</li><li>Po naprawie nowa kontrola kończy się sukcesem.</li><li>Przycisk merge staje się dostępny dopiero po zielonym statusie.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="bash-title">
+      <div class="block-heading"><span class="block-number">09</span><div><p class="eyebrow">BASH W WORKFLOW</p><h2 id="bash-title">Konstrukcje użyte w poleceniach</h2></div></div>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Konstrukcja</th><th>Znaczenie</th><th>Przykład</th></tr></thead><tbody>
+        <tr><td>Zmienna</td><td>Przechowuje wartość używaną w kolejnych poleceniach.</td><td><code>PROJECT_PATH="./App/App.csproj"</code></td></tr>
+        <tr><td>Odczyt zmiennej</td><td>Wstawia wartość zmiennej.</td><td><code>"$PROJECT_PATH"</code></td></tr>
+        <tr><td>Cudzysłowy</td><td>Chronią spacje i znaki specjalne w wartości.</td><td><code>dotnet restore "$PROJECT_PATH"</code></td></tr>
+        <tr><td>Kod wyjścia</td><td><code>0</code> oznacza sukces, wartość różna od zera — błąd.</td><td>Nieudany <code>dotnet build</code> zatrzymuje step.</td></tr>
+        <tr><td><code>&amp;&amp;</code></td><td>Uruchamia następne polecenie tylko po sukcesie poprzedniego.</td><td><code>dotnet restore "$PROJECT_PATH" &amp;&amp; dotnet build "$PROJECT_PATH"</code></td></tr>
+        <tr><td><code>|</code> w YAML</td><td>Pozwala zapisać kilka linii skryptu w jednym stepie.</td><td><code>run: |</code></td></tr>
+      </tbody></table></div>
+      <p>W przygotowanym workflow każda faza ma osobny step, dzięki czemu log od razu pokazuje, czy błąd wystąpił podczas restore, build czy run. Po błędzie GitHub nie wykonuje dalszych kroków joba.</p>
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">REF</span><div><p class="eyebrow">PLIK DO PORÓWNANIA</p><h3>Sprawdź końcową wersję build.yml</h3></div></div>
+        <p>Dopiero po wykonaniu wszystkich etapów razem z prowadzącym porównaj swój plik z poniższą wersją. Nie kopiuj jej wcześniej — celem ćwiczenia jest wspólne zbudowanie workflow i sprawdzenie każdego przyrostu.</p>
+        <pre class="code-block"><code>name: Build .NET project
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  DOTNET_VERSION: 10.0.x
+  PROJECT_PATH: ./src/MyApp/MyApp.csproj
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Confirm runner
+        shell: bash
+        run: echo "Runner is ready"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        shell: bash
+        run: dotnet restore "$PROJECT_PATH"
+
+      - name: Build project
+        shell: bash
+        run: dotnet build "$PROJECT_PATH" --configuration Release --no-restore
+
+      - name: Run project
+        shell: bash
+        run: dotnet run --project "$PROJECT_PATH" --configuration Release --no-build</code></pre>
+        <p>Różnić powinny się tylko wartości zależne od projektu, przede wszystkim <code>DOTNET_VERSION</code> i <code>PROJECT_PATH</code>. Nazwy stepów mogą być inne, ale ich kolejność i działanie powinny pozostać takie same.</p>
+      </article>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="problems-title">
+      <div class="block-heading"><span class="block-number">10</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="problems-title">Najczęstsze problemy</h2></div></div>
+      <details><summary>Nie widzę przycisku Run workflow</summary><p>Sprawdź, czy plik istnieje na domyślnej gałęzi <code>main</code>, zawiera <code>workflow_dispatch</code> i znajduje się w katalogu <code>.github/workflows</code>. Wybierz właściwy workflow z listy po lewej stronie zakładki Actions.</p></details>
+      <details><summary>Workflow nie znajduje pliku .csproj</summary><p>Runner zaczyna pracę w katalogu głównym repozytorium. Porównaj <code>PROJECT_PATH</code> z wynikiem lokalnego <code>find . -name "*.csproj"</code>. Wielkość liter ma znaczenie na runnerze Linux.</p></details>
+      <details><summary>Wersja .NET nie pasuje do projektu</summary><p>Otwórz <code>.csproj</code> i sprawdź <code>TargetFramework</code>. W tym laboratorium oczekujemy <code>net10.0</code>, a workflow powinien zawierać <code>DOTNET_VERSION: 10.0.x</code>. Jeżeli projekt używa starszego frameworka, zaktualizuj go wspólnie z prowadzącym przed kontynuowaniem.</p></details>
+      <details><summary>Krok Run project nigdy się nie kończy</summary><p>Workflow zakłada aplikację konsolową, która kończy działanie. Serwer WWW lub program czekający na dane użytkownika będzie działał bez końca. Użyj projektu konsolowego i usuń oczekiwanie na <code>Console.ReadLine()</code>.</p></details>
+      <details><summary>Workflow nie uruchamia się po pushu</summary><p>Sprawdź filtr <code>branches</code>. W etapie 2 push musi trafić do <code>main</code>. W wersji docelowej push nadal uruchamia workflow na <code>main</code>, a branche robocze są sprawdzane przez <code>pull_request</code>.</p></details>
+      <details><summary>Status build nie pojawia się w Rulesets</summary><p>Najpierw otwórz PR i poczekaj, aż job <code>build</code> wykona się przynajmniej raz. Następnie odśwież ustawienia rulesetu.</p></details>
+      <details><summary>YAML zgłasza błąd składni</summary><p>Sprawdź wcięcia, brak tabulatorów i dwukropki. Otwórz uruchomienie w Actions — GitHub zwykle wskazuje linię, której nie potrafi odczytać.</p></details>
+    </section>
+
+    <section class="section-block" aria-labelledby="done-title">
+      <div class="block-heading"><span class="block-number">11</span><div><p class="eyebrow">KRYTERIA UKOŃCZENIA</p><h2 id="done-title">Sprawdź gotową automatyzację</h2></div></div>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Repozytorium zawiera jeden używany w zadaniu plik <code>.csproj</code>; workflow nie wymaga <code>.sln</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Plik workflow znajduje się pod ścieżką <code>.github/workflows/build.yml</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span><code>PROJECT_PATH</code> wskazuje rzeczywisty plik projektu.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Etap ręczny został uruchomiony przez <code>workflow_dispatch</code> i zakończył się sukcesem.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Etap <code>push</code> uruchomił workflow automatycznie.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Pull Request do <code>main</code> uruchamia job <code>build</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Workflow wykonuje checkout, setup .NET, restore, build i run.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Workflow nie uruchamia testów i nie wykonuje deploymentu.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Ruleset dla <code>main</code> wymaga Pull Requesta i pomyślnej kontroli <code>build</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Kontrolowany błąd kompilacji zablokował merge, a naprawa przywróciła zielony status.</span></li>
+      </ul>
+    </section>
+
+    <div class="next-step"><span class="note-index">KONIEC / LAB 07</span><p>Oddaj adres repozytorium i Pull Requesta. W historii Actions powinny być widoczne trzy etapy: uruchomienie ręczne, uruchomienie po pushu oraz kontrola Pull Requesta.</p><a href="../index.html">WRÓĆ DO KURSU →</a></div>
+  </main>
+
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span>PRG-WPR <span class="footer-slash">·</span> 2026–27</span></footer>
+</body>
+</html>
