@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Instrukcja instalacji WSL 2 i Ubuntu na prywatnym komputerze z Windows 10 lub Windows 11.">
+  <title>Instalacja WSL i Ubuntu na Windows | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="../assets/js/code-copy.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="instalacja-wsl.html" aria-current="page">Instrukcja WSL</a>
+      <a class="nav-link" href="../laboratoria/lab-08.html">Laboratorium 08</a>
+    </nav>
+    <span class="header-code">INSTRUKCJA / WSL</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span>Instrukcje</span><span aria-hidden="true">/</span><span aria-current="page">Instalacja WSL</span></nav>
+
+    <section class="lab-hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">INSTRUKCJA ŚRODOWISKA <span class="eyebrow-divider">/</span> WINDOWS</p>
+        <h1 id="page-title">Instalacja WSL<br><span>i Ubuntu</span></h1>
+        <p class="intro-lede">Przygotuj na prywatnym komputerze terminal Linux potrzebny do wykonywania skryptów Bash. Instrukcja prowadzi od sprawdzenia Windows aż do pierwszego działającego terminala Ubuntu.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres instrukcji"><span class="data-label">SYSTEM</span><strong>WINDOWS 10 / 11</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">ŚRODOWISKO</span><strong>WSL 2 / UBUNTU</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="before-title">
+      <div class="block-heading"><span class="block-number">00</span><div><p class="eyebrow">ZANIM ZACZNIESZ</p><h2 id="before-title">Sprawdź wymagania</h2></div></div>
+      <p>Do instalacji potrzebujesz komputera z 64-bitowym Windows 11 albo aktualnym Windows 10, połączenia z internetem oraz konta pozwalającego zatwierdzić zmiany administratora. Standardowe polecenie instalacyjne działa w Windows 10 w wersji 2004 (kompilacja 19041) lub nowszej oraz w Windows 11.</p>
+      <ol class="instruction-list">
+        <li>Zapisz otwarte dokumenty — instalacja może wymagać ponownego uruchomienia komputera.</li>
+        <li>Uruchom <strong>Ustawienia → System → Informacje</strong> i sprawdź edycję oraz wersję Windows.</li>
+        <li>Uruchom <strong>Windows Update</strong> i zainstaluj oczekujące aktualizacje systemowe.</li>
+        <li>Nie wykonuj tej instrukcji na komputerze zarządzanym przez szkołę lub pracodawcę bez zgody administratora.</li>
+      </ol>
+      <aside class="safety-note"><strong>macOS i Linux</strong><p>WSL jest składnikiem Windows. Na macOS lub Linuksie nie instaluj WSL — system ma już terminal zgodny z większością poleceń Bash używanych na zajęciach.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="check-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">KONTROLA</p><h2 id="check-title">Sprawdź, czy WSL już działa</h2></div></div>
+      <p>Otwórz menu Start, wpisz <strong>PowerShell</strong> i uruchom aplikację. Na tym etapie nie musisz jeszcze wybierać opcji administratora. Wpisz:</p>
+      <pre class="code-block"><code>wsl --status
+wsl --list --verbose</code></pre>
+      <p>Możliwe wyniki:</p>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Wynik</th><th>Co zrobić</th></tr></thead><tbody>
+        <tr><td>Na liście jest <code>Ubuntu</code></td><td>WSL jest gotowy. Przejdź do sekcji 05.</td></tr>
+        <tr><td>WSL działa, ale nie ma Ubuntu</td><td>Przejdź do sekcji 03 i doinstaluj dystrybucję.</td></tr>
+        <tr><td>Polecenie nie jest rozpoznawane lub WSL nie jest zainstalowany</td><td>Wykonaj instalację z sekcji 02.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="section-block" aria-labelledby="install-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">INSTALACJA WSL</p><h2 id="install-title">Włącz WSL i zainstaluj Ubuntu</h2></div></div>
+      <p>Zamknij zwykłe okno PowerShell. Otwórz menu Start, wpisz <strong>PowerShell</strong>, kliknij wynik prawym przyciskiem i wybierz <strong>Uruchom jako administrator</strong>. Zatwierdź pytanie systemu, a następnie wykonaj:</p>
+      <pre class="code-block"><code>wsl --install -d Ubuntu</code></pre>
+      <p>Polecenie włącza potrzebne składniki Windows, instaluje WSL oraz pobiera Ubuntu. Nie zamykaj okna podczas instalacji. Jeżeli system poprosi o restart, wykonaj go.</p>
+      <aside class="safety-note"><strong>Nie używaj przypadkowych instalatorów</strong><p>Korzystaj z polecenia systemowego albo Microsoft Store. Nie pobieraj obrazów Ubuntu i instalatorów WSL z nieznanych stron.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="ubuntu-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">TYLKO BRAKUJĄCE UBUNTU</p><h2 id="ubuntu-title">Doinstaluj dystrybucję</h2></div></div>
+      <p>Jeżeli WSL już działa, ale nie masz Ubuntu, otwórz PowerShell i sprawdź dostępne nazwy:</p>
+      <pre class="code-block"><code>wsl --list --online</code></pre>
+      <p>Następnie zainstaluj Ubuntu:</p>
+      <pre class="code-block"><code>wsl --install -d Ubuntu</code></pre>
+      <p>Możesz również wybrać wersję widoczną na liście, na przykład <code>Ubuntu-24.04</code>. W kolejnych poleceniach używaj dokładnie tej nazwy, którą pokazuje <code>wsl --list --verbose</code>.</p>
+    </section>
+
+    <section class="section-block" aria-labelledby="account-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">PIERWSZE URUCHOMIENIE</p><h2 id="account-title">Utwórz użytkownika Ubuntu</h2></div></div>
+      <p>Po instalacji Ubuntu może uruchomić się automatycznie. Jeżeli tak się nie stanie, otwórz PowerShell i wykonaj:</p>
+      <pre class="code-block"><code>wsl -d Ubuntu</code></pre>
+      <p>Przy pierwszym uruchomieniu poczekaj na rozpakowanie systemu, a następnie podaj:</p>
+      <ol class="instruction-list">
+        <li><strong>Enter new UNIX username</strong> — wpisz prostą nazwę użytkownika, najlepiej małymi literami i bez spacji.</li>
+        <li><strong>New password</strong> — ustaw hasło użytkownika Ubuntu.</li>
+        <li><strong>Retype new password</strong> — wpisz to samo hasło ponownie.</li>
+      </ol>
+      <aside class="safety-note"><strong>Hasła nie widać</strong><p>Podczas wpisywania hasła terminal nie wyświetla liter, kropek ani gwiazdek. Klawiatura działa — wpisz hasło i naciśnij Enter. To hasło może być potrzebne przy poleceniach <code>sudo</code>.</p></aside>
+      <p>Jeżeli zainstalowałeś wersję o innej nazwie, uruchom ją na przykład przez <code>wsl -d Ubuntu-24.04</code>.</p>
+    </section>
+
+    <section class="section-block" aria-labelledby="default-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">KONFIGURACJA</p><h2 id="default-title">Ustaw Ubuntu i WSL 2 jako domyślne</h2></div></div>
+      <p>W terminalu Ubuntu wpisz <code>exit</code>, aby wrócić do PowerShella. Następnie wykonaj:</p>
+      <pre class="code-block"><code>wsl --set-default-version 2
+wsl --set-default Ubuntu
+wsl --list --verbose</code></pre>
+      <p>Na liście gwiazdka <code>*</code> powinna znajdować się przy Ubuntu, a kolumna <strong>VERSION</strong> powinna zawierać <code>2</code>. Jeżeli dystrybucja ma inną nazwę, podstaw ją do polecenia <code>wsl --set-default</code>.</p>
+      <p>Jeżeli Ubuntu widnieje jako WSL 1, przestaw istniejącą dystrybucję:</p>
+      <pre class="code-block"><code>wsl --set-version Ubuntu 2</code></pre>
+      <p>Konwersja może potrwać kilka minut. Nie wyłączaj komputera podczas tej operacji.</p>
+    </section>
+
+    <section class="section-block" aria-labelledby="update-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">AKTUALIZACJA</p><h2 id="update-title">Zaktualizuj Ubuntu</h2></div></div>
+      <p>Uruchom domyślną dystrybucję poleceniem <code>wsl</code>. Poniższe komendy wykonuj już w terminalu Ubuntu:</p>
+      <pre class="code-block"><code>sudo apt update
+sudo apt upgrade -y</code></pre>
+      <p><code>sudo</code> uruchamia polecenie z uprawnieniami administratora Ubuntu i może poprosić o utworzone wcześniej hasło. <code>apt update</code> odświeża listę pakietów, a <code>apt upgrade -y</code> instaluje dostępne aktualizacje.</p>
+      <p>Sprawdź podstawowe narzędzia:</p>
+      <pre class="code-block"><code>git --version
+bash --version</code></pre>
+      <p>Jeżeli Git nie jest dostępny, zainstaluj go:</p>
+      <pre class="code-block"><code>sudo apt install -y git</code></pre>
+    </section>
+
+    <section class="section-block" aria-labelledby="verify-title">
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">WERYFIKACJA</p><h2 id="verify-title">Sprawdź gotowe środowisko</h2></div></div>
+      <p>W PowerShellu wykonaj:</p>
+      <pre class="code-block"><code>wsl --status
+wsl --list --verbose
+wsl</code></pre>
+      <p>Po przejściu do Ubuntu wykonaj:</p>
+      <pre class="code-block"><code>whoami
+cat /etc/os-release
+pwd
+git --version
+bash --version</code></pre>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Ubuntu jest widoczne na liście dystrybucji WSL.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Gwiazdka wskazuje Ubuntu jako dystrybucję domyślną.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Ubuntu korzysta z WSL 2.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Polecenie <code>wsl</code> otwiera terminal Ubuntu.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span><code>git</code> i <code>bash</code> wyświetlają numery wersji.</span></li>
+      </ul>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="problems-title">
+      <div class="block-heading"><span class="block-number">08</span><div><p class="eyebrow">ROZWIĄZYWANIE PROBLEMÓW</p><h2 id="problems-title">Gdy instalacja nie działa</h2></div></div>
+      <details><summary>wsl --install nie jest rozpoznawane</summary><p>Uruchom Windows Update i sprawdź wersję systemu. Standardowe polecenie wymaga Windows 10 w wersji 2004 z kompilacją 19041 lub nowszą albo Windows 11. Dla starszego systemu skorzystaj z oficjalnej instrukcji instalacji ręcznej.</p></details>
+      <details><summary>Instalacja zatrzymuje się na 0,0%</summary><p>Sprawdź połączenie z internetem, uruchom ponownie komputer i ponów polecenie w PowerShellu uruchomionym jako administrator. Możesz też zainstalować aplikację Ubuntu z Microsoft Store.</p></details>
+      <details><summary>Pojawia się błąd dotyczący Virtual Machine Platform lub wirtualizacji</summary><p>Upewnij się, że komputer został ponownie uruchomiony po instalacji. Jeżeli problem pozostaje, sprawdź w Menedżerze zadań, w zakładce Wydajność → Procesor, czy wirtualizacja jest włączona. Zmiana ustawień BIOS/UEFI zależy od producenta komputera — skorzystaj z jego dokumentacji.</p></details>
+      <details><summary>Nie pamiętam hasła użytkownika Ubuntu</summary><p>Hasło Ubuntu jest niezależne od hasła i PIN-u Windows. Nie próbuj wielokrotnie zgadywać. Skorzystaj z oficjalnej dokumentacji WSL dotyczącej resetowania hasła dystrybucji.</p></details>
+      <details><summary>PowerShell pokazuje inną nazwę niż Ubuntu</summary><p>Skopiuj dokładną nazwę z <code>wsl --list --verbose</code>. Jeżeli jest to na przykład <code>Ubuntu-24.04</code>, używaj tej nazwy w poleceniach <code>wsl -d</code>, <code>wsl --set-default</code> i <code>wsl --set-version</code>.</p></details>
+    </section>
+
+    <section class="section-block" aria-labelledby="sources-title">
+      <div class="block-heading"><span class="block-number">09</span><div><p class="eyebrow">DOKUMENTACJA</p><h2 id="sources-title">Oficjalne materiały Microsoft</h2></div></div>
+      <ul class="outcome-list">
+        <li><a href="https://learn.microsoft.com/windows/wsl/install" target="_blank" rel="noreferrer">Instalowanie WSL <span aria-hidden="true">↗</span></a></li>
+        <li><a href="https://learn.microsoft.com/windows/wsl/basic-commands" target="_blank" rel="noreferrer">Podstawowe polecenia WSL <span aria-hidden="true">↗</span></a></li>
+        <li><a href="https://learn.microsoft.com/windows/wsl/setup/environment" target="_blank" rel="noreferrer">Konfigurowanie środowiska programistycznego WSL <span aria-hidden="true">↗</span></a></li>
+        <li><a href="https://learn.microsoft.com/windows/wsl/troubleshooting" target="_blank" rel="noreferrer">Rozwiązywanie problemów z WSL <span aria-hidden="true">↗</span></a></li>
+      </ul>
+    </section>
+
+    <div class="next-step"><span class="note-index">GOTOWE / WSL</span><p>Jeżeli Ubuntu działa, wróć do laboratorium 08. Dalsza instrukcja pokaże, jak otworzyć repozytorium w WSL i krok po kroku przygotować pierwszy skrypt Bash.</p><a href="../laboratoria/lab-08.html#wsl-title">WRÓĆ DO LAB 08 →</a></div>
+  </main>
+
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span>PRG-WPR <span class="footer-slash">·</span> 2026–27</span></footer>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="Laboratorium 08: samodzielna rozbudowa workflow GitHub Actions o automatyczne kontrole, diagnostykę błędów i artefakt kompilacji.">
+  <title>08. Rozbudowa workflow GitHub Actions | Warsztat Programisty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script src="../assets/js/code-copy.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Przejdź do treści</a>
+  <header class="site-header">
+    <a class="wordmark" href="../index.html" aria-label="Warsztat Programisty, strona główna"><span class="wordmark-symbol" aria-hidden="true">W<span>/</span></span><span>WARSZTAT<br>PROGRAMISTY</span></a>
+    <nav class="site-nav" aria-label="Nawigacja główna">
+      <a class="nav-link" href="../index.html">Kurs</a>
+      <a class="nav-link is-current" href="lab-08.html" aria-current="page">Laboratorium 08</a>
+      <a class="nav-external" href="https://github.com/" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <span class="header-code">MODUŁ / 08</span>
+  </header>
+
+  <main id="main" class="lab-page">
+    <nav class="breadcrumbs" aria-label="Okruszki nawigacyjne"><a href="../index.html">Kurs</a><span aria-hidden="true">/</span><span aria-current="page">Laboratorium 08</span></nav>
+
+    <section class="lab-hero" aria-labelledby="lab-title">
+      <div>
+        <p class="eyebrow">LABORATORIUM 08 <span class="eyebrow-divider">/</span> PRACA SAMODZIELNA</p>
+        <h1 id="lab-title">Rozbudowa workflow<br><span>GitHub Actions</span></h1>
+        <p class="intro-lede">Rozbudujesz automatyzację z laboratorium 07 o kontrolę jakości i artefakt kompilacji. Celowo zepsujesz pipeline, znajdziesz przyczynę w logach, naprawisz ją i udokumentujesz wynik.</p>
+      </div>
+      <aside class="lab-readout" aria-label="Zakres laboratorium"><span class="data-label">TRYB</span><strong>SOLO</strong><span class="readout-rule" aria-hidden="true"></span><span class="data-label">REZULTAT</span><strong>CI / ARTIFACT</strong></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="brief-title">
+      <div class="block-heading"><span class="block-number">00</span><div><p class="eyebrow">BRIEF / ZADANIE</p><h2 id="brief-title">Samodzielnie ulepsz istniejący pipeline</h2></div></div>
+      <p>Pracujesz na własnym repozytorium i workflow przygotowanym podczas laboratorium 07. Nie tworzysz automatyzacji od zera. Twoim zadaniem jest przeanalizować istniejący plik, dodać nowe kontrole oraz wykazać na podstawie logów, że potrafisz zdiagnozować nieudane uruchomienie.</p>
+      <ol class="instruction-list">
+        <li><strong>Pracuj na branchu.</strong> Wszystkie zmiany wykonaj poza <code>main</code>.</li>
+        <li><strong>Rozwijaj małymi krokami.</strong> Po każdej istotnej zmianie wykonaj osobny commit i push.</li>
+        <li><strong>Obserwuj Actions.</strong> Każdy push do brancha otwartego Pull Requesta powinien uruchomić kontrolę.</li>
+        <li><strong>Zachowaj historię próby.</strong> Nie usuwaj nieudanego uruchomienia ani commitów z kontrolowanym błędem i jego naprawą.</li>
+        <li><strong>Oddaj Pull Request.</strong> PR ma zawierać działający workflow, opis diagnostyki i dokumentację w README.</li>
+      </ol>
+      <aside class="safety-note"><strong>Nie pracuj bezpośrednio na main</strong><p>Kontrolowany błąd ma pojawić się wyłącznie na branchu roboczym. Nie wyłączaj ochrony brancha i nie scalaj wersji z czerwoną kontrolą.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="goals-title">
+      <div class="block-heading"><span class="block-number">01</span><div><p class="eyebrow">CELE LABORATORIUM</p><h2 id="goals-title">Po wykonaniu zadania potrafisz</h2></div></div>
+      <ul class="outcome-list">
+        <li>przeczytać istniejący workflow i wskazać jego triggery, joby oraz stepy,</li>
+        <li>uruchamiać kontrolę dla <code>push</code> do <code>main</code> i Pull Requesta do <code>main</code>,</li>
+        <li>dodać krok wykonujący własny skrypt Bash,</li>
+        <li>przerwać job czytelnym komunikatem i kodem wyjścia różnym od zera,</li>
+        <li>odnaleźć w logach pierwszy krok, który zakończył się błędem,</li>
+        <li>opublikować wynik kompilacji jako artefakt uruchomienia,</li>
+        <li>opisać automatyczne kontrole w dokumentacji projektu.</li>
+      </ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="start-title">
+      <div class="block-heading"><span class="block-number">02</span><div><p class="eyebrow">PUNKT STARTOWY</p><h2 id="start-title">Sprawdź stan repozytorium</h2></div></div>
+      <p>Przed zmianami upewnij się, że projekt buduje się lokalnie, a workflow z laboratorium 07 jest zielony. Poniższe polecenia wykonaj w <strong>PowerShellu</strong>. Nazwy i ścieżki są przykładowe — dopasuj je do własnego repozytorium.</p>
+      <pre class="code-block"><code>git switch main
+git pull --ff-only origin main
+git status
+
+Get-ChildItem -Recurse -Filter *.csproj
+dotnet build "./src/MyApp/MyApp.csproj" --configuration Release</code></pre>
+      <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>git status</code> nie pokazuje lokalnych zmian.</li><li>Znasz dokładną ścieżkę do używanego pliku <code>.csproj</code>.</li><li>Lokalny build kończy się komunikatem <code>Build succeeded</code>.</li><li>Ostatnie uruchomienie workflow z laboratorium 07 jest zielone.</li></ul>
+      <aside class="safety-note"><strong>Najpierw napraw punkt startowy</strong><p>Jeżeli istniejący workflow nie działa, nie dodawaj kolejnych kroków. Porównaj <code>PROJECT_PATH</code>, wersję .NET i log pierwszego nieudanego stepu z materiałem laboratorium 07.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="branch-title">
+      <div class="block-heading"><span class="block-number">03</span><div><p class="eyebrow">BRANCH / PULL REQUEST</p><h2 id="branch-title">Przygotuj miejsce pracy</h2></div></div>
+      <pre class="code-block"><code>git switch -c ci/lab08-workflow
+git push -u origin ci/lab08-workflow</code></pre>
+      <p>Na GitHubie otwórz Draft Pull Request z <code>ci/lab08-workflow</code> do <code>main</code>. Dzięki temu każdy kolejny push będzie od razu widoczny jako kontrola PR-a, a opis możesz uzupełniać w trakcie pracy.</p>
+      <p>Sprawdź, czy sekcja <code>on</code> istniejącego workflow zawiera oba wymagane zdarzenia:</p>
+      <pre class="code-block"><code>on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main</code></pre>
+      <aside class="safety-note"><strong>Co uruchamia workflow na branchu?</strong><p>Filtr <code>push: main</code> nie reaguje na push do brancha roboczego. Taką zmianę sprawdza zdarzenie <code>pull_request</code>, gdy branch ma otwarty PR do <code>main</code>.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="wsl-title">
+      <div class="block-heading"><span class="block-number">04</span><div><p class="eyebrow">WINDOWS / WSL</p><h2 id="wsl-title">Przygotuj terminal Ubuntu</h2></div></div>
+      <aside class="safety-note"><strong>Pracujesz na własnym komputerze bez WSL?</strong><p>Zanim przejdziesz dalej, wykonaj osobną instrukcję <a href="../instrukcje/instalacja-wsl.html">Instalacja WSL i Ubuntu na komputerze domowym →</a>. Wróć do tego miejsca, gdy polecenie <code>wsl --list --verbose</code> pokaże zainstalowane Ubuntu.</p></aside>
+      <p>Skrypt napiszemy i uruchomimy w Bashu dostępnym przez WSL. Na komputerze może być już widoczna dystrybucja <code>rancher-desktop</code>, ale jest ona technicznym środowiskiem Rancher Desktop, a nie systemem przeznaczonym do pracy studenta. Zainstaluj Ubuntu i ustaw je jako domyślną dystrybucję.</p>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">POWERSHELL</p><h3>Sprawdź zainstalowane dystrybucje</h3></div></div>
+        <p>Otwórz <strong>Windows Terminal</strong> albo <strong>PowerShell</strong>. Poniższych poleceń nie wpisuj jeszcze w terminalu Linux.</p>
+        <pre class="code-block"><code>wsl --list --verbose
+wsl --list --online</code></pre>
+        <p>Pierwsze polecenie pokazuje dystrybucje już zainstalowane. Gwiazdka <code>*</code> oznacza dystrybucję domyślną. Drugie pokazuje systemy dostępne do instalacji.</p>
+        <aside class="safety-note"><strong>Nie usuwaj Rancher Desktop</strong><p>Nie wykonuj <code>wsl --unregister</code> dla dystrybucji <code>rancher-desktop</code> ani <code>rancher-desktop-data</code>. Wystarczy, że Ubuntu zostanie ustawione jako domyślne.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">INSTALACJA</p><h3>Zainstaluj Ubuntu</h3></div></div>
+        <p>W tym samym oknie PowerShell uruchom:</p>
+        <pre class="code-block"><code>wsl --install -d Ubuntu</code></pre>
+        <p>Jeżeli Ubuntu jest już zainstalowane, WSL wyświetli odpowiedni komunikat — wtedy przejdź do następnego kroku. Podczas pierwszego uruchomienia system poprosi o utworzenie nazwy użytkownika i hasła Linuksa. Wpisywane hasło nie jest widoczne na ekranie; to prawidłowe zachowanie.</p>
+        <aside class="safety-note"><strong>Może być wymagany restart</strong><p>Jeżeli Windows poprosi o ponowne uruchomienie komputera, wykonaj restart, ponownie otwórz PowerShell i uruchom <code>wsl -d Ubuntu</code>, aby dokończyć konfigurację użytkownika.</p></aside>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">DOMYŚLNA DYSTRYBUCJA</p><h3>Wybierz Ubuntu zamiast Rancher Desktop</h3></div></div>
+        <p>Po zakończeniu instalacji wróć do PowerShella. Jeśli znajdujesz się w Ubuntu, wpisz najpierw <code>exit</code>. Następnie wykonaj:</p>
+        <pre class="code-block"><code>wsl --set-default Ubuntu
+wsl --list --verbose</code></pre>
+        <p>Na liście gwiazdka <code>*</code> powinna znajdować się przy <code>Ubuntu</code>. Od tej chwili samo polecenie <code>wsl</code> uruchomi właśnie tę dystrybucję.</p>
+        <p>Jeżeli na liście widzisz inną dokładną nazwę, na przykład <code>Ubuntu-24.04</code>, użyj jej zamiast <code>Ubuntu</code>:</p>
+        <pre class="code-block"><code>wsl --set-default Ubuntu-24.04</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">START TERMINALA</p><h3>Uruchom Bash w katalogu repozytorium</h3></div></div>
+        <p>W PowerShellu przejdź najpierw do katalogu swojego repozytorium, a następnie uruchom domyślną dystrybucję:</p>
+        <pre class="code-block"><code>cd "C:\sciezka\do\twojego\repozytorium"
+wsl</code></pre>
+        <p>WSL otworzy Bash w odpowiadającym mu katalogu Linuksa. Alternatywnie możesz wpisać <code>wsl ~</code>, aby rozpocząć w katalogu domowym użytkownika, albo <code>wsl -d Ubuntu</code>, aby jawnie wskazać Ubuntu.</p>
+        <p>Sprawdź środowisko już w terminalu Linux:</p>
+        <pre class="code-block"><code>whoami
+cat /etc/os-release
+pwd
+git --version
+bash --version</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li><code>/etc/os-release</code> zawiera nazwę Ubuntu.</li><li><code>pwd</code> wskazuje katalog repozytorium, zwykle pod <code>/mnt/c/...</code>.</li><li>Polecenia <code>git</code> i <code>bash</code> wyświetlają numery wersji.</li></ul>
+        <aside class="safety-note"><strong>Dwa rodzaje poleceń</strong><p>Polecenia rozpoczynające się od <code>wsl</code> wykonujesz w PowerShellu lub CMD. Polecenia takie jak <code>pwd</code>, <code>whoami</code> i późniejsze <code>bash scripts/...</code> wykonujesz już w terminalu Ubuntu.</p></aside>
+      </article>
+
+      <p>Pełną listę poleceń znajdziesz w oficjalnej dokumentacji <a href="https://learn.microsoft.com/windows/wsl/basic-commands" target="_blank" rel="noreferrer">Podstawowe polecenia WSL <span aria-hidden="true">↗</span></a>.</p>
+    </section>
+
+    <section class="section-block" aria-labelledby="script-title">
+      <div class="block-heading"><span class="block-number">05</span><div><p class="eyebrow">NOWA KONTROLA</p><h2 id="script-title">Dodaj skrypt sprawdzający repozytorium</h2></div></div>
+      <p>Zbudujesz skrypt <code>scripts/check-repository.sh</code> małymi krokami. Po każdym etapie uruchomisz go lokalnie i zobaczysz rezultat. Nie przepisuj od razu wersji końcowej — jej zadaniem jest dopiero późniejsze porównanie rozwiązania.</p>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">01</span><div><p class="eyebrow">PLIK I INTERPRETER</p><h3>Utwórz najprostszy skrypt</h3></div></div>
+        <p>Utwórz katalog <code>scripts</code>, a w nim plik <code>check-repository.sh</code>. Dodaj dwie linie:</p>
+        <pre class="code-block"><code>#!/usr/bin/env bash
+
+echo "Starting repository check..."</code></pre>
+        <p>Pierwsza linia to <strong>shebang</strong>. Informuje system, że plik jest skryptem Bash. Polecenie <code>env</code> odnajduje interpreter <code>bash</code> dostępny w danym środowisku. <code>echo</code> wypisuje tekst w terminalu.</p>
+        <aside class="safety-note"><strong>Komentarze a shebang</strong><p>Zwykła linia zaczynająca się od <code>#</code> jest komentarzem i Bash jej nie wykonuje. Pierwsza linia <code>#!</code> jest wyjątkiem — system używa jej do wyboru interpretera.</p></aside>
+        <p>Uruchom skrypt z katalogu głównego repozytorium:</p>
+        <pre class="code-block"><code>bash scripts/check-repository.sh</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Terminal wyświetla <code>Starting repository check...</code>.</li><li>Polecenie kończy się bez błędu.</li></ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">02</span><div><p class="eyebrow">TRYB BEZPIECZNY</p><h3>Włącz wykrywanie błędów</h3></div></div>
+        <p>Pod shebangiem, przed <code>echo</code>, dodaj:</p>
+        <pre class="code-block"><code>set -euo pipefail</code></pre>
+        <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Opcja</th><th>Po co jej używamy</th></tr></thead><tbody>
+          <tr><td><code>-e</code></td><td>Zatrzymuje skrypt, gdy polecenie kończy się błędem.</td></tr>
+          <tr><td><code>-u</code></td><td>Zgłasza błąd przy próbie użycia niezdefiniowanej zmiennej.</td></tr>
+          <tr><td><code>-o pipefail</code></td><td>Wykrywa błąd dowolnego polecenia w potoku, a nie tylko ostatniego.</td></tr>
+        </tbody></table></div>
+        <p>Te opcje pomagają szybko wykryć problem. Bez nich skrypt mógłby kontynuować pracę z błędnymi lub brakującymi danymi.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">03</span><div><p class="eyebrow">ARGUMENT</p><h3>Odbierz ścieżkę do projektu</h3></div></div>
+        <p>Usuń tymczasowe <code>echo</code> z pierwszego kroku. Pod <code>set -euo pipefail</code> dodaj zmienną i wypisz jej wartość:</p>
+        <pre class="code-block"><code>PROJECT_PATH="${1:-}"
+
+echo "Received project path: $PROJECT_PATH"</code></pre>
+        <p><code>$1</code> oznacza pierwszy argument przekazany podczas uruchamiania skryptu. Zapis <code>${1:-}</code> zwraca ten argument, a jeżeli go nie podano — pusty tekst. Wynik zostaje zapisany w zmiennej <code>PROJECT_PATH</code>. Cudzysłowy chronią wartości zawierające spacje.</p>
+        <p>Porównaj dwa uruchomienia:</p>
+        <pre class="code-block"><code>bash scripts/check-repository.sh
+bash scripts/check-repository.sh "./src/MyApp/MyApp.csproj"</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Za pierwszym razem po dwukropku nie ma ścieżki.</li><li>Za drugim razem terminal pokazuje przekazany argument.</li></ul>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">04</span><div><p class="eyebrow">PIERWSZY WARUNEK</p><h3>Zatrzymaj skrypt, gdy brakuje argumentu</h3></div></div>
+        <p>Zastąp ostatnią linię <code>echo</code> poniższym blokiem:</p>
+        <pre class="code-block"><code>if [[ -z "$PROJECT_PATH" ]]; then
+  echo "ERROR: Provide a project path as the first argument."
+  exit 1
+fi</code></pre>
+        <p><code>if</code> rozpoczyna warunek, a <code>fi</code> go kończy. Test <code>-z</code> jest prawdziwy, gdy tekst jest pusty. <code>exit 1</code> natychmiast kończy skrypt kodem błędu. W GitHub Actions taki kod nada stepowi czerwony status.</p>
+        <p>Przetestuj oba przypadki ponownie. Pierwsze polecenie powinno się nie udać, a drugie przejść dalej:</p>
+        <pre class="code-block"><code>bash scripts/check-repository.sh
+bash scripts/check-repository.sh "./src/MyApp/MyApp.csproj"</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">05</span><div><p class="eyebrow">PLIK PROJEKTU</p><h3>Sprawdź, czy wskazany plik istnieje</h3></div></div>
+        <p>Pod pierwszym blokiem <code>if</code> dodaj drugą kontrolę:</p>
+        <pre class="code-block"><code>if [[ ! -f "$PROJECT_PATH" ]]; then
+  echo "ERROR: Project file not found: $PROJECT_PATH"
+  exit 1
+fi</code></pre>
+        <p>Test <code>-f</code> sprawdza, czy pod podaną ścieżką istnieje zwykły plik. Znak <code>!</code> odwraca wynik, dlatego wnętrze warunku wykona się właśnie wtedy, gdy pliku nie znaleziono.</p>
+        <p>Najpierw podaj nieistniejącą, a następnie prawidłową ścieżkę:</p>
+        <pre class="code-block"><code>bash scripts/check-repository.sh "./missing.csproj"
+bash scripts/check-repository.sh "./src/MyApp/MyApp.csproj"</code></pre>
+        <p>Zastąp przykładową ścieżkę <code>./src/MyApp/MyApp.csproj</code> rzeczywistym położeniem swojego projektu.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">06</span><div><p class="eyebrow">README I SUKCES</p><h3>Dodaj ostatnią kontrolę</h3></div></div>
+        <p>Pod kontrolą projektu dodaj:</p>
+        <pre class="code-block"><code>if [[ ! -s "README.md" ]]; then
+  echo "ERROR: README.md is missing or empty."
+  exit 1
+fi
+
+echo "Repository check passed."
+echo "Project: $PROJECT_PATH"
+echo "README.md is present and not empty."</code></pre>
+        <p>Test <code>-s</code> sprawdza, czy plik istnieje i ma rozmiar większy od zera. Operator <code>!</code> ponownie odwraca wynik. Jeżeli wszystkie warunki zostały spełnione, skrypt dociera do końcowych komunikatów. Ostatnie <code>echo</code> zwraca kod <code>0</code>, czyli sukces, dlatego nie trzeba dopisywać <code>exit 0</code>.</p>
+        <pre class="code-block"><code>bash scripts/check-repository.sh "./src/MyApp/MyApp.csproj"
+echo $?</code></pre>
+        <p>Specjalna zmienna <code>$?</code> zawiera kod zakończenia ostatniego polecenia. Po udanej kontroli powinna mieć wartość <code>0</code>.</p>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">REF</span><div><p class="eyebrow">WERSJA DO PORÓWNANIA</p><h3>Sprawdź kompletny skrypt</h3></div></div>
+        <p>Dopiero teraz porównaj swój plik z pełną wersją. Komentarze przypominają znaczenie najważniejszych instrukcji; nie musisz usuwać ich ze swojego skryptu.</p>
+        <pre class="code-block"><code>#!/usr/bin/env bash
+# Uruchom ten plik przy użyciu interpretera Bash.
+
+set -euo pipefail
+# Zatrzymuj wykonanie po błędach i wykrywaj brakujące zmienne.
+
+PROJECT_PATH="${1:-}"
+# Pobierz pierwszy argument lub pusty tekst, jeśli argumentu nie podano.
+
+if [[ -z "$PROJECT_PATH" ]]; then
+  # Przerwij pracę, jeżeli użytkownik nie podał ścieżki.
+  echo "ERROR: Provide a project path as the first argument."
+  exit 1
+fi
+
+if [[ ! -f "$PROJECT_PATH" ]]; then
+  # Przerwij pracę, jeżeli wskazany plik projektu nie istnieje.
+  echo "ERROR: Project file not found: $PROJECT_PATH"
+  exit 1
+fi
+
+if [[ ! -s "README.md" ]]; then
+  # Przerwij pracę, jeżeli README nie istnieje lub jest pusty.
+  echo "ERROR: README.md is missing or empty."
+  exit 1
+fi
+
+# Te linie wykonają się tylko wtedy, gdy wszystkie kontrole przejdą.
+echo "Repository check passed."
+echo "Project: $PROJECT_PATH"
+echo "README.md is present and not empty."</code></pre>
+      </article>
+
+      <article class="lesson-step">
+        <div class="step-heading"><span class="step-number">07</span><div><p class="eyebrow">GITHUB ACTIONS</p><h3>Podłącz skrypt do workflow</h3></div></div>
+        <p>W pliku workflow dodaj krok po <strong>Checkout repository</strong>, ale przed restore i build:</p>
+        <pre class="code-block"><code>      - name: Check repository structure
+        shell: bash
+        run: bash scripts/check-repository.sh "$PROJECT_PATH"</code></pre>
+        <p><code>shell: bash</code> jawnie wybiera interpreter. Wartość <code>$PROJECT_PATH</code> pochodzi z sekcji <code>env</code> workflow i zostaje przekazana do skryptu jako pierwszy argument.</p>
+        <pre class="code-block"><code>git add scripts/check-repository.sh .github/workflows/build.yml
+git commit -m "ci: add repository structure check"
+git push</code></pre>
+        <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Pull Request uruchamia nowe wykonanie workflow.</li><li>Krok <strong>Check repository structure</strong> jest widoczny w logu.</li><li>Log zawiera komunikat <code>Repository check passed</code>.</li></ul>
+      </article>
+    </section>
+
+    <section class="section-block" aria-labelledby="failure-title">
+      <div class="block-heading"><span class="block-number">06</span><div><p class="eyebrow">KONTROLOWANY BŁĄD</p><h2 id="failure-title">Zepsuj pipeline i przeczytaj log</h2></div></div>
+      <p>Teraz świadomie ustaw w <code>PROJECT_PATH</code> nieistniejącą ścieżkę, na przykład:</p>
+      <pre class="code-block"><code>env:
+  PROJECT_PATH: ./src/ProjectThatDoesNotExist/Project.csproj</code></pre>
+      <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "test: trigger repository check failure"
+git push</code></pre>
+      <ol class="instruction-list">
+        <li>Otwórz nieudane uruchomienie w zakładce <strong>Actions</strong> albo w kontrolach Pull Requesta.</li>
+        <li>Otwórz job <strong>build</strong> i znajdź pierwszy czerwony step.</li>
+        <li>Rozwiń jego log i znajdź komunikat zaczynający się od <code>ERROR:</code>.</li>
+        <li>Zapisz w opisie PR-a nazwę stepu, komunikat błędu, przyczynę oraz plan naprawy.</li>
+        <li>Sprawdź, które kolejne kroki zostały pominięte po błędzie.</li>
+      </ol>
+      <p>W opisie Pull Requesta umieść krótką sekcję według wzoru:</p>
+      <pre class="code-block"><code>## Diagnostyka kontrolowanego błędu
+- Nieudany step: Check repository structure
+- Komunikat: ERROR: Project file not found: ...
+- Przyczyna: PROJECT_PATH wskazywał nieistniejący plik
+- Naprawa: przywrócenie rzeczywistej ścieżki do .csproj</code></pre>
+      <aside class="safety-note"><strong>Nie używaj continue-on-error</strong><p>Celem zadania jest prawidłowe zatrzymanie joba. Nie maskuj błędu przez <code>continue-on-error: true</code>, operator <code>|| true</code> ani ręczne zwracanie kodu <code>0</code>.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="repair-title">
+      <div class="block-heading"><span class="block-number">07</span><div><p class="eyebrow">NAPRAWA</p><h2 id="repair-title">Przywróć zielony status</h2></div></div>
+      <p>Przywróć prawidłową wartość <code>PROJECT_PATH</code>. W terminalu Ubuntu sprawdź skrypt:</p>
+      <pre class="code-block"><code>bash scripts/check-repository.sh "./src/MyApp/MyApp.csproj"</code></pre>
+      <p>Jeżeli .NET został skonfigurowany na Windowsie, build uruchom w PowerShellu, a nie w Ubuntu:</p>
+      <pre class="code-block"><code>dotnet build "./src/MyApp/MyApp.csproj" --configuration Release</code></pre>
+      <p>Następnie w wybranym terminalu wykonaj commit naprawy i push:</p>
+      <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "fix: restore valid project path"
+git push</code></pre>
+      <ul class="expected-result"><span class="result-mark" aria-hidden="true">✓</span><li>Historia PR-a zawiera osobny commit wywołujący błąd i osobny commit z naprawą.</li><li>Nowe uruchomienie wykonuje kontrolę, restore i build.</li><li>Pull Request ponownie ma zielony status.</li></ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="artifact-title">
+      <div class="block-heading"><span class="block-number">08</span><div><p class="eyebrow">ARTEFAKT</p><h2 id="artifact-title">Opublikuj wynik kompilacji</h2></div></div>
+      <p><code>dotnet build</code> potwierdza poprawność kodu, ale jego katalog wyjściowy zawiera również pliki tymczasowe. Dodaj po buildzie krok <code>dotnet publish</code>, który przygotuje uporządkowany rezultat, a następnie wyślij go jako artefakt.</p>
+      <pre class="code-block"><code>      - name: Publish project
+        shell: bash
+        run: dotnet publish "$PROJECT_PATH" --configuration Release --no-restore --output ./artifacts/app
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-${{ github.sha }}
+          path: ./artifacts/app
+          if-no-files-found: error
+          retention-days: 7</code></pre>
+      <p>Krok <code>Upload build artifact</code> umieść po <code>Publish project</code>. Nazwa zawiera SHA commita, więc można jednoznacznie powiązać pobrany plik z wersją kodu.</p>
+      <pre class="code-block"><code>git add .github/workflows/build.yml
+git commit -m "ci: upload published application artifact"
+git push</code></pre>
+      <ol class="instruction-list">
+        <li>Poczekaj na zielone zakończenie workflow.</li>
+        <li>Otwórz stronę podsumowania uruchomienia.</li>
+        <li>W sekcji <strong>Artifacts</strong> znajdź paczkę <code>app-&lt;sha&gt;</code>.</li>
+        <li>Pobierz archiwum i sprawdź, czy nie jest puste.</li>
+      </ol>
+      <aside class="safety-note"><strong>Artefakt to nie deployment</strong><p>Pliki są przechowywane przy konkretnym uruchomieniu workflow. To wynik kompilacji do pobrania, a nie opublikowana aplikacja ani GitHub Pages.</p></aside>
+    </section>
+
+    <section class="section-block" aria-labelledby="readme-title">
+      <div class="block-heading"><span class="block-number">09</span><div><p class="eyebrow">DOKUMENTACJA</p><h2 id="readme-title">Opisz automatyczne kontrole</h2></div></div>
+      <p>Dodaj do <code>README.md</code> sekcję <strong>Continuous Integration</strong>. Opis ma być zgodny z rzeczywistym workflow i zawierać:</p>
+      <ul class="outcome-list">
+        <li>zdarzenia uruchamiające workflow,</li>
+        <li>nazwę sprawdzanego projektu i używaną wersję .NET,</li>
+        <li>listę kontroli: struktura repozytorium, restore, build, run lub publish,</li>
+        <li>informację o nazwie i siedmiodniowym czasie przechowywania artefaktu,</li>
+        <li>krótką instrukcję, gdzie znaleźć logi i artefakty na GitHubie.</li>
+      </ul>
+      <p>Opcjonalnie dodaj pod tytułem projektu badge statusu. Zastąp właściciela, repozytorium i nazwę pliku własnymi wartościami:</p>
+      <pre class="code-block"><code>[![Build](https://github.com/OWNER/REPOSITORY/actions/workflows/build.yml/badge.svg)](https://github.com/OWNER/REPOSITORY/actions/workflows/build.yml)</code></pre>
+      <pre class="code-block"><code>git add README.md
+git commit -m "docs: describe continuous integration workflow"
+git push</code></pre>
+    </section>
+
+    <section class="section-block troubleshooting" aria-labelledby="problems-title">
+      <div class="block-heading"><span class="block-number">10</span><div><p class="eyebrow">DIAGNOSTYKA</p><h2 id="problems-title">Najczęstsze problemy</h2></div></div>
+      <details><summary>Po wpisaniu wsl uruchamia się Rancher Desktop zamiast Ubuntu</summary><p>W PowerShellu wykonaj <code>wsl --list --verbose</code>, odczytaj dokładną nazwę Ubuntu i ustaw ją poleceniem <code>wsl --set-default Ubuntu</code>. Gwiazdka na ponownie wyświetlonej liście powinna znajdować się przy Ubuntu.</p></details>
+      <details><summary>Polecenie wsl --install informuje, że Ubuntu jest już zainstalowane</summary><p>Nie instaluj go ponownie. Uruchom <code>wsl -d Ubuntu</code>, dokończ tworzenie użytkownika, wpisz <code>exit</code>, a następnie ustaw dystrybucję jako domyślną.</p></details>
+      <details><summary>Nie pamiętam hasła albo podczas wpisywania nic się nie pojawia</summary><p>Terminal Linux celowo nie pokazuje znaków hasła ani gwiazdek. Wpisz hasło i naciśnij Enter. Jest to hasło użytkownika Ubuntu, a nie PIN do konta Windows.</p></details>
+      <details><summary>Workflow nie uruchamia się po pushu do brancha</summary><p>Sprawdź, czy istnieje otwarty Pull Request do <code>main</code> i czy workflow reaguje na <code>pull_request</code>. Sam filtr <code>push</code> ograniczony do <code>main</code> nie obejmuje brancha roboczego.</p></details>
+      <details><summary>Skrypt lokalnie zwraca Permission denied</summary><p>Uruchom go jawnie przez <code>bash scripts/check-repository.sh ...</code>. Ten sposób nie wymaga ustawienia bitu wykonywalnego i działa tak samo w pokazanym workflow.</p></details>
+      <details><summary>Skrypt nie znajduje projektu, chociaż ścieżka wygląda poprawnie</summary><p>Runner używa Linuksa, więc wielkość liter ma znaczenie. Porównaj wartość z wynikiem <code>find . -name "*.csproj"</code> i pamiętaj, że ścieżka jest liczona od katalogu głównego repozytorium.</p></details>
+      <details><summary>Upload artifact zgłasza, że nie ma plików</summary><p>Sprawdź, czy <code>dotnet publish</code> używa <code>--output ./artifacts/app</code>, a <code>path</code> w kolejnym kroku wskazuje dokładnie ten sam katalog.</p></details>
+      <details><summary>Artefakt nie jest widoczny przy Pull Requeście</summary><p>Otwórz konkretne uruchomienie workflow i jego stronę podsumowania. Artefakty są prezentowane przy runie, nie jako pliki w repozytorium.</p></details>
+      <details><summary>Po błędzie następne stepy mają status skipped</summary><p>To oczekiwane zachowanie. Step zwrócił kod różny od zera, dlatego GitHub przerwał dalsze wykonywanie joba. Napraw przyczynę w pierwszym czerwonym kroku.</p></details>
+    </section>
+
+    <section class="section-block" aria-labelledby="done-title">
+      <div class="block-heading"><span class="block-number">11</span><div><p class="eyebrow">KRYTERIA UKOŃCZENIA</p><h2 id="done-title">Sprawdź kompletność rozwiązania</h2></div></div>
+      <ul class="checklist">
+        <li><span class="check-box" aria-hidden="true"></span><span>Praca została wykonana na osobnym branchu i przedstawiona w Pull Requeście do <code>main</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Workflow uruchamia się dla <code>push</code> do <code>main</code> oraz Pull Requesta do <code>main</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Repozytorium zawiera skrypt <code>scripts/check-repository.sh</code> sprawdzający projekt i README.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Skrypt jest wykonywany w osobnym, czytelnie nazwanym stepie workflow.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Historia Actions i commitów pokazuje kontrolowany błąd oraz jego naprawę.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Opis PR-a zawiera nazwę nieudanego stepu, komunikat, przyczynę i sposób naprawy.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Workflow wykonuje <code>dotnet publish</code> i wysyła niepusty artefakt przez <code>actions/upload-artifact@v4</code>.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Artefakt ma unikalną nazwę, jest przechowywany przez 7 dni i można go pobrać.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span><code>README.md</code> opisuje triggery, kontrole, artefakt oraz miejsce odczytu logów.</span></li>
+        <li><span class="check-box" aria-hidden="true"></span><span>Końcowe uruchomienie workflow jest zielone, a Pull Request gotowy do przeglądu.</span></li>
+      </ul>
+    </section>
+
+    <section class="section-block" aria-labelledby="submit-title">
+      <div class="block-heading"><span class="block-number">12</span><div><p class="eyebrow">ODDANIE</p><h2 id="submit-title">Przekaż dowody wykonania</h2></div></div>
+      <p>Oddaj jeden link do Pull Requesta. Z jego poziomu prowadzący powinien móc przejść do kodu, dokumentacji, czerwonego uruchomienia z kontrolowanym błędem oraz końcowego zielonego uruchomienia z artefaktem.</p>
+      <div class="info-table-wrap"><table class="info-table"><thead><tr><th>Element</th><th>Gdzie ma być widoczny</th></tr></thead><tbody>
+        <tr><td>Zmiany w workflow i skrypt</td><td>Zakładka <strong>Files changed</strong> w Pull Requeście</td></tr>
+        <tr><td>Opis diagnostyki</td><td>Opis Pull Requesta</td></tr>
+        <tr><td>Kontrolowany błąd i naprawa</td><td>Historia commitów oraz Checks / Actions</td></tr>
+        <tr><td>Zielony pipeline</td><td>Końcowe kontrole Pull Requesta</td></tr>
+        <tr><td>Artefakt aplikacji</td><td>Podsumowanie końcowego uruchomienia</td></tr>
+        <tr><td>Opis CI</td><td><code>README.md</code></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <div class="next-step"><span class="note-index">KONIEC / LAB 08</span><p>Gotowy Pull Request pokazuje nie tylko działający workflow, ale też sposób myślenia podczas diagnozowania błędu: obserwację, przyczynę, naprawę i ponowną weryfikację.</p><a href="../index.html">WRÓĆ DO KURSU →</a></div>
+  </main>
+
+  <footer class="site-footer"><span>WARSZTAT PROGRAMISTY <span class="footer-slash">/</span> PJATK GDAŃSK</span><span>PRG-WPR <span class="footer-slash">·</span> 2026–27</span></footer>
+</body>
+</html>
